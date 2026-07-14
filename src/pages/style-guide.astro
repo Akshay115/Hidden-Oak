@@ -1,0 +1,525 @@
+---
+/**
+ * /style-guide — living documentation of the Hidden Oak design tokens.
+ * Review colors, type scale, buttons, spacing, radius, and textures here
+ * before building out pages. Everything visible is driven by the CSS
+ * custom properties declared in src/styles/global.css.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import CTAButton from '../components/CTAButton.astro';
+
+// Color swatches: the raw palette + the semantic mapping.
+const rawColors = [
+  { name: 'wood-charred',    hex: '#2B1D14', role: 'background-dark · charred wood brown' },
+  { name: 'clay-terracotta', hex: '#B5651D', role: 'primary · CTA · clay terracotta' },
+  { name: 'birch-white',     hex: '#F1E7D0', role: 'background-light · text-on-dark' },
+  { name: 'forest-green',    hex: '#3B5544', role: 'secondary accent · deep forest' },
+  { name: 'hot-coal',        hex: '#E4572E', role: 'highlight · CTA hover · hot-coal orange' },
+];
+
+const semanticColors = [
+  { name: '--color-bg',           value: 'var(--wood-charred)',    on: 'dark' },
+  { name: '--color-bg-elevated',  value: 'var(--wood-burnt)',      on: 'dark' },
+  { name: '--color-bg-muted',     value: 'var(--wood-smolder)',    on: 'dark' },
+  { name: '--color-primary',      value: 'var(--clay-terracotta)', on: 'dark' },
+  { name: '--color-primary-hover',value: 'var(--hot-coal)',        on: 'dark' },
+  { name: '--color-secondary',    value: 'var(--forest-green)',    on: 'dark' },
+  { name: '--color-accent',       value: 'var(--hot-coal)',        on: 'dark' },
+  { name: '--color-ink',          value: 'var(--birch-white)',     on: 'dark' },
+  { name: '--color-ink-muted',    value: 'var(--ink-80)',          on: 'dark' },
+  { name: '--color-ink-subtle',   value: 'var(--ink-60)',          on: 'dark' },
+];
+
+const typeScale = [
+  { token: '--text-xs',   cls: 't-xs',   sample: 'Eyebrow / caption — hot-coal label' },
+  { token: '--text-sm',   cls: 't-sm',   sample: 'Secondary text · table data · meta' },
+  { token: '--text-base', cls: 't-base', sample: 'Body copy. The quick brown fox jumps over the lazy dog.' },
+  { token: '--text-md',   cls: 't-md',   sample: 'Lede paragraph — slightly larger intro text.' },
+  { token: '--text-lg',   cls: 't-lg',   sample: 'Subheading — h5 serif' },
+  { token: '--text-xl',   cls: 't-xl',   sample: 'Heading 4' },
+  { token: '--text-2xl',  cls: 't-2xl',  sample: 'Heading 3' },
+  { token: '--text-3xl',  cls: 't-3xl',  sample: 'Heading 2' },
+  { token: '--text-4xl',  cls: 't-4xl',  sample: 'Heading 1' },
+];
+
+const spacingSteps = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9];
+const radiusSteps = [
+  { token: '--radius-xs',  px: '4px',  note: 'tags' },
+  { token: '--radius-sm',  px: '8px',  note: 'small inputs' },
+  { token: '--radius-md',  px: '12px', note: 'cards, inputs' },
+  { token: '--radius-lg',  px: '16px', note: 'panels' },
+  { token: '--radius-xl',  px: '20px', note: 'feature cards' },
+  { token: '--radius-2xl', px: '28px', note: 'hero panels' },
+  { token: '--radius-pill', px: '999px', note: 'buttons, pills' },
+];
+---
+
+<BaseLayout
+  title="Style Guide"
+  description="Design tokens for Hidden Oak — color, type, spacing, radius, and texture reference."
+>
+  <div class="guide">
+    <header class="guide__intro container">
+      <p class="eyebrow">Design System</p>
+      <h1>Style Guide</h1>
+      <p class="lede">
+        The earthy Indian-Russian banya theme, laid out for review. Every value
+        below is a CSS custom property from <code>global.css</code> — change it
+        there and the whole site follows.
+      </p>
+    </header>
+
+    <!-- =========================================================== COLOR -->
+    <section class="section container" id="color">
+      <div class="block-head">
+        <p class="eyebrow">01 · Color</p>
+        <h2>Raw palette</h2>
+        <p class="lede">The five named hex values that anchor the theme.</p>
+      </div>
+
+      <div class="swatches">
+        {
+          rawColors.map((c) => (
+            <figure class="swatch">
+              <div class="swatch__chip" style={`background:${c.hex};`}>
+                <span class="swatch__hex">{c.hex}</span>
+              </div>
+              <figcaption>
+                <code>--{c.name}</code>
+                <span class="swatch__role">{c.role}</span>
+              </figcaption>
+            </figure>
+          ))
+        }
+      </div>
+
+      <div class="block-head" style="margin-top: var(--space-6);">
+        <p class="eyebrow">Semantic tokens</p>
+        <h3>The component-facing API</h3>
+        <p class="lede">
+          Components consume these, not the raw palette. Re-skin the site by
+          editing these mappings.
+        </p>
+      </div>
+      <div class="semantic-grid">
+        {
+          semanticColors.map((c) => (
+            <div class="semantic">
+              <span class:list={['semantic__chip', c.on === 'light' ? 'on-light' : 'on-dark']} style={`background:${c.value};`} />
+              <code class="semantic__name">{c.name}</code>
+              <code class="semantic__val">{c.value}</code>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- ============================================================ TYPE -->
+    <section class="section container" id="type">
+      <div class="block-head">
+        <p class="eyebrow">02 · Typography</p>
+        <h2>Font pairing</h2>
+      </div>
+      <div class="font-pair">
+        <article class="font-card">
+          <div class="font-card__label">Headings</div>
+          <div class="font-card__name font-serif">Fraunces</div>
+          <p class="font-card__desc">
+            Warm old-style variable serif with optical sizing. SOFT axis dialed
+            up at display sizes for a hand-carved feel. Weights 400–700.
+          </p>
+        </article>
+        <article class="font-card">
+          <div class="font-card__label">Body</div>
+          <div class="font-card__name font-sans">Manrope</div>
+          <p class="font-card__desc">
+            Humanist sans, open and readable. Pairs with Fraunces without
+            competing. Weights 400–700.
+          </p>
+        </article>
+      </div>
+
+      <div class="block-head" style="margin-top: var(--space-6);">
+        <p class="eyebrow">Fluid type scale</p>
+        <h3>Responsive via <code>clamp()</code></h3>
+        <p class="lede">Scales smoothly with viewport — no breakpoint jumps.</p>
+      </div>
+      <div class="type-scale">
+        {
+          typeScale.map((t) => (
+            <div class="type-row">
+              <code class="type-row__token">{t.token}</code>
+              <div class:list={['type-row__sample', t.cls]}>{t.sample}</div>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- ========================================================= BUTTONS -->
+    <section class="section container" id="buttons">
+      <div class="block-head">
+        <p class="eyebrow">03 · Buttons</p>
+        <h2>CTA states</h2>
+        <p class="lede">From <code>CTAButton.astro</code> — primary, ghost, light variants.</p>
+      </div>
+
+      <div class="btn-grid">
+        <div class="btn-cell">
+          <span class="btn-cell__label">Default</span>
+          <CTAButton href="#buttons" variant="primary">Book a Session</CTAButton>
+        </div>
+        <div class="btn-cell">
+          <span class="btn-cell__label">Hover (hot-coal)</span>
+          <CTAButton href="#buttons" variant="primary" class="force-hover">Book a Session</CTAButton>
+        </div>
+        <div class="btn-cell">
+          <span class="btn-cell__label">Ghost</span>
+          <CTAButton href="#buttons" variant="ghost">Learn More</CTAButton>
+        </div>
+        <div class="btn-cell">
+          <span class="btn-cell__label">Light</span>
+          <CTAButton href="#buttons" variant="light">See Prices</CTAButton>
+        </div>
+        <div class="btn-cell">
+          <span class="btn-cell__label">Size: lg</span>
+          <CTAButton href="#buttons" variant="primary" size="lg">Book Now</CTAButton>
+        </div>
+        <div class="btn-cell">
+          <span class="btn-cell__label">Focus</span>
+          <CTAButton href="#buttons" variant="primary" class="force-focus">Book a Session</CTAButton>
+        </div>
+      </div>
+    </section>
+
+    <!-- ========================================================= SPACING -->
+    <section class="section container" id="spacing">
+      <div class="block-head">
+        <p class="eyebrow">04 · Spacing</p>
+        <h2>8px base grid</h2>
+        <p class="lede">Every layout gap, padding, and margin is a multiple of 8.</p>
+      </div>
+      <div class="spacing-ramp">
+        {
+          spacingSteps.map((n) => (
+            <div class="spacing-row">
+              <code>--space-{n}</code>
+              <span class="spacing-row__val">{n === 0 ? '0' : `${n * 8}px / ${n * 0.5}rem`}</span>
+              <span class="spacing-row__bar" style={`width: ${n === 0 ? 2 : n * 16}px;`} />
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- ========================================================= RADIUS -->
+    <section class="section container" id="radius">
+      <div class="block-head">
+        <p class="eyebrow">05 · Border-radius</p>
+        <h2>Soft & organic</h2>
+        <p class="lede">No sharp corners — everything from 8px up to pill, keeping the hand-built wooden feel.</p>
+      </div>
+      <div class="radius-grid">
+        {
+          radiusSteps.map((r) => (
+            <div class="radius-cell">
+              <div class="radius-cell__shape" style={`border-radius:${r.px};`} />
+              <code>{r.token}</code>
+              <span class="radius-cell__note">{r.px} · {r.note}</span>
+            </div>
+          ))
+        }
+      </div>
+    </section>
+
+    <!-- ======================================================== TEXTURE -->
+    <section class="section container" id="texture">
+      <div class="block-head">
+        <p class="eyebrow">06 · Texture</p>
+        <h2>Background patterns</h2>
+        <p class="lede">
+          Tileable CSS gradients — no image downloads. Subtle by design; applied
+          at low opacity so they read as material, not decoration.
+        </p>
+      </div>
+      <div class="texture-grid">
+        <figure class="texture">
+          <div class="texture__panel" style="background-image: var(--texture-wood); background-color: var(--wood-charred);"></div>
+          <figcaption>
+            <code>--texture-wood</code>
+            <span>Repeating vertical streaks — charred oak planking.</span>
+          </figcaption>
+        </figure>
+        <figure class="texture">
+          <div class="texture__panel" style="background-image: var(--texture-clay); background-color: var(--wood-burnt);"></div>
+          <figcaption>
+            <code>--texture-clay</code>
+            <span>Mottled radial gradients — troweled clay plaster.</span>
+          </figcaption>
+        </figure>
+        <figure class="texture">
+          <div class="texture__panel" style="background-image: var(--texture-banya); background-color: var(--wood-charred);"></div>
+          <figcaption>
+            <code>--texture-banya</code>
+            <span>Wood base + faint ember glow — full-bleed section bg.</span>
+          </figcaption>
+        </figure>
+      </div>
+    </section>
+
+    <!-- ====================================================== CLOSE -->
+    <section class="section container">
+      <div class="cta-return">
+        <h2>Ready to build?</h2>
+        <p class="lede">Jump back to the homepage to see these tokens applied in context.</p>
+        <CTAButton href="/" variant="primary" size="lg">Back to Site</CTAButton>
+      </div>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  /* ------------------------------------------------------------------ layout */
+  .guide { padding-block: var(--space-6) var(--space-7); }
+  .guide__intro { display: flex; flex-direction: column; gap: var(--space-2); margin-bottom: var(--space-6); }
+  .guide__intro h1 { font-size: var(--text-4xl); }
+  .guide__intro .lede { max-width: 64ch; }
+
+  .block-head { display: flex; flex-direction: column; gap: var(--space-1); margin-bottom: var(--space-4); }
+  .block-head h2 { font-size: var(--text-2xl); }
+  .block-head h3 { font-size: var(--text-xl); margin-top: var(--space-2); }
+  .block-head .lede { margin-top: var(--space-1); max-width: 60ch; }
+
+  /* ------------------------------------------------------------------ color */
+  .swatches {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-3);
+  }
+  .swatch { margin: 0; }
+  .swatch__chip {
+    aspect-ratio: 16 / 10;
+    border-radius: var(--radius-lg);
+    display: flex;
+    align-items: flex-end;
+    padding: var(--space-2);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-sm);
+  }
+  .swatch__hex {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    padding: 0.2em 0.55em;
+    border-radius: var(--radius-xs);
+    background: rgba(0, 0, 0, 0.45);
+    color: #fff;
+    backdrop-filter: blur(4px);
+  }
+  .swatch figcaption {
+    margin-top: var(--space-2);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .swatch figcaption code { font-size: var(--text-sm); color: var(--color-ink); }
+  .swatch__role { font-size: var(--text-xs); color: var(--color-ink-subtle); }
+
+  .semantic-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+    gap: var(--space-2);
+  }
+  .semantic {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    grid-template-rows: auto auto;
+    gap: 2px var(--space-2);
+    align-items: center;
+    padding: var(--space-2);
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+  }
+  .semantic__chip {
+    width: 28px; height: 28px;
+    border-radius: var(--radius-sm);
+    grid-row: span 2;
+    border: 1px solid var(--color-border);
+  }
+  .semantic__name { font-size: var(--text-sm); color: var(--color-ink); }
+  .semantic__val { font-size: var(--text-xs); color: var(--color-ink-subtle); }
+
+  /* ------------------------------------------------------------------- type */
+  .font-pair {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-3);
+  }
+  .font-card {
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+  }
+  .font-card__label {
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-caps);
+    color: var(--color-accent);
+    font-weight: var(--weight-semibold);
+  }
+  .font-card__name { font-size: var(--text-3xl); margin-block: var(--space-1) var(--space-2); }
+  .font-serif { font-family: var(--font-serif); font-weight: var(--weight-bold); }
+  .font-sans  { font-family: var(--font-sans);  font-weight: var(--weight-bold); }
+  .font-card__desc { font-size: var(--text-sm); color: var(--color-ink-muted); }
+
+  .type-scale { display: flex; flex-direction: column; gap: var(--space-2); }
+  .type-row {
+    display: grid;
+    grid-template-columns: 180px 1fr;
+    gap: var(--space-3);
+    align-items: baseline;
+    padding-block: var(--space-2);
+    border-top: 1px solid var(--color-border);
+  }
+  .type-row:first-child { border-top: none; }
+  .type-row__token { font-size: var(--text-xs); color: var(--color-ink-subtle); }
+  .type-row__sample { color: var(--color-ink); }
+  .t-xs   { font-size: var(--text-xs); }
+  .t-sm   { font-size: var(--text-sm); }
+  .t-base { font-size: var(--text-base); }
+  .t-md   { font-size: var(--text-md); color: var(--color-ink-muted); }
+  .t-lg,
+  .t-xl,
+  .t-2xl,
+  .t-3xl,
+  .t-4xl { font-family: var(--font-serif); font-weight: var(--weight-semibold); color: var(--color-cream); }
+  .t-lg  { font-size: var(--text-lg); }
+  .t-xl  { font-size: var(--text-xl); }
+  .t-2xl { font-size: var(--text-2xl); }
+  .t-3xl { font-size: var(--text-3xl); }
+  .t-4xl { font-size: var(--text-4xl); }
+
+  /* ---------------------------------------------------------------- buttons */
+  .btn-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: var(--space-3);
+  }
+  .btn-cell {
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-3);
+    min-height: 120px;
+    justify-content: space-between;
+  }
+  .btn-cell__label {
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-caps);
+    color: var(--color-ink-subtle);
+    font-weight: var(--weight-semibold);
+  }
+  /* simulate states for documentation */
+  .btn-cell :global(.force-hover) {
+    background: linear-gradient(135deg, var(--hot-coal), var(--clay-terracotta)) !important;
+    color: var(--birch-white) !important;
+    box-shadow: var(--shadow-lg), var(--shadow-glow) !important;
+    transform: translateY(-2px) !important;
+  }
+  .btn-cell :global(.force-focus) {
+    outline: 2px solid var(--color-accent-bright) !important;
+    outline-offset: 3px !important;
+  }
+
+  /* ----------------------------------------------------------------- spacing */
+  .spacing-ramp { display: flex; flex-direction: column; gap: var(--space-1); }
+  .spacing-row {
+    display: grid;
+    grid-template-columns: 140px 180px 1fr;
+    align-items: center;
+    gap: var(--space-3);
+    padding-block: 0.4rem;
+  }
+  .spacing-row code { font-size: var(--text-sm); color: var(--color-ink); }
+  .spacing-row__val { font-size: var(--text-xs); color: var(--color-ink-subtle); }
+  .spacing-row__bar {
+    height: 12px;
+    background: linear-gradient(90deg, var(--clay-terracotta), var(--hot-coal));
+    border-radius: var(--radius-pill);
+  }
+  @media (max-width: 600px) {
+    .spacing-row { grid-template-columns: 100px 1fr; }
+    .spacing-row__val { display: none; }
+  }
+
+  /* ------------------------------------------------------------------ radius */
+  .radius-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: var(--space-3);
+  }
+  .radius-cell {
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-md);
+    padding: var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+    align-items: center;
+    text-align: center;
+  }
+  .radius-cell__shape {
+    width: 72px; height: 72px;
+    background: linear-gradient(135deg, var(--clay-terracotta), var(--forest-green));
+    margin-bottom: var(--space-1);
+  }
+  .radius-cell code { font-size: var(--text-xs); color: var(--color-ink); }
+  .radius-cell__note { font-size: var(--text-xs); color: var(--color-ink-subtle); }
+
+  /* ----------------------------------------------------------------- texture */
+  .texture-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: var(--space-3);
+  }
+  .texture { margin: 0; }
+  .texture__panel {
+    aspect-ratio: 16 / 10;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-sm);
+  }
+  .texture figcaption {
+    margin-top: var(--space-2);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .texture figcaption code { font-size: var(--text-sm); color: var(--color-ink); }
+  .texture figcaption span { font-size: var(--text-xs); color: var(--color-ink-subtle); }
+
+  /* ------------------------------------------------------------- cta return */
+  .cta-return {
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    align-items: flex-start;
+  }
+
+  /* responsive table-style rows */
+  @media (max-width: 600px) {
+    .type-row { grid-template-columns: 1fr; gap: var(--space-1); }
+    .type-row__token { font-size: var(--text-xs); }
+  }
+</style>

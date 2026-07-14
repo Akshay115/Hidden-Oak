@@ -1,0 +1,114 @@
+---
+/**
+ * Hero — full-bleed landing hero. Used at the top of pages.
+ * Background image is optional; falls back to a warm gradient.
+ */
+import CTAButton from './CTAButton.astro';
+
+interface Props {
+  eyebrow?: string;
+  title: string;
+  subtitle?: string;
+  image?: string;
+  primaryCta?: { href: string; label: string };
+  secondaryCta?: { href: string; label: string };
+  align?: 'left' | 'center';
+}
+
+const {
+  eyebrow,
+  title,
+  subtitle,
+  image,
+  primaryCta = { href: '/book', label: 'Book a Session' },
+  secondaryCta,
+  align = 'left',
+} = Astro.props;
+
+const bgStyle = image
+  ? `background-image: linear-gradient(180deg, rgba(13,11,9,0.55), rgba(13,11,9,0.92)), url('${image}');`
+  : '';
+---
+
+<section class:list={['hero', `hero--${align}`]} style={bgStyle}>
+  <div class="hero__scrim"></div>
+  <div class="hero__content container">
+    {eyebrow && <p class="eyebrow hero__eyebrow">{eyebrow}</p>}
+    <h1 class="hero__title">{title}</h1>
+    {
+      subtitle && (
+        <p class="hero__subtitle">
+          {subtitle}
+        </p>
+      )
+    }
+    <div class="hero__actions">
+      <CTAButton href={primaryCta.href} variant="primary" size="lg">{primaryCta.label}</CTAButton>
+      {
+        secondaryCta && (
+          <CTAButton href={secondaryCta.href} variant="ghost" size="lg">
+            {secondaryCta.label}
+          </CTAButton>
+        )
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    min-height: clamp(420px, 70vh, 720px);
+    display: flex;
+    align-items: center;
+    background-color: var(--color-bg);
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    overflow: hidden;
+  }
+  .hero--center .hero__content { text-align: center; align-items: center; }
+  .hero__scrim {
+    position: absolute;
+    inset: 0;
+    background: radial-gradient(
+      120% 80% at 50% 0%,
+      rgba(196, 99, 31, 0.12),
+      transparent 60%
+    );
+    pointer-events: none;
+  }
+  .hero__content {
+    position: relative;
+    z-index: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-5);
+    padding-block: var(--space-9);
+    align-items: flex-start;
+    max-width: var(--container-narrow);
+  }
+  .hero--center .hero__content { margin-inline: auto; }
+  .hero__title {
+    font-size: var(--text-4xl);
+    line-height: var(--leading-tight);
+    max-width: 16ch;
+  }
+  .hero__subtitle {
+    font-size: var(--text-md);
+    color: var(--color-ink-muted);
+    max-width: 52ch;
+    line-height: var(--leading-loose);
+  }
+  .hero__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-3);
+    margin-top: var(--space-3);
+  }
+  .hero--center .hero__actions { justify-content: center; }
+  @media (max-width: 640px) {
+    .hero__title { font-size: var(--text-3xl); }
+    .hero__subtitle { font-size: var(--text-base); }
+  }
+</style>

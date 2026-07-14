@@ -1,0 +1,106 @@
+---
+/**
+ * Footer — site-wide footer with brand blurb, nav links, contact line.
+ */
+const year = new Date().getFullYear();
+
+const links = [
+  { href: '/the-banya', label: 'The Banya' },
+  { href: '/services', label: 'Services' },
+  { href: '/pricing', label: 'Pricing' },
+  { href: '/gallery', label: 'Gallery' },
+  { href: '/book', label: 'Book Now' },
+  { href: '/location', label: 'Location' },
+];
+---
+
+<footer class="site-footer">
+  <div class="site-footer__inner container">
+    <div class="site-footer__brand">
+      <a href="/" class="brand-mark">Hidden Oak</a>
+      <p class="brand-tagline">
+        A traditional Russian banya, transplanted to the Goan coast.
+        Wood-fired heat, cold plunge, and quiet — hidden among the palms.
+      </p>
+    </div>
+
+    <nav class="site-footer__nav" aria-label="Footer">
+      <ul>
+        {links.map((l) => <li><a href={l.href}>{l.label}</a></li>)}
+      </ul>
+    </nav>
+
+    <div class="site-footer__contact">
+      <p class="eyebrow">Find us</p>
+      <p>Arambol Beach</p>
+      <p>North Goa, India</p>
+      <p class="site-footer__book"><a href="/book">Book a session →</a></p>
+    </div>
+  </div>
+
+  <div class="site-footer__bar container">
+    <p>© {year} Hidden Oak Banya · Arambol, Goa. All rights reserved.</p>
+    <p class="built">Built with Astro · Hosted on Cloudflare Pages</p>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    background: var(--wood-burnt);
+    border-top: 1px solid var(--color-border);
+    margin-top: var(--space-7);
+  }
+  .site-footer__inner {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr 1fr;
+    gap: var(--space-6);
+    padding-block: var(--space-6);
+  }
+  .brand-mark {
+    font-family: var(--font-serif);
+    font-size: var(--text-xl);
+    font-weight: var(--weight-bold);
+    color: var(--birch-white);
+    text-decoration: none;
+  }
+  .brand-tagline {
+    margin-top: var(--space-2);
+    color: var(--color-ink-subtle);
+    max-width: 36ch;
+    font-size: var(--text-sm);
+    line-height: var(--leading-normal);
+  }
+  .site-footer__nav ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+  }
+  .site-footer__nav a {
+    color: var(--color-ink-muted);
+    font-size: var(--text-sm);
+  }
+  .site-footer__contact p {
+    font-size: var(--text-sm);
+    color: var(--brand-info, var(--color-ink-muted));
+    margin-block: 2px;
+    color: var(--color-ink-muted);
+  }
+  .site-footer__book { margin-top: var(--space-2) !important; }
+  .site-footer__bar {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    gap: var(--space-3);
+    padding-block: var(--space-4);
+    border-top: 1px solid var(--color-border);
+    font-size: var(--text-xs);
+    color: var(--color-ink-subtle);
+  }
+  @media (max-width: 720px) {
+    .site-footer__inner { grid-template-columns: 1fr; gap: var(--space-5); }
+    .site-footer__bar { flex-direction: column; align-items: flex-start; }
+  }
+</style>

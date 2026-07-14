@@ -1,0 +1,360 @@
+---
+/**
+ * The Banya / About — /the-banya
+ *
+ * Storytelling-focused: the history and culture of the Russian banya, the
+ * traditional ritual, and how Hidden Oak adapts it in Goa.
+ * Practical breakdown of what a visitor gets lives on /services.
+ *
+ * Content is original, written from sourced research. Key accuracy notes:
+ *  - The Primary Chronicle / Apostle Andrew passage is framed as the earliest
+ *    *written/literary* description, not verified history (the chronicle
+ *    contains embellished legends).
+ *  - Etymology given per scholarly consensus: Greek balaneîon → Latin
+ *    balneum → Proto-Slavic → баня. The romanticised "makes pain go away"
+ *    folk etymology is NOT repeated.
+ *  - Bannik and venik benefits described as traditional belief, not science.
+ *
+ * Heading hierarchy: single h1 (in Hero), h2 per chapter, h3 for sub-sections.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import SectionDivider from '../components/SectionDivider.astro';
+import CTAButton from '../components/CTAButton.astro';
+---
+
+<BaseLayout
+  title="The Banya"
+  description="The Russian banya is a thousand-year-old ritual of heat, steam, and cold. Hidden Oak brings the tradition to the Goan coast — earth, wood, and warm fire among the palms of Arambol."
+>
+  <Hero
+    eyebrow="Our Story"
+    title="The Banya"
+    subtitle="A thousand-year-old ritual of heat, steam, and cold — brought to the Goan coast, and made at home among the palms."
+    secondaryCta={{ href: '/book', label: 'Book a Session' }}
+  />
+
+  {/* =====================================================================
+       CHAPTER I — THE ROOTS
+       What a banya is; etymology; earliest written record; village
+       institution; folk medicine; the bannik.
+  ===================================================================== */}
+  <section class="section">
+    <div class="container prose">
+      <p class="eyebrow">Chapter I · The Roots</p>
+      <h2>An old word for an older practice</h2>
+
+      <p>
+        A <em>banya</em> is, at its simplest, a bathhouse — a warm room of wood and
+        stone where water is poured on heated rocks to make steam. But to call it
+        a sauna, in the Nordic sense, undersells it. The banya is slower, wetter,
+        and more communal. It has its own vocabulary, its own etiquette, and its
+        own spirit. For most of Russian history it was less a luxury than a piece
+        of the household — as essential, and as unremarkable, as the hearth.
+      </p>
+
+      <p>
+        Even the word travels a long way. <em>Banya</em> (баня) descends, through
+        Old Church Slavonic and Proto-Slavic, from the Latin <em>balneum</em> —
+        itself a borrowing from the Greek <em>balaneîon</em>. It is a cousin of
+        the Italian <em>bagno</em> and the French <em>bain</em>. But if the word
+        came from the south, the practice did not. Sweating over hot stones is far
+        older than any name for it, rooted in the forest cultures of the Slavic
+        and Finno-Ugric north.
+      </p>
+
+      <h3 class="prose__sub">The earliest written record</h3>
+      <p>
+        The oldest surviving description of the banya sits in a twelfth-century
+        manuscript — the <em>Primary Chronicle</em>, compiled around 1113 in
+        Kievan Rus'. The chronicler records a traveller's account of the land that
+        would become Novgorod, and pauses, evidently delighted, to describe what
+        he found there: wooden bathhouses heated to a fierce heat, the bathers
+        anointing themselves, beating themselves with bundles of branches, then
+        dousing themselves in cold water — emerging, he wrote, barely alive, only
+        to do it all again the next day.
+      </p>
+      <p class="prose__note">
+        The passage is almost certainly a legend, not a record. The Primary
+        Chronicle was written to tell a story as much as to keep one, and it
+        attributes the sighting to Andrew the Apostle — who, even in tradition,
+        travelled these lands centuries earlier. Historians read it as the
+        chronicle's way of saying: <em>this practice is old, and it is ours.</em>
+        What it tells us reliably is that by the 1100s the banya was already so
+        woven into Slavic life that it needed no introduction.
+      </p>
+
+      <h3 class="prose__sub">The cleanest place in the village</h3>
+      <p>
+        In a Russian village without plumbing, the banya was often the most
+        hygienic structure for miles — the one place a person could get properly
+        clean. It was communal by necessity, shared by turns. But cleanliness was
+        only the start of it. The banya was the village's unofficial clinic, its
+        birthing room, and its place of purification. Folk healers — the
+        <em>znakhari</em> — worked there, treating colds and aching joints with
+        herbal steam and massage. Women gave birth inside the banya, attended by
+        midwives, because it was warm, private, and had water on hand. After
+        illness, after childbirth, after a death in the family, the first stop
+        was the banya: to be washed, to be reset, to begin again.
+      </p>
+      <p>
+        A peasant proverb, now the title of a scholarly history of the bathhouse,
+        puts the whole relationship in five words: <em>without the banya we would
+        perish.</em>
+      </p>
+
+      <h3 class="prose__sub">The spirit in the corner</h3>
+      <p>
+        Because the banya stood at the edge of village life — literally, often
+        built apart from the house, and figuratively, the place where the body
+        was opened and made vulnerable — folklore gave it a guardian. Every banya
+        had its <em>bannik</em>, a capricious spirit who lived behind the stove.
+        He was not exactly worshipped and not exactly welcome. He was
+        accommodated. You left him a little soap, a little water. You did not
+        bathe alone, or after dark, or in his turn — the last shift of the day
+        was always his. Cross him, the stories warned, and he might scald you,
+        or steam you senseless, or burn the place down. Keep on his good side,
+        and he would keep the bathhouse sound.
+      </p>
+      <p>
+        No one at Hidden Oak still believes in the bannik. But the instinct
+        behind him — that the bathhouse is a place to enter with respect, and a
+        little humility — is one we have kept.
+      </p>
+    </div>
+  </section>
+
+  <SectionDivider />
+
+  {/* =====================================================================
+       CHAPTER II — THE RITUAL
+       Heat and light steam; the venik (birch + oak); cold plunge;
+       rest and tea; the rhythm of rounds.
+  ===================================================================== */}
+  <section class="section">
+    <div class="container prose">
+      <p class="eyebrow">Chapter II · The Ritual</p>
+      <h2>Heat, cold, rest — and repeat</h2>
+
+      <p>
+        The banya is not a thing you do once. It is a cycle, and the cycle is the
+        point. You warm slowly in the steam, you cool sharply in cold water, and
+        you rest. Then you do it again. Two hours, three hours — the pace is set
+        by the body, not the clock.
+      </p>
+
+      <h3 class="prose__sub">Light steam</h3>
+      <p>
+        The steam room — the <em>parilka</em> — is built around a stove of stone,
+        the <em>kamenka</em>. When the stones are good and hot, you ladle a little
+        water onto them through the vent. The trick is restraint: a small amount
+        of water on very hot stone becomes a fine, light vapour that the Russians
+        call <em>lyogkiy par</em> — "light steam." Too much water and the air goes
+        heavy and clammy, which is the opposite of what you want. When someone
+        finally steps out, done, the traditional greeting from those outside is
+        <em>S lyogkim parom</em> — "may your steam have been light."
+      </p>
+
+      <h3 class="prose__sub">The venik</h3>
+      <p>
+        Then there is the <em>venik</em>: a bundle of leafy branches, soaked in
+        warm water until supple, used to fan the hot steam across the skin and to
+        work the muscles with a gentle, rhythmic tapping. Done well, it is closer
+        to a massage than a beating — the leaves carry the heat, release their
+        own oils, and leave the skin flushed and lightly exfoliated.
+      </p>
+      <p>
+        Two woods do most of the work. <strong>Birch</strong> is the classic — its
+        leaves are soft, full of essential oils, and traditionally believed to
+        ease aches and open the chest. <strong>Oak</strong> is firmer, the leaves
+        broader and richer in tannin, used for a deeper, more astringent pass
+        that is said to be good for the skin. (Hidden Oak, we should admit, is
+        named for the second.) Eucalyptus turns up in modern banyas too — not
+        traditional, but welcome for the way it clears the head.
+      </p>
+
+      <h3 class="prose__sub">The cold</h3>
+      <p>
+        And then — out. Into the cold. In a Russian winter this means a snowbank,
+        or a hole cut through the ice of a frozen river. The shock is total, and
+        brief, and the body comes back out of it singing. In the banyas of today,
+        the cold is more often a wooden plunge tub — a <em>kupel</em> — kept
+        cold enough to do the same job. Heat opens; cold closes. One without the
+        other is only half the practice.
+      </p>
+
+      <h3 class="prose__sub">Tea, and the space between</h3>
+      <p>
+        Between rounds, you rest. A traditional banya has a room just for this —
+        the <em>predbannik</em>, the "before-the-banya," where the benches and
+        the clothes pegs live. Here you sit, cool down, drink tea — strong black
+        tea, or herbal, often with honey or jam — and let the body settle before
+        the next round. This is where the social life of the banya happens: the
+        long, unhurried conversations that are, for many, the real reason they
+        came.
+      </p>
+    </div>
+  </section>
+
+  <SectionDivider />
+
+  {/* =====================================================================
+       CHAPTER III — THE FUSION
+       Hidden Oak in Goa: earth/mud walls, jungle setting, the swedana
+       parallel, Arambol context, what was kept and what was changed.
+  ===================================================================== */}
+  <section class="section">
+    <div class="container prose">
+      <p class="eyebrow">Chapter III · The Fusion</p>
+      <h2>From the birch forest to the Goan coast</h2>
+
+      <p>
+        Hidden Oak did not set out to build a museum. The question was never
+        <em>how do we reproduce a Russian banya in Goa</em> — the climate is
+        wrong, the materials are wrong, and a faithful replica would feel exactly
+        like one. The question was: what from this tradition is worth keeping,
+        and what can it become here?
+      </p>
+
+      <h3 class="prose__sub">Earth walls, warm wood</h3>
+      <p>
+        A traditional banya is built from what is around it — timber, stone, clay.
+        In Goa, what is around is laterite earth, palm timber, and a long local
+        tradition of building with mud. So the walls at Hidden Oak are plastered
+        earth, not planed pine — the same troweled clay finish you see on village
+        houses across the Konkan coast. The mass of those walls holds heat the
+        way a stone <em>kamenka</em> does: slowly, evenly, deep into the evening.
+        The wood is local and tropical, chosen to take the humidity. Nothing is
+        imported to look the part.
+      </p>
+
+      <h3 class="prose__sub">Among the palms</h3>
+      <p>
+        And then there is the setting. A Russian banya belongs in a birch forest
+        in winter: the snow outside, the steam inside, the contrast doing its
+        work. We do not have the snow. We have, instead, the quiet end of an
+        Arambol lane — palms and cashew trees, the sea close enough to hear on a
+        still day, the air heavy and warm. The cold plunge is not a hole in the
+        ice; it is a tub kept cold against the tropical heat, and the shock of it
+        is no less real for the green outside the door. The contrast here is not
+        hot-and-frozen. It is hot-and-cool, under a canopy, in the tropics. It is
+        its own thing.
+      </p>
+
+      <h3 class="prose__sub">An older neighbour</h3>
+      <p>
+        What surprised us, building it, was how close the banya sits to traditions
+        that were already here. India has its own thousand-year practice of
+        medicinal steam. In Ayurveda it is called <em>swedana</em> — from the
+        Sanskrit for <em>sweat</em> — a sudation therapy used to open the body's
+        channels, ease stiffness, and prepare for purification. Herbal steam, the
+        movement of heat through the body, the careful rhythm of warmth and rest:
+        these are not Russian ideas, or Indian ideas. They are human ones, arrived
+        at independently, in more than one forest.
+      </p>
+      <p>
+        So Hidden Oak does not pretend to be Ayurvedic, and it does not pretend to
+        be purely Russian. It is a Russian banya built in the Indian way, with
+        local earth and local wood, in a place that has drawn people looking for
+        quiet and recovery for longer than most. Arambol has been a stop on the
+        trail for seekers and travellers since the late 1960s — not ancient, but
+        not new either. We are, in a sense, the latest guests in a village that
+        has been hosting for half a century.
+      </p>
+
+      <h3 class="prose__sub">What stayed, what changed</h3>
+      <p>
+        What we kept: the cycle of heat and cold, the <em>venik</em>, the slow
+        pace, the tea between rounds, and the feeling — hard to name but
+        unmistakable — of leaving cleaner and lighter than you came.
+      </p>
+      <p>
+        What we changed: the snowbank, obviously. The birch, mostly — we use what
+        the climate allows, and let eucalyptus and local aromatic leaves stand in
+        where a Russian forest would have provided. And the walls, which are the
+        colour of the earth they came from.
+      </p>
+      <p>
+        The result is not a Russian banya with a Goan postcode. It is something
+        that could only exist here — earthy, warm, and a little wild. We call it
+        Hidden Oak, and we would like to show you what we mean.
+      </p>
+    </div>
+  </section>
+
+  <SectionDivider />
+
+  {/* ===== CTA ========================================================= */}
+  <section class="section">
+    <div class="container cta-band">
+      <div>
+        <p class="eyebrow">Come and feel it</p>
+        <h2>The best way to understand it is to step inside.</h2>
+        <p class="lede">
+          Sessions run by appointment, seven days a week. First-timers always welcome.
+        </p>
+      </div>
+      <CTAButton href="/book" variant="primary" size="lg">Book a Session</CTAButton>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .prose {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    max-width: var(--container-narrow);
+  }
+  .prose h2 {
+    max-width: 22ch;
+    margin-bottom: var(--space-1);
+  }
+  .prose h3 {
+    font-size: var(--text-xl);
+    margin-top: var(--space-4);
+    color: var(--birch-white);
+  }
+  .prose p {
+    font-size: var(--text-md);
+    color: var(--color-ink-muted);
+    line-height: var(--leading-loose);
+  }
+  /* A sub-heading inside the prose flow */
+  .prose__sub {
+    scroll-margin-top: calc(var(--header-height) + var(--space-3));
+  }
+  /* Editorial note — for the historical caveat about the Primary Chronicle. */
+  .prose__note {
+    position: relative;
+    padding: var(--space-3) var(--space-4);
+    background: var(--wood-smolder);
+    border-left: 3px solid var(--clay-terracotta);
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    color: var(--color-ink-subtle);
+    line-height: var(--leading-normal);
+  }
+  .prose em {
+    color: var(--birch-warm);
+    font-style: italic;
+  }
+  .prose strong {
+    color: var(--birch-white);
+    font-weight: var(--weight-semibold);
+  }
+  .cta-band {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-5);
+    flex-wrap: wrap;
+    background: var(--wood-burnt);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+  }
+  @media (max-width: 640px) {
+    .cta-band { flex-direction: column; align-items: flex-start; }
+  }
+</style>

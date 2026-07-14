@@ -1,0 +1,98 @@
+---
+/**
+ * BookingEmbed — Cal.com inline scheduler.
+ *
+ * Loads Cal.com's embed.js as a client-side module script. The <div> below is
+ * the mount target; the script transforms it into an iframe pointing at the
+ * configured event URL. This is the ONLY third-party embed on the site and the
+ * only piece of client-side JavaScript beyond Astro's island-free static HTML.
+ *
+ * To reconfigure, change `namespace` (your Cal.com org/username) and `event`
+ * (the event slug). Or pass them as props from a page.
+ */
+interface Props {
+  namespace?: string; // Cal.com org / username
+  event?: string;     // event slug
+  layout?: 'month_view' | 'week_view';
+  class?: string;
+}
+
+const {
+  namespace = 'hidden-oak',
+  event = 'banya-session',
+  layout = 'month_view',
+  class: className = '',
+} = Astro.props;
+
+const calLink = `https://cal.com/${namespace}/${event}`;
+---
+
+<div class:list={['booking-embed', className]} data-cal-namespace={namespace}>
+  <noscript>
+    <p class="booking-embed__noscript">
+      Booking requires JavaScript.
+      <a href={calLink}>Open the scheduler directly →</a>
+    </p>
+  </noscript>
+  <div
+    class="booking-embed__mount"
+    data-cal-link={`${namespace}/${event}`}
+    data-cal-config={`{"layout":"${layout}"`}
+  >
+    <span class="booking-embed__placeholder">Loading scheduler…</span>
+  </div>
+</div>
+
+<script>
+  // Injected only once, when this component first appears on a page.
+  // Uses Cal.com's official @calcom/embed-js bundle from their CDN.
+  (function () {
+    const mount = document.querySelector('[data-cal-link]');
+    if (!mount) return;
+
+    const s = document.createElement('script');
+    s.type = 'module';
+    s.innerHTML = `
+      import { Cal } from "https://cal.com/embed.js";
+      Cal("init", { origin: "https://cal.com" });
+      const ns = document.currentScript.closest('[data-cal-namespace]')?.dataset.calNamespace;
+      const el = document.currentScript.closest('[data-cal-link]');
+      if (el) {
+        Cal("inline", {
+          elementOrSelector: el,
+          calLink: el.dataset.calLink,
+          config: JSON.parse(el.dataset.calConfig || '{}')
+        });
+      }
+    `;
+    mount.appendChild(s);
+  })();
+</script>
+
+<style>
+  .booking-embed {
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-2);
+    overflow: hidden;
+  }
+  .booking-embed__mount {
+    min-height: 640px;
+    border-radius: var(--radius-md);
+    background: var(--color-surface);
+  }
+  .booking-embed__placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 640px;
+    color: var(--color-ink-subtle);
+    font-size: var(--text-sm);
+  }
+  .booking-embed__noscript {
+    padding: var(--space-5);
+    color: var(--color-ink-muted);
+  }
+  /* Once Cal.com mounts, its iframe replaces the placeholder. */
+</style>

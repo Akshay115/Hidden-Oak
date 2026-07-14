@@ -1,0 +1,41 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import BookingEmbed from '../components/BookingEmbed.astro';
+---
+
+<BaseLayout
+  title="Book"
+  description="Book a banya session at Hidden Oak with our online scheduler."
+>
+  <section class="section book">
+    <div class="container book__head">
+      <p class="eyebrow">Booking</p>
+      <h1>Pick a time.</h1>
+      <p class="lede">
+        Choose a slot below. You'll get a confirmation by email — and a reminder the day before.
+        Need a different time? <a href="/contact">Get in touch</a>.
+      </p>
+    </div>
+
+    <div class="container">
+      <BookingEmbed namespace="hidden-oak" event="banya-session" />
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  .book__head {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-3);
+    max-width: var(--container-narrow);
+    margin-bottom: var(--space-7);
+  }
+  .book__head h1 { font-size: var(--text-3xl); }
+  .lede {
+    font-size: var(--text-md);
+    color: var(--color-ink-muted);
+    line-height: var(--leading-loose);
+    max-width: 60ch;
+  }
+</style>

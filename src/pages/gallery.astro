@@ -1,0 +1,120 @@
+---
+/**
+ * Gallery — /gallery
+ * Image-rich masonry-style grid. Until real photos land in /public/images,
+ * gradient tiles with captions stand in. Replacing a tile with a real image:
+ *   set `src` on the <img> and remove the gradient placeholder div.
+ */
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Hero from '../components/Hero.astro';
+import CTAButton from '../components/CTAButton.astro';
+
+// Varying row spans create the masonry feel. `tone` drives the placeholder gradient.
+const shots = [
+  { alt: '[TODO alt — steam room]',     caption: 'The steam room',     tone: 'warm',   span: 'tall'   },
+  { alt: '[TODO alt — ice bath]',       caption: 'Ice bath',           tone: 'cool',   span: 'short'  },
+  { alt: '[TODO alt — wood stove]',     caption: 'The stove',          tone: 'ember',  span: 'std'    },
+  { alt: '[TODO alt — rest area]',      caption: 'Rest area',          tone: 'oak',    span: 'tall'   },
+  { alt: '[TODO alt — venik bundles]',  caption: 'Venik & accessories',tone: 'sage',   span: 'std'    },
+  { alt: '[TODO alt — Arambol beach]',  caption: 'Arambol beach',      tone: 'warm',   span: 'short'  },
+  { alt: '[TODO alt — entrance path]',  caption: 'The approach',       tone: 'oak',    span: 'std'    },
+  { alt: '[TODO alt — evening light]',  caption: 'Evening light',      tone: 'ember',  span: 'tall'   },
+  { alt: '[TODO alt — shower detail]',  caption: 'Shower & rinse',     tone: 'cool',   span: 'short'  },
+];
+---
+
+<BaseLayout
+  title="Gallery"
+  description="[TODO meta description — photos of Hidden Oak banya in Arambol, Goa.]"
+>
+  <Hero
+    eyebrow="Gallery"
+    title="A look around."
+    subtitle="[TODO hero subtitle — a few words on the space.]"
+    align="center"
+  />
+
+  <section class="section">
+    <div class="container">
+      <div class="masonry">
+        {
+          shots.map((s) => (
+            <figure class:list={['tile', `tile--${s.tone}`, `tile--${s.span}`]}>
+              {/* TODO: replace with <img src="/images/..." alt={s.alt} loading="lazy" />
+                  once real photos are in /public/images. */}
+              <div class="tile__media" role="img" aria-label={s.alt} />
+              <figcaption>{s.caption}</figcaption>
+            </figure>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container cta-band">
+      <h2>[TODO heading — see it in person]</h2>
+      <CTAButton href="/book" variant="primary" size="lg">Book a Session</CTAButton>
+    </div>
+  </section>
+</BaseLayout>
+
+<style>
+  /* CSS columns masonry — items flow top-to-bottom then next column.
+     Break-inside avoid keeps tiles intact across the column flow. */
+  .masonry {
+    column-count: 3;
+    column-gap: var(--space-3);
+  }
+  @media (max-width: 880px) { .masonry { column-count: 2; } }
+  @media (max-width: 540px) { .masonry { column-count: 1; } }
+
+  .tile {
+    break-inside: avoid;
+    margin: 0 0 var(--space-3);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
+    background: var(--wood-burnt);
+    border: 1px solid var(--color-border);
+    transition: transform var(--transition-base), border-color var(--transition-base);
+  }
+  .tile:hover {
+    transform: translateY(-3px);
+    border-color: var(--color-border-strong);
+  }
+  .tile__media {
+    width: 100%;
+    background-size: cover;
+    background-position: center;
+  }
+  /* Vary the aspect ratio to create masonry rhythm. */
+  .tile--short .tile__media { aspect-ratio: 4 / 3; }
+  .tile--std   .tile__media { aspect-ratio: 1 / 1; }
+  .tile--tall  .tile__media { aspect-ratio: 3 / 4; }
+  /* Placeholder gradients by tone — replace with real image backgrounds later. */
+  .tile--warm  .tile__media { background: linear-gradient(135deg, var(--wood-smolder), var(--clay-light)); }
+  .tile--cool  .tile__media { background: linear-gradient(135deg, #2a3438, var(--forest-light)); }
+  .tile--oak   .tile__media { background: linear-gradient(135deg, var(--wood-charred), var(--clay-terracotta)); }
+  .tile--ember .tile__media { background: linear-gradient(135deg, #3a1f12, var(--hot-coal)); }
+  .tile--sage  .tile__media { background: linear-gradient(135deg, var(--forest-deep), var(--forest-light)); }
+  figcaption {
+    padding: var(--space-2) var(--space-3);
+    font-size: var(--text-sm);
+    color: var(--color-ink-muted);
+  }
+
+  .cta-band {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: var(--space-5);
+    flex-wrap: wrap;
+    background: var(--wood-burnt);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-6);
+  }
+  @media (max-width: 640px) {
+    .cta-band { flex-direction: column; align-items: flex-start; }
+  }
+</style>

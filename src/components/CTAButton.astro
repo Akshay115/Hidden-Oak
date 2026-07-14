@@ -1,0 +1,80 @@
+---
+/**
+ * CTAButton — primary call-to-action link.
+ * Renders as an <a> (no client JS). Variants: primary | ghost | light.
+ */
+interface Props {
+  href: string;
+  variant?: 'primary' | 'ghost' | 'light';
+  size?: 'md' | 'lg';
+  class?: string;
+}
+
+const {
+  href,
+  variant = 'primary',
+  size = 'md',
+  class: className = '',
+} = Astro.props;
+---
+
+<a
+  href={href}
+  class:list={['cta', `cta--${variant}`, `cta--${size}`, className]}
+>
+  <slot />
+</a>
+
+<style>
+  .cta {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: var(--space-2);
+    font-family: var(--font-sans);
+    font-weight: 600;
+    letter-spacing: var(--tracking-wide);
+    border-radius: var(--radius-pill);
+    border: 1px solid transparent;
+    text-decoration: none;
+    cursor: pointer;
+    transition: transform var(--transition-fast), background-color var(--transition-fast),
+      color var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+    white-space: nowrap;
+  }
+
+  .cta--md { padding: var(--space-3) var(--space-5); font-size: var(--text-base); }
+  .cta--lg { padding: var(--space-4) var(--space-6); font-size: var(--text-md); }
+
+  .cta--primary {
+    background: linear-gradient(135deg, var(--color-ember), var(--color-oak));
+    color: var(--color-cream);
+    box-shadow: var(--shadow-md);
+  }
+  .cta--primary:hover {
+    color: var(--color-cream);
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-lg), var(--shadow-glow);
+  }
+
+  .cta--ghost {
+    background: transparent;
+    color: var(--color-ink);
+    border-color: var(--color-border-strong);
+  }
+  .cta--ghost:hover {
+    color: var(--color-cream);
+    border-color: var(--color-ember-bright);
+    background: rgba(196, 99, 31, 0.08);
+  }
+
+  .cta--light {
+    background: var(--color-cream);
+    color: var(--color-bg);
+  }
+  .cta--light:hover {
+    color: var(--color-bg);
+    background: #fff;
+    transform: translateY(-2px);
+  }
+</style>
