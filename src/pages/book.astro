@@ -1,41 +1,154 @@
 ---
+/**
+ * Book a Session — /book
+ *
+ * Mounts the Cal.com inline scheduler via BookingEmbed.
+ * The placeholder calLink "hidden-oak/banya-session" should be replaced
+ * with the real Cal.com event URL when ready (see BookingEmbed.astro).
+ */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import BookingEmbed from '../components/BookingEmbed.astro';
 ---
 
 <BaseLayout
-  title="Book"
-  description="Book a banya session at Hidden Oak with our online scheduler."
+  title="Book a Session"
+  description="Book your banya session at Hidden Oak in Arambol, Goa. Choose a time that suits you — first-timers always welcome."
 >
   <section class="section book">
     <div class="container book__head">
       <p class="eyebrow">Booking</p>
-      <h1>Pick a time.</h1>
+      <h1>Book your session.</h1>
       <p class="lede">
-        Choose a slot below. You'll get a confirmation by email — and a reminder the day before.
-        Need a different time? <a href="/contact">Get in touch</a>.
+        Pick a slot below. You'll get a confirmation by email and a reminder the
+        day before. First time? We'll walk you through every step when you arrive.
       </p>
     </div>
 
-    <div class="container">
-      <BookingEmbed namespace="hidden-oak" event="banya-session" />
+    <div class="container book__main">
+      <div class="book__intro">
+        <h2 class="book__intro-heading">Before you book</h2>
+        <p>
+          Sessions run <strong>75 to 90 minutes</strong>, depending on whether you
+          add the ice bath — that's two to three rounds of heat with rest in
+          between, never a rush. <strong>Bring swimwear</strong> (a swimsuit or
+          trunks), and a <strong>water bottle</strong> to stay hydrated. Towels,
+          soap, and tea are on us. If it's your first time, have a read through
+          <a href="/services">what to expect</a> — it answers most of the
+          questions people have before their first visit.
+        </p>
+      </div>
+
+      <BookingEmbed calLink="hidden-oak/banya-session" />
+    </div>
+
+    <div class="container book__aside">
+      <div class="book__aside-item">
+        <h2>Prefer to talk?</h2>
+        <p>
+          Message us directly and we'll find a time that works.
+        </p>
+        <ul class="book__channels">
+          <li><a href="https://wa.me/91[TODO]">WhatsApp →</a></li>
+          <li><a href="mailto:hello@hiddenoak.example">Email →</a></li>
+        </ul>
+      </div>
+      <div class="book__aside-item">
+        <h2>Not sure what to pick?</h2>
+        <p>
+          The difference between walk-in options is just the ice bath — see a
+          side-by-side before you decide.
+        </p>
+        <a href="/services" class="book__aside-link">See what's included →</a>
+      </div>
     </div>
   </section>
 </BaseLayout>
 
 <style>
+  .book { padding-top: var(--space-6); }
+
   .book__head {
     display: flex;
     flex-direction: column;
-    gap: var(--space-3);
+    gap: var(--space-2);
     max-width: var(--container-narrow);
-    margin-bottom: var(--space-7);
+    margin-bottom: var(--space-6);
   }
   .book__head h1 { font-size: var(--text-3xl); }
-  .lede {
+  .book__head .lede {
     font-size: var(--text-md);
     color: var(--color-ink-muted);
     line-height: var(--leading-loose);
-    max-width: 60ch;
+    max-width: 58ch;
+  }
+
+  .book__main { margin-bottom: var(--space-7); }
+
+  /* Intro paragraph above the embed — session length + what to bring. */
+  .book__intro {
+    max-width: var(--container-narrow);
+    margin-bottom: var(--space-5);
+    padding: var(--space-4) var(--space-5);
+    background: var(--wood-burnt);
+    border: 1px solid var(--color-border);
+    border-left: 3px solid var(--clay-terracotta);
+    border-radius: var(--radius-md);
+  }
+  .book__intro-heading {
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-2);
+    color: var(--birch-white);
+  }
+  .book__intro p {
+    font-size: var(--text-base);
+    color: var(--color-ink-muted);
+    line-height: var(--leading-loose);
+  }
+  .book__intro strong {
+    color: var(--birch-white);
+    font-weight: var(--weight-semibold);
+  }
+  .book__intro a {
+    font-weight: var(--weight-semibold);
+  }
+
+  .book__aside {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+    margin-top: var(--space-2);
+  }
+  .book__aside-item {
+    background: var(--wood-burnt);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    padding: var(--space-4) var(--space-5);
+  }
+  .book__aside-item h2 {
+    font-size: var(--text-lg);
+    margin-bottom: var(--space-2);
+  }
+  .book__aside-item p {
+    font-size: var(--text-sm);
+    color: var(--color-ink-muted);
+    line-height: var(--leading-normal);
+    margin-bottom: var(--space-3);
+  }
+  .book__channels {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-1);
+  }
+  .book__channels a,
+  .book__aside-link {
+    font-weight: var(--weight-semibold);
+    font-size: var(--text-sm);
+  }
+
+  @media (max-width: 640px) {
+    .book__aside { grid-template-columns: 1fr; }
   }
 </style>

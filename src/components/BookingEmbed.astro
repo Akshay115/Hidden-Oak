@@ -1,98 +1,215 @@
 ---
 /**
- * BookingEmbed — Cal.com inline scheduler.
+ * BookingEmbed — Cal.com inline scheduler (vanilla JS), styled to match
+ * Hidden Oak's earthy design tokens.
  *
- * Loads Cal.com's embed.js as a client-side module script. The <div> below is
- * the mount target; the script transforms it into an iframe pointing at the
- * configured event URL. This is the ONLY third-party embed on the site and the
- * only piece of client-side JavaScript beyond Astro's island-free static HTML.
+ * Uses Cal.com's official embed snippet with a `Cal("ui", {...})` config
+ * that passes our terracotta brandColor and a dark theme background. The
+ * embed sits inside a wood-texture card so it reads as part of the page.
  *
- * To reconfigure, change `namespace` (your Cal.com org/username) and `event`
- * (the event slug). Or pass them as props from a page.
+ * -----------------------------------------------------------------------
+ * TO RECONFIGURE: change `calLink` below to your real Cal.com event URL.
+ * The value is in "username/event-slug" form — e.g. "hidden-oak/banya-session"
+ * maps to https://cal.com/hidden-oak/banya-session
+ * -----------------------------------------------------------------------
+ *
+ * Docs: https://cal.com/help/embedding/adding-embed
+ *        https://cal.com/help/embedding/embed-instructions
  */
 interface Props {
-  namespace?: string; // Cal.com org / username
-  event?: string;     // event slug
+  /** Cal.com link in username/event-slug form, e.g. "hidden-oak/banya-session". */
+  calLink?: string;
+  /** CSS selector or HTMLElement where the inline embed mounts. Leave default. */
+  mountSelector?: string;
+  /**
+   * Hide Cal.com branding inside the embed.
+   * TODO: hideBranding requires a paid Cal.com plan (Team/Enterprise).
+   * If on the Free plan, set this to false — the small "Powered by Cal.com"
+   * badge will show at the foot of the scheduler. Remove this comment once
+   * the plan tier is confirmed.
+   */
+  hideBranding?: boolean;
+  /** Layout the calendar opens to. */
   layout?: 'month_view' | 'week_view';
   class?: string;
 }
 
 const {
-  namespace = 'hidden-oak',
-  event = 'banya-session',
+  calLink = 'hidden-oak/banya-session',
+  mountSelector = '#cal-inline-wrapper',
+  // TODO: requires paid Cal.com plan (Team/Enterprise). Set to false on Free.
+  hideBranding = true,
   layout = 'month_view',
   class: className = '',
 } = Astro.props;
 
-const calLink = `https://cal.com/${namespace}/${event}`;
+const directUrl = `https://cal.com/${calLink}`;
 ---
 
-<div class:list={['booking-embed', className]} data-cal-namespace={namespace}>
+<div class:list={['booking-embed', className]} data-cal-embed>
+  <!-- Mount point: Cal.com replaces this placeholder with the scheduler iframe. -->
+  <div id="cal-inline-wrapper" class="booking-embed__wrapper" role="region" aria-label="Booking scheduler">
+    <div class="booking-embed__loading" aria-hidden="true">
+      <span class="booking-embed__spinner"></span>
+      <span class="booking-embed__loading-text">Loading scheduler…</span>
+    </div>
+  </div>
+
   <noscript>
     <p class="booking-embed__noscript">
       Booking requires JavaScript.
-      <a href={calLink}>Open the scheduler directly →</a>
+      <a href={directUrl} rel="noopener">Open the scheduler directly →</a>
     </p>
   </noscript>
-  <div
-    class="booking-embed__mount"
-    data-cal-link={`${namespace}/${event}`}
-    data-cal-config={`{"layout":"${layout}"`}
-  >
-    <span class="booking-embed__placeholder">Loading scheduler…</span>
-  </div>
 </div>
 
-<script>
-  // Injected only once, when this component first appears on a page.
-  // Uses Cal.com's official @calcom/embed-js bundle from their CDN.
-  (function () {
-    const mount = document.querySelector('[data-cal-link]');
-    if (!mount) return;
-
-    const s = document.createElement('script');
-    s.type = 'module';
-    s.innerHTML = `
-      import { Cal } from "https://cal.com/embed.js";
-      Cal("init", { origin: "https://cal.com" });
-      const ns = document.currentScript.closest('[data-cal-namespace]')?.dataset.calNamespace;
-      const el = document.currentScript.closest('[data-cal-link]');
-      if (el) {
-        Cal("inline", {
-          elementOrSelector: el,
-          calLink: el.dataset.calLink,
-          config: JSON.parse(el.dataset.calConfig || '{}')
-        });
+<!--
+  Cal.com official embed snippet (vanilla JS) + ui config matched to tokens.
+  The IIFE loader is verbatim from Cal.com's Embed Snippet Generator.
+  The Cal("ui", {...}) call below themes the embed:
+    - brandColor: our clay terracotta (--clay-terracotta / #B5651D)
+    - theme "dark": Cal's built-in dark theme (closest match to our charred wood)
+    - hideBranding: removes "Powered by Cal.com" (TODO: needs paid plan)
+-->
+<script is:inline define:vars={{ calLink, mountSelector, hideBranding, layout }}>
+  (function (C, A, L) {
+    let p = function (a, ar) { a.q.push(ar); };
+    let d = C.document;
+    C.Cal = C.Cal || function () {
+      let cal = C.Cal || {};
+      let ar = arguments;
+      if (!cal.loaded) {
+        cal.ns = {};
+        cal.q = cal.q || [];
+        d.head.appendChild(d.createElement("script")).src = A;
+        cal.loaded = true;
       }
-    `;
-    mount.appendChild(s);
-  })();
+      if (ar[0] === L) {
+        const api = function (api, args) { p(api, args); };
+        const namespace = ar[1];
+        const namespaceApi = namespace ? api(namespace) : api;
+        cal.ns[namespace] = cal.ns[namespace] || namespaceApi;
+        return namespace ? cal.ns[namespace] : cal;
+      }
+      p(ar[0], Array.prototype.slice.call(arguments, 1));
+      return cal;
+    };
+  })(window, "https://script.cal.com/embed.js", "init");
+
+  Cal("init", { origin: "https://cal.com" });
+
+  // Theme the embed to match Hidden Oak's earthy design tokens.
+  Cal("ui", {
+    theme: "dark",
+    styles: {
+      branding: {
+        brandColor: "#B5651D",       /* --clay-terracotta */
+      },
+    },
+    // TODO: hideBranding requires a paid Cal.com plan (Team/Enterprise).
+    // On the Free plan, set hideBranding: false — the "Powered by Cal.com"
+    // badge will appear in the scheduler footer.
+    hideBranding: hideBranding,
+    // CSS variables injected into the Cal.com iframe. These override the
+    // built-in dark theme to nudge it toward our charred-wood palette.
+    // Cal's ui config supports a `cssVars` map that gets applied inside the
+    // embed iframe's :root, so colors match the host page as closely as the
+    // iframe boundary allows.
+    cssVars: {
+      "--cal-bg": "#2B1D14",              /* --wood-charred (page bg) */
+      "--cal-bg-default": "#2B1D14",
+      "--cal-bg-muted": "#3A2818",        /* --wood-burnt (elevated) */
+      "--cal-bg-inverted": "#F1E7D0",     /* --birch-white */
+      "--cal-border-subtle": "#53412C",   /* hairline borders */
+      "--cal-border-default": "#6E5839",
+      "--cal-text-default": "#F1E7D0",    /* --birch-white */
+      "--cal-text-muted": "#B3A888",      /* --ink-60 */
+      "--cal-text-emphasis": "#E4572E",   /* --hot-coal */
+      "--cal-brand": "#B5651D",           /* --clay-terracotta */
+      "--cal-brand-emphasis": "#E4572E",  /* hover state */
+      "--cal-brand-bg": "#B5651D",
+      "--cal-brand-bg-muted": "rgba(181, 101, 29, 0.15)",
+      "--cal-font-sans": "Manrope, ui-sans-serif, system-ui, sans-serif",
+      "--cal-radius": "12px",
+    },
+  });
+
+  Cal("inline", {
+    elementOrSelector: mountSelector,
+    calLink: calLink,
+    config: { layout: layout },
+  });
 </script>
 
 <style>
+  /* The styled container — reads as a wood-texture card, not a bolted widget. */
   .booking-embed {
-    background: var(--color-bg-elevated);
+    /* Layered background: wood-grain texture (from design tokens) over the
+       burnt-wood elevated surface. This is what makes the embed feel built-in. */
+    background-color: var(--wood-burnt);
+    background-image: var(--texture-wood);
+    background-repeat: repeat;
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: var(--space-2);
+    /* Organic radius from tokens — soft, hand-built feel, no sharp corners. */
+    border-radius: var(--radius-xl);
+    /* Generous padding so the iframe breathes inside the card. */
+    padding: var(--space-3);
+    box-shadow: var(--shadow-md);
+    min-height: 680px;
+    position: relative;
     overflow: hidden;
   }
-  .booking-embed__mount {
+
+  .booking-embed__wrapper {
     min-height: 640px;
-    border-radius: var(--radius-md);
-    background: var(--color-surface);
+    /* Inner surface slightly recessed — subtle inset against the wood card. */
+    background: var(--wood-charred);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+    overflow: hidden;
   }
-  .booking-embed__placeholder {
+  .booking-embed__wrapper :global(iframe) {
+    width: 100% !important;
+    height: 100% !important;
+    min-height: 640px;
+    border: 0;
+    border-radius: var(--radius-lg);
+    display: block;
+  }
+
+  /* Loading state — spinner + text, centered over the empty slot. */
+  .booking-embed__loading {
+    position: absolute;
+    inset: var(--space-3);
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    min-height: 640px;
+    gap: var(--space-3);
     color: var(--color-ink-subtle);
     font-size: var(--text-sm);
+    pointer-events: none;
   }
+  .booking-embed__spinner {
+    width: 32px;
+    height: 32px;
+    border: 2px solid var(--color-border);
+    border-top-color: var(--clay-terracotta);
+    border-radius: 50%;
+    animation: cal-spin 0.8s linear infinite;
+  }
+  @keyframes cal-spin {
+    to { transform: rotate(360deg); }
+  }
+
   .booking-embed__noscript {
-    padding: var(--space-5);
+    padding: var(--space-4);
     color: var(--color-ink-muted);
+    font-size: var(--text-sm);
   }
-  /* Once Cal.com mounts, its iframe replaces the placeholder. */
+
+  @media (max-width: 600px) {
+    .booking-embed { padding: var(--space-2); min-height: 620px; }
+    .booking-embed__wrapper { min-height: 580px; }
+  }
 </style>
