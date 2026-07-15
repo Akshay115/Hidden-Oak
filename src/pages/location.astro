@@ -47,9 +47,11 @@ const hours = [
 >
   <Hero
     compact
+    dual
     eyebrow="Find Us"
     title="Location & Contact"
-    subtitle="Hidden among the palms at the quiet end of Arambol. Come for the steam, stay for the quiet."
+    subtitle="Hidden among the palms at the quiet end of Arambol. Come for the steam and the ice."
+    poster="/images/gallery/exterior-garden.jpg"
     primaryCta={{ href: '/book', label: 'Book a Session' }}
   />
 
@@ -289,7 +291,7 @@ const hours = [
   .address {
     font-style: normal;
     font-size: var(--text-md);
-    color: var(--birch-white);
+    color: var(--forest-deep);
     line-height: var(--leading-normal);
     display: flex;
     flex-direction: column;
@@ -361,12 +363,13 @@ const hours = [
     padding: var(--space-2) 0;
     border-bottom: 1px solid var(--color-border);
   }
-  .hours-list__day { color: var(--birch-white); font-weight: var(--weight-medium); }
+  .hours-list__day { color: var(--forest-deep); font-weight: var(--weight-medium); }
   .hours-list__time { color: var(--color-ink-muted); font-family: var(--font-mono); font-size: var(--text-sm); }
   .hours-note {
     margin-top: var(--space-4);
     padding: var(--space-3) var(--space-4);
-    background: var(--wood-burnt);
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
     font-size: var(--text-sm);
     color: var(--color-ink-muted);
@@ -385,7 +388,7 @@ const hours = [
   .contact-form { margin-top: var(--space-5); display: flex; flex-direction: column; gap: var(--space-3); }
   .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
   .field { display: flex; flex-direction: column; gap: var(--space-1); }
-  .field__label { font-size: var(--text-sm); color: var(--birch-white); font-weight: var(--weight-medium); }
+  .field__label { font-size: var(--text-sm); color: var(--forest-deep); font-weight: var(--weight-medium); }
   .field__req { color: var(--hot-coal-bright); }
   .field__opt { color: var(--color-ink-subtle); font-weight: var(--weight-regular); }
   .contact-form input,
@@ -393,9 +396,9 @@ const hours = [
     font: inherit;
     width: 100%;
     padding: var(--space-2) var(--space-3);
-    background: var(--wood-smolder);
-    color: var(--birch-white);
-    border: 1px solid var(--color-border);
+    background: #fff;
+    color: var(--color-ink);
+    border: 1px solid var(--color-border-strong);
     border-radius: var(--radius-md);
     transition: border-color var(--duration-fast) var(--ease-soft),
       box-shadow var(--duration-fast) var(--ease-soft);
@@ -406,7 +409,7 @@ const hours = [
   .contact-form textarea:focus {
     outline: none;
     border-color: var(--clay-terracotta);
-    box-shadow: 0 0 0 3px rgba(181, 101, 29, 0.25);
+    box-shadow: 0 0 0 3px rgba(181, 101, 29, 0.2);
   }
   .contact-form textarea { resize: vertical; min-height: 120px; }
 
@@ -418,12 +421,12 @@ const hours = [
   .contact-form__status--ok {
     background: rgba(111, 138, 90, 0.15);
     border: 1px solid var(--forest-light);
-    color: var(--birch-white);
+    color: var(--forest-deep);
   }
   .contact-form__status--err {
-    background: rgba(196, 69, 43, 0.15);
+    background: rgba(196, 69, 43, 0.12);
     border: 1px solid var(--color-danger);
-    color: var(--birch-warm);
+    color: var(--color-danger);
   }
   .contact-form__alt { margin-top: var(--space-4); font-size: var(--text-sm); color: var(--color-ink-subtle); }
   .contact-form__alt a { font-weight: var(--weight-semibold); }

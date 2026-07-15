@@ -23,9 +23,17 @@
   --forest-deep:     #2a3f32;
   --hot-coal:        #e85d32;
   --hot-coal-bright: #f27448;
-  --hot-coal-glow:   rgba(61, 90, 72, 0.15);
+  --hot-coal-glow:   rgba(232, 93, 50, 0.22);
   --gold-ember:      #b88a44;
   --mist:            rgba(61, 90, 72, 0.05);
+
+  /* Ice / cold plunge — equal partner to heat */
+  --ice-pale:        #e8f4ff;
+  --ice-soft:        #c5e4f5;
+  --ice-mid:         #7eb6d4;
+  --ice-deep:        #3d7a96;
+  --ice-glow:        rgba(126, 182, 212, 0.28);
+  --ice-mist:        rgba(200, 230, 245, 0.12);
 
   --ink-full:    #2f2118;
   --ink-80:      #4f3a2a;
@@ -128,21 +136,21 @@
   --radius-pill: 999px;
   --radius-blob: 63% 37% 54% 46% / 55% 48% 52% 45%;
 
-  /* ── Shadows ─────────────────────────────────────────────────────── */
-  --shadow-xs:  0 1px 2px rgba(0, 0, 0, 0.35);
-  --shadow-sm:  0 2px 8px rgba(0, 0, 0, 0.35);
-  --shadow-md:  0 8px 24px rgba(0, 0, 0, 0.4);
-  --shadow-lg:  0 18px 48px rgba(0, 0, 0, 0.48);
-  --shadow-xl:  0 28px 72px rgba(0, 0, 0, 0.55);
-  --shadow-inset: inset 0 1px 0 rgba(244, 234, 212, 0.07);
+  /* ── Shadows (tuned for light linen surfaces) ────────────────────── */
+  --shadow-xs:  0 1px 2px rgba(47, 33, 24, 0.06);
+  --shadow-sm:  0 2px 10px rgba(47, 33, 24, 0.07);
+  --shadow-md:  0 10px 28px rgba(47, 33, 24, 0.1);
+  --shadow-lg:  0 18px 48px rgba(47, 33, 24, 0.12);
+  --shadow-xl:  0 28px 64px rgba(47, 33, 24, 0.16);
+  --shadow-inset: inset 0 1px 0 rgba(255, 255, 255, 0.45);
   --shadow-glow: 0 0 36px var(--hot-coal-glow);
-  --shadow-glow-soft: 0 0 60px rgba(212, 161, 90, 0.12);
+  --shadow-glow-soft: 0 0 48px rgba(212, 161, 90, 0.14);
 
   /* ── Layout & motion ─────────────────────────────────────────────── */
   --container-max: 1180px;
   --container-narrow: 720px;
   --container-wide: 1360px;
-  --header-height: 80px;
+  --header-height: 76px;
 
   --transition-fast: 160ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-base: 280ms cubic-bezier(0.4, 0, 0.2, 1);
@@ -237,7 +245,7 @@ body {
   overflow-x: hidden;
 }
 
-/* Ambient ember glow layer (fixed) */
+/* Ambient heat + ice glow layer (fixed) */
 body::before {
   content: '';
   position: fixed;
@@ -245,9 +253,10 @@ body::before {
   pointer-events: none;
   z-index: 0;
   background:
-    radial-gradient(ellipse 40% 30% at 15% 80%, rgba(232, 93, 50, 0.06), transparent 70%),
-    radial-gradient(ellipse 35% 25% at 85% 20%, rgba(212, 161, 90, 0.05), transparent 70%),
-    radial-gradient(ellipse 45% 35% at 92% 78%, rgba(61, 90, 72, 0.08), transparent 70%);
+    radial-gradient(ellipse 40% 30% at 12% 78%, rgba(232, 93, 50, 0.07), transparent 70%),
+    radial-gradient(ellipse 35% 28% at 88% 18%, rgba(126, 182, 212, 0.08), transparent 70%),
+    radial-gradient(ellipse 30% 25% at 70% 90%, rgba(212, 161, 90, 0.05), transparent 70%),
+    radial-gradient(ellipse 45% 35% at 8% 25%, rgba(61, 90, 72, 0.06), transparent 70%);
   animation: ambient-breathe 14s var(--ease-in-out) infinite alternate;
 }
 
@@ -384,6 +393,94 @@ html {
   pointer-events: none;
   background: radial-gradient(60% 40% at 10% 100%, rgba(61, 90, 72, 0.06), transparent 70%);
 }
+.section--ice {
+  background:
+    radial-gradient(100% 80% at 80% 0%, rgba(126, 182, 212, 0.12), transparent 55%),
+    linear-gradient(180deg, rgba(232, 244, 255, 0.45), transparent 70%);
+  border-block: 1px solid rgba(126, 182, 212, 0.18);
+}
+.section--heat {
+  background:
+    radial-gradient(100% 80% at 20% 0%, rgba(232, 93, 50, 0.08), transparent 55%),
+    linear-gradient(180deg, rgba(255, 220, 180, 0.2), transparent 70%);
+}
+
+/* Full-bleed image panels */
+.img-panel {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-2xl);
+  isolation: isolate;
+}
+.img-panel img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  transition: transform var(--duration-slow) var(--ease-out),
+    filter var(--duration-medium) var(--ease-soft);
+}
+.img-panel:hover img {
+  transform: scale(1.04);
+  filter: brightness(1.06) saturate(1.08);
+}
+.img-panel__caption {
+  position: absolute;
+  left: var(--space-3);
+  bottom: var(--space-3);
+  z-index: 2;
+  color: #fff8ef;
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+  text-shadow: 0 1px 8px rgba(0, 0, 0, 0.45);
+}
+.img-panel::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background: linear-gradient(transparent 45%, rgba(20, 14, 10, 0.55) 100%);
+}
+
+/* Light surface cards (consistent site-wide) */
+.surface-card {
+  background: var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
+  box-shadow: var(--shadow-sm);
+  transition:
+    transform var(--duration-fast) var(--ease-spring),
+    border-color var(--duration-fast) var(--ease-soft),
+    box-shadow var(--duration-fast) var(--ease-soft);
+}
+.surface-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--color-border-strong);
+  box-shadow: var(--shadow-md);
+}
+
+/* Shared CTA band */
+.cta-band {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-5);
+  flex-wrap: wrap;
+  background:
+    linear-gradient(135deg, rgba(61, 90, 72, 0.06), rgba(126, 182, 212, 0.08)),
+    var(--color-bg-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-2xl);
+  padding: var(--space-6);
+  box-shadow: var(--shadow-md);
+}
+.cta-band h2 { max-width: 18ch; color: var(--forest-deep); }
+@media (max-width: 720px) {
+  .cta-band { flex-direction: column; align-items: flex-start; }
+}
 
 .eyebrow {
   display: inline-flex;
@@ -442,14 +539,14 @@ html {
   background-size: auto, auto, var(--texture-tile-size) var(--texture-tile-size);
 }
 
-/* Glass card */
+/* Glass card — light surface (site is linen-first) */
 .glass-card {
-  background: rgba(47, 33, 24, 0.72);
+  background: rgba(255, 250, 242, 0.82);
   backdrop-filter: blur(14px) saturate(130%);
   -webkit-backdrop-filter: blur(14px) saturate(130%);
   border: 1px solid var(--color-border);
   border-radius: var(--radius-xl);
-  box-shadow: var(--shadow-md), var(--shadow-inset);
+  box-shadow: var(--shadow-md);
 }
 
 /* ── Icons & motifs ──────────────────────────────────────────────────── */
@@ -589,6 +686,56 @@ html {
   100% { transform: translateY(-70vh) translateX(20px) scale(1); opacity: 0; }
 }
 
+/* ── Frost particles (ice counterpart) ───────────────────────────────── */
+.frost-field {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Heat | Ice dual badge */
+.dual-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.65rem;
+  padding: 0.45rem 1rem;
+  border-radius: var(--radius-pill);
+  background: rgba(255, 255, 255, 0.55);
+  border: 1px solid var(--color-border);
+  font-size: var(--text-xs);
+  font-weight: var(--weight-semibold);
+  letter-spacing: var(--tracking-caps);
+  text-transform: uppercase;
+}
+.dual-badge__heat { color: var(--hot-coal); display: inline-flex; align-items: center; gap: 0.35rem; }
+.dual-badge__ice  { color: var(--ice-deep); display: inline-flex; align-items: center; gap: 0.35rem; }
+.dual-badge__sep {
+  width: 3px; height: 3px; border-radius: 50%;
+  background: var(--color-ink-subtle);
+}
+
+/* Soft text link */
+.text-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: var(--forest-deep);
+  font-size: var(--text-sm);
+  font-weight: var(--weight-semibold);
+  letter-spacing: 0.01em;
+  border-bottom: 1px solid var(--gold-ember);
+  padding-bottom: 0.3rem;
+  transition: color var(--duration-fast) var(--ease-soft);
+}
+.text-link:hover { color: var(--clay-terracotta); }
+.text-link span {
+  color: var(--hot-coal);
+  transition: transform var(--transition-fast);
+}
+.text-link:hover span { transform: translate(2px, -2px); }
+
 /* ── Shine sweep for CTAs ────────────────────────────────────────────── */
 @keyframes shine-sweep {
   0%   { transform: translateX(-120%) skewX(-18deg); }
@@ -614,5 +761,6 @@ html {
 
   .hero__steam,
   .ember-field,
+  .frost-field,
   body::before { display: none !important; }
 }

@@ -1,21 +1,6 @@
 ---
 /**
- * The Banya / About — /the-banya
- *
- * Storytelling-focused: the history and culture of the Russian banya, the
- * traditional ritual, and how Hidden Oak adapts it in Goa.
- * Practical breakdown of what a visitor gets lives on /services.
- *
- * Content is original, written from sourced research. Key accuracy notes:
- *  - The Primary Chronicle / Apostle Andrew passage is framed as the earliest
- *    *written/literary* description, not verified history (the chronicle
- *    contains embellished legends).
- *  - Etymology given per scholarly consensus: Greek balaneîon → Latin
- *    balneum → Proto-Slavic → баня. The romanticised "makes pain go away"
- *    folk etymology is NOT repeated.
- *  - Bannik and venik benefits described as traditional belief, not science.
- *
- * Heading hierarchy: single h1 (in Hero), h2 per chapter, h3 for sub-sections.
+ * The Banya / About — storytelling with image breaks for heat + ice.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
@@ -25,21 +10,36 @@ import CTAButton from '../components/CTAButton.astro';
 
 <BaseLayout
   title="The Banya"
-  description="The Russian banya is a thousand-year-old ritual of heat, steam, and cold. Hidden Oak brings the tradition to the Goan coast — earth, wood, and warm fire among the palms of Arambol."
+  description="The Russian banya is a thousand-year-old ritual of heat, steam, and cold. Hidden Oak brings the tradition to the Goan coast — earth, wood, fire, and ice among the palms of Arambol."
 >
   <Hero
     compact
+    dual
     eyebrow="Our Story"
     title="The Banya"
-    subtitle="A thousand-year-old ritual of heat, steam, and cold — brought to the Goan coast, and made at home among the palms."
+    subtitle="A thousand-year-old ritual of heat, steam, and cold — brought to the Goan coast, at home among the palms."
+    poster="/images/gallery/exterior-dusk.jpg"
     secondaryCta={{ href: '/book', label: 'Book a Session' }}
   />
 
-  {/* =====================================================================
-       CHAPTER I — THE ROOTS
-       What a banya is; etymology; earliest written record; village
-       institution; folk medicine; the bannik.
-  ===================================================================== */}
+  {/* Image intro strip */}
+  <section class="section story-strip" data-reveal>
+    <div class="container story-strip__grid">
+      <figure class="img-panel">
+        <img src="/images/gallery/sauna-steam.jpg" alt="Steam in the parilka" loading="lazy" decoding="async" />
+        <figcaption class="img-panel__caption">Steam</figcaption>
+      </figure>
+      <figure class="img-panel">
+        <img src="/images/gallery/ice-detail.jpg" alt="Ice water surface" loading="lazy" decoding="async" />
+        <figcaption class="img-panel__caption">Ice</figcaption>
+      </figure>
+      <figure class="img-panel">
+        <img src="/images/gallery/detail-venik.jpg" alt="Venik branches" loading="lazy" decoding="async" />
+        <figcaption class="img-panel__caption">Venik</figcaption>
+      </figure>
+    </div>
+  </section>
+
   <section class="section" data-reveal>
     <div class="container prose">
       <p class="eyebrow">Chapter I · The Roots</p>
@@ -125,13 +125,17 @@ import CTAButton from '../components/CTAButton.astro';
     </div>
   </section>
 
-  <SectionDivider />
+  {/* Heat / ice visual break */}
+  <section class="chapter-break" data-reveal="fade" aria-hidden="true">
+    <div class="chapter-break__heat">
+      <img src="/images/gallery/sauna-stove.jpg" alt="" />
+    </div>
+    <div class="chapter-break__ice">
+      <img src="/images/gallery/ice-tub.jpg" alt="" />
+    </div>
+    <p class="chapter-break__label">Heat · Cold · Rest · Repeat</p>
+  </section>
 
-  {/* =====================================================================
-       CHAPTER II — THE RITUAL
-       Heat and light steam; the venik (birch + oak); cold plunge;
-       rest and tea; the rhythm of rounds.
-  ===================================================================== */}
   <section class="section" data-reveal>
     <div class="container prose">
       <p class="eyebrow">Chapter II · The Ritual</p>
@@ -184,6 +188,11 @@ import CTAButton from '../components/CTAButton.astro';
         other is only half the practice.
       </p>
 
+      <figure class="prose__figure img-panel">
+        <img src="/images/gallery/ice-tub.jpg" alt="The kupel — cold plunge tub at Hidden Oak" loading="lazy" decoding="async" />
+        <figcaption class="img-panel__caption">The kupel · ice plunge</figcaption>
+      </figure>
+
       <h3 class="prose__sub">Tea, and the space between</h3>
       <p>
         Between rounds, you rest. A traditional banya has a room just for this —
@@ -199,11 +208,6 @@ import CTAButton from '../components/CTAButton.astro';
 
   <SectionDivider />
 
-  {/* =====================================================================
-       CHAPTER III — THE FUSION
-       Hidden Oak in Goa: earth/mud walls, jungle setting, the swedana
-       parallel, Arambol context, what was kept and what was changed.
-  ===================================================================== */}
   <section class="section" data-reveal>
     <div class="container prose">
       <p class="eyebrow">Chapter III · The Fusion</p>
@@ -216,6 +220,11 @@ import CTAButton from '../components/CTAButton.astro';
         like one. The question was: what from this tradition is worth keeping,
         and what can it become here?
       </p>
+
+      <figure class="prose__figure img-panel">
+        <img src="/images/gallery/exterior-garden.jpg" alt="Garden and exterior of Hidden Oak among palms" loading="lazy" decoding="async" />
+        <figcaption class="img-panel__caption">Among the palms · Arambol</figcaption>
+      </figure>
 
       <h3 class="prose__sub">Earth walls, warm wood</h3>
       <p>
@@ -285,7 +294,6 @@ import CTAButton from '../components/CTAButton.astro';
 
   <SectionDivider />
 
-  {/* ===== CTA ========================================================= */}
   <section class="section" data-reveal>
     <div class="container cta-band">
       <div>
@@ -301,6 +309,15 @@ import CTAButton from '../components/CTAButton.astro';
 </BaseLayout>
 
 <style>
+  .story-strip { padding-block: var(--space-5); }
+  .story-strip__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: var(--space-3);
+    min-height: 220px;
+  }
+  .story-strip .img-panel { min-height: 220px; aspect-ratio: 4/3; }
+
   .prose {
     display: flex;
     flex-direction: column;
@@ -310,52 +327,90 @@ import CTAButton from '../components/CTAButton.astro';
   .prose h2 {
     max-width: 22ch;
     margin-bottom: var(--space-1);
+    color: var(--forest-deep);
   }
   .prose h3 {
     font-size: var(--text-xl);
     margin-top: var(--space-4);
-    color: var(--birch-white);
+    color: var(--forest-deep);
   }
   .prose p {
     font-size: var(--text-md);
     color: var(--color-ink-muted);
     line-height: var(--leading-loose);
   }
-  /* A sub-heading inside the prose flow */
   .prose__sub {
     scroll-margin-top: calc(var(--header-height) + var(--space-3));
   }
-  /* Editorial note — for the historical caveat about the Primary Chronicle. */
   .prose__note {
     position: relative;
     padding: var(--space-3) var(--space-4);
-    background: var(--wood-smolder);
+    background: var(--color-bg-elevated);
     border-left: 3px solid var(--clay-terracotta);
     border-radius: var(--radius-md);
     font-size: var(--text-sm);
     color: var(--color-ink-subtle);
     line-height: var(--leading-normal);
+    border: 1px solid var(--color-border);
+    border-left-width: 3px;
+    border-left-color: var(--clay-terracotta);
   }
   .prose em {
-    color: var(--birch-warm);
+    color: var(--wood-smolder);
     font-style: italic;
   }
   .prose strong {
-    color: var(--birch-white);
+    color: var(--forest-deep);
     font-weight: var(--weight-semibold);
   }
-  .cta-band {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-5);
-    flex-wrap: wrap;
-    background: var(--wood-burnt);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-xl);
-    padding: var(--space-6);
+  .prose__figure {
+    margin: var(--space-4) 0;
+    aspect-ratio: 16 / 10;
+    min-height: 260px;
   }
-  @media (max-width: 640px) {
-    .cta-band { flex-direction: column; align-items: flex-start; }
+
+  .chapter-break {
+    position: relative;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    min-height: clamp(240px, 40vh, 400px);
+    overflow: hidden;
+  }
+  .chapter-break__heat,
+  .chapter-break__ice {
+    overflow: hidden;
+  }
+  .chapter-break img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    min-height: 240px;
+  }
+  .chapter-break__heat img { filter: brightness(1.1) saturate(1.12); }
+  .chapter-break__ice img { filter: brightness(1.14) saturate(0.92); }
+  .chapter-break__label {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 2;
+    padding: 0.65rem 1.25rem;
+    border-radius: var(--radius-pill);
+    background: rgba(20, 14, 10, 0.55);
+    backdrop-filter: blur(12px);
+    border: 1px solid rgba(255, 248, 239, 0.25);
+    color: #fff8ef;
+    font-size: var(--text-xs);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+
+  @media (max-width: 720px) {
+    .story-strip__grid { grid-template-columns: 1fr; }
+    .chapter-break { grid-template-columns: 1fr; min-height: auto; }
+    .chapter-break__heat,
+    .chapter-break__ice { min-height: 180px; }
   }
 </style>

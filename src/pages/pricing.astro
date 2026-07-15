@@ -119,9 +119,11 @@ const tiers = [
 >
   <Hero
     compact
+    dual
     eyebrow="Pricing"
     title="Pricing & Memberships"
-    subtitle="Pay per visit, or make it a habit. No joining fees, no lock-in — just steam, cold, and rest."
+    subtitle="Pay per visit, or make it a habit. No joining fees, no lock-in — just steam, ice, and rest."
+    poster="/images/gallery/ice-detail.jpg"
     primaryCta={{ href: '/book', label: 'Book a Session' }}
   />
 
@@ -321,9 +323,9 @@ const tiers = [
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
-    background: var(--wood-burnt);
+    background: var(--color-bg-elevated);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-xl);
     padding: var(--space-5);
     box-shadow: var(--shadow-sm);
     transition: transform var(--transition-base), border-color var(--transition-base),
@@ -335,10 +337,12 @@ const tiers = [
     box-shadow: var(--shadow-md);
   }
 
-  /* Featured: terracotta border + warm glow, the "Full Reset" treatment */
   .card--featured {
     border-color: var(--clay-terracotta);
     box-shadow: var(--shadow-glow), var(--shadow-md);
+    background:
+      radial-gradient(ellipse 70% 50% at 50% 0%, rgba(126, 182, 212, 0.1), transparent 55%),
+      var(--color-bg-elevated);
   }
   .card--featured:hover {
     border-color: var(--clay-light);
@@ -349,7 +353,7 @@ const tiers = [
     position: absolute;
     top: calc(-1 * var(--space-2));
     left: var(--space-4);
-    background: var(--clay-deep);          /* darker fill for AA contrast with birch-white text */
+    background: var(--clay-deep);
     color: var(--birch-white);
     font-family: var(--font-sans);
     font-size: var(--text-xs);
@@ -365,10 +369,11 @@ const tiers = [
     color: var(--hot-coal-bright);
     margin-top: var(--space-1);
   }
+  .card--featured .card__icon { color: var(--ice-deep); }
   .card h3 {
     font-family: var(--font-serif);
     font-size: var(--text-xl);
-    color: var(--birch-white);
+    color: var(--forest-deep);
     margin-top: var(--space-1);
   }
 
@@ -382,7 +387,7 @@ const tiers = [
     font-family: var(--font-serif);
     font-size: var(--text-3xl);
     font-weight: var(--weight-bold);
-    color: var(--birch-white);
+    color: var(--forest-deep);
     line-height: 1;
   }
   .card__cadence {
@@ -397,6 +402,8 @@ const tiers = [
     font-weight: var(--weight-semibold);
     margin-top: var(--space-1);
   }
+  .card--featured .card__duration,
+  .card--featured .card__sessions { color: var(--ice-deep); }
 
   .card__list {
     list-style: none;
@@ -445,7 +452,7 @@ const tiers = [
   }
   .policies li {
     padding: var(--space-3) var(--space-4);
-    background: var(--wood-burnt);
+    background: var(--color-bg-elevated);
     border: 1px solid var(--color-border);
     border-left: 3px solid var(--clay-terracotta);
     border-radius: var(--radius-md);
@@ -467,7 +474,8 @@ const tiers = [
   .need-help {
     margin-top: var(--space-5);
     padding: var(--space-4) var(--space-5);
-    background: var(--wood-smolder);
+    background: var(--color-bg-elevated);
+    border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
     display: flex;
     align-items: center;
@@ -476,6 +484,7 @@ const tiers = [
     font-size: var(--text-sm);
     color: var(--color-ink-muted);
   }
+  .block-head h2 { color: var(--forest-deep); }
   .need-help a { font-weight: var(--weight-semibold); }
 
   /* ---- responsive --------------------------------------------------- */

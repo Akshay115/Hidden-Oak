@@ -1,25 +1,12 @@
 ---
 /**
- * Services & Benefits — /services
- *
- * Practical, scannable counterpart to /the-banya (which tells the story).
- * This page exists to reduce hesitation before someone books:
- *   - what each part of the session actually is and feels like
- *   - the two walk-in options compared side by side
- *   - the six most common first-timer questions, answered plainly
- *
- * Tone: reassuring and clear. Plain language only — no medical/health claims
- * that can't be substantiated. Benefits described as "how it feels," not
- * "what it treats."
- *
- * Heading hierarchy: h1 in Hero, h2 per major section, h3 for sub-blocks.
+ * Services & Benefits — practical, image-first guide to heat + ice.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import SectionDivider from '../components/SectionDivider.astro';
 import CTAButton from '../components/CTAButton.astro';
 
-// The two walk-in options compared in section 4.
 const sessions = [
   {
     name: 'Without Ice Bath',
@@ -50,7 +37,6 @@ const sessions = [
   },
 ];
 
-// Section 5 — FAQ. Accordion via native <details>. Reassuring, plain answers.
 const faqs = [
   {
     q: 'Is it safe?',
@@ -85,69 +71,78 @@ const faqs = [
 >
   <Hero
     compact
+    dual
     eyebrow="What You'll Experience"
-    title="Services & Benefits"
-    subtitle="Everything you need to know before your first visit — without the jargon."
+    title="Heat, ice & everything between."
+    subtitle="The full ritual — wood-fired steam, optional cold plunge, rest, and tea — explained plainly."
+    poster="/images/gallery/sauna-steam.jpg"
     primaryCta={{ href: '/book', label: 'Book a Session' }}
     secondaryCta={{ href: '/pricing', label: 'See Pricing' }}
   />
 
-  {/* ============================================================
-       1. THE SAUNA / STEAM SESSION
-  ============================================================ */}
-  <section class="section" id="sauna-steam" data-reveal>
-    <div class="container feature-block">
-      <div class="feature-block__head">
-        <span class="feature-block__icon" aria-hidden="true">
-          <span class="deco-icon deco-icon--lg deco-icon--flame"></span>
-        </span>
-        <span class="feature-block__num" aria-hidden="true">01</span>
-        <div>
-          <p class="eyebrow">The heart of it</p>
-          <h2>The sauna & steam session</h2>
+  {/* Visual dual intro */}
+  <section class="section dual-intro" data-reveal>
+    <div class="container dual-intro__grid">
+      <a href="#sauna-steam" class="snap snap--heat">
+        <img src="/images/gallery/sauna-stove.jpg" alt="Wood-fired stove in the sauna" loading="lazy" decoding="async" />
+        <div class="snap__label">
+          <span class="deco-icon deco-icon--sm deco-icon--flame"></span>
+          01 · Heat
         </div>
+      </a>
+      <a href="#ice-bath" class="snap snap--ice">
+        <img src="/images/gallery/ice-tub.jpg" alt="Ice bath cold plunge tub" loading="lazy" decoding="async" />
+        <div class="snap__label">
+          <span class="deco-icon deco-icon--sm deco-icon--snowflake"></span>
+          02 · Ice
+        </div>
+      </a>
+    </div>
+  </section>
+
+  {/* SAUNA */}
+  <section class="section section--heat" id="sauna-steam" data-reveal>
+    <div class="container feature">
+      <div class="feature__visual">
+        <img src="/images/gallery/sauna-bench.jpg" alt="Wooden benches inside the steam room" loading="lazy" decoding="async" />
       </div>
-
-      <div class="feature-block__body">
-        <div class="feature-block__copy">
-          <h3>What it is</h3>
-          <p>
-            A warm room of wood and stone, heated to somewhere between 60°C and
-            90°C (140–195°F). You sit, you breathe, you let the heat
-            do its work. Water is ladled onto hot stones to make steam — which
-            raises the humidity and makes the warmth feel deeper, not hotter.
-          </p>
-
-          <h3>How long</h3>
-          <p>
-            A full session runs about 75 to 90 minutes, broken into two or three
-            <em>rounds</em> of 10 to 20 minutes each in the heat, with rest in
-            between. You never stay in for the whole session — the rhythm of
-            warming up, cooling off, and warming up again is the whole point.
-          </p>
-
-          <h3>What it feels like</h3>
-          <p>
-            The first few minutes can feel like a lot. Then the body settles,
-            breathing slows, and the heat stops being something you notice and
-            becomes something you sink into. People usually come out moving
-            looser, with their shoulders dropped and their head clearer.
-          </p>
+      <div class="feature__copy">
+        <div class="feature__head">
+          <span class="icon-badge" aria-hidden="true">
+            <span class="deco-icon deco-icon--md deco-icon--flame"></span>
+          </span>
+          <div>
+            <p class="eyebrow">The heart of it</p>
+            <h2>The sauna & steam</h2>
+          </div>
         </div>
-
-        <aside class="feature-block__benefits" aria-label="What people notice">
+        <h3>What it is</h3>
+        <p>
+          A warm room of wood and stone, heated to somewhere between 60°C and
+          90°C. You sit, you breathe, you let the heat do its work. Water is
+          ladled onto hot stones to make light steam — deeper warmth, not harsher heat.
+        </p>
+        <h3>How long</h3>
+        <p>
+          A full session runs about 75 to 90 minutes, broken into two or three
+          rounds of 10 to 20 minutes in the heat, with rest in between.
+          The rhythm of warming, cooling, and warming again is the whole point.
+        </p>
+        <h3>What it feels like</h3>
+        <p>
+          The first few minutes can feel like a lot. Then the body settles,
+          breathing slows, and the heat becomes something you sink into.
+          People usually come out looser, clearer, ready for cold — or for tea.
+        </p>
+        <aside class="feature__aside surface-card">
           <h3>What people notice</h3>
           <ul>
-            <li>Tense muscles feel looser and softer</li>
-            <li>Circulation gets going — a warm, flushed feeling</li>
-            <li>The mind quietly settles, the way it does after a long walk</li>
-            <li>You sleep well that night</li>
-            <li>Skin feels clean and open</li>
+            <li>Tense muscles feel looser</li>
+            <li>A warm, flushed circulation</li>
+            <li>The mind quietly settles</li>
+            <li>Sleep comes easier that night</li>
           </ul>
-          <p class="feature-block__disclaimer">
-            These are how people describe the experience, not medical claims. If
-            you have a health condition, please check with your doctor first.
-          </p>
+          <p class="feature__note">How people describe the experience — not medical claims.</p>
         </aside>
       </div>
     </div>
@@ -155,65 +150,50 @@ const faqs = [
 
   <SectionDivider />
 
-  {/* ============================================================
-       2. THE ICE BATH
-  ============================================================ */}
-  <section class="section" id="ice-bath" data-reveal>
-    <div class="container feature-block">
-      <div class="feature-block__head">
-        <span class="feature-block__icon" aria-hidden="true">
-          <span class="deco-icon deco-icon--lg deco-icon--snowflake"></span>
-        </span>
-        <span class="feature-block__num" aria-hidden="true">02</span>
-        <div>
-          <p class="eyebrow">Optional add-on</p>
-          <h2>The ice bath</h2>
-        </div>
+  {/* ICE */}
+  <section class="section section--ice" id="ice-bath" data-reveal>
+    <div class="container feature feature--flip">
+      <div class="feature__visual feature__visual--ice">
+        <img src="/images/gallery/ice-tub.jpg" alt="Cedar cold plunge tub filled with ice water" loading="lazy" decoding="async" />
+        <img class="feature__visual-sub" src="/images/gallery/ice-detail.jpg" alt="Close-up of cold water surface" loading="lazy" decoding="async" />
       </div>
-
-      <div class="feature-block__body">
-        <div class="feature-block__copy">
-          <h3>What it is</h3>
-          <p>
-            A tub of cold water — held somewhere between 5°C and 12°C
-            (41–54°F) — that you step into after a round in the heat.
-            You stay in for somewhere between 30 seconds and a few minutes.
-            That’s it. Short, sharp, and over before you know it.
-          </p>
-
-          <h3>Why pair it with heat</h3>
-          <p>
-            Heat opens things up; cold closes them back down. Going from warm to
-            cold and back again — what’s sometimes called contrast therapy
-            — is the traditional heart of the banya, and it’s where the
-            real feeling of reset comes from. One without the other is only half
-            the practice. Many people find the cold the part they remember most.
-          </p>
-
-          <h3>If it’s your first time</h3>
-          <p>
-            You don’t have to commit in advance, and you don’t have to do
-            it at all. When you’re warmed up and curious, we’ll talk you
-            through it: how to breathe (slowly, out), how to get in (gradually,
-            not all at once), and roughly how long to stay (for a first-timer,
-            that’s often just 30 seconds to a minute). You can get out the
-            moment you want to. Most people are surprised by how manageable it is
-            — and how good they feel after.
-          </p>
+      <div class="feature__copy">
+        <div class="feature__head">
+          <span class="icon-badge icon-badge--ice" aria-hidden="true">
+            <span class="deco-icon deco-icon--md deco-icon--snowflake"></span>
+          </span>
+          <div>
+            <p class="eyebrow">Optional · unforgettable</p>
+            <h2>The ice bath</h2>
+          </div>
         </div>
-
-        <aside class="feature-block__benefits" aria-label="What people notice">
+        <h3>What it is</h3>
+        <p>
+          A tub of cold water — held somewhere between 5°C and 12°C — that you
+          step into after a round in the heat. Stay 30 seconds to a few minutes.
+          Short, sharp, and over before you know it.
+        </p>
+        <h3>Why pair it with heat</h3>
+        <p>
+          Heat opens; cold closes. Going from warm to cold and back again is the
+          traditional heart of the banya — and where the real feeling of reset comes from.
+          Many people find the ice the part they remember most.
+        </p>
+        <h3>If it’s your first time</h3>
+        <p>
+          You don’t have to commit in advance, and you don’t have to do it at all.
+          We’ll talk you through breathing, how to get in, and how long to stay.
+          Most people are surprised by how manageable it is — and how good they feel after.
+        </p>
+        <aside class="feature__aside feature__aside--ice surface-card">
           <h3>What people notice</h3>
           <ul>
-            <li>An immediate, full-body wake-up</li>
-            <li>Feeling clear and alert for hours after</li>
-            <li>A sense of having done something genuinely impressive</li>
-            <li>The heat round that follows feels even better</li>
+            <li>An immediate full-body wake-up</li>
+            <li>Clear and alert for hours after</li>
+            <li>Pride at having done something real</li>
+            <li>The next heat round feels even better</li>
           </ul>
-          <p class="feature-block__disclaimer">
-            Always optional. Skip it entirely if it’s not for you — the
-            base session is complete on its own.
-          </p>
+          <p class="feature__note">Always optional. The base session is complete on its own.</p>
         </aside>
       </div>
     </div>
@@ -221,48 +201,35 @@ const faqs = [
 
   <SectionDivider />
 
-  {/* ============================================================
-       3. THE SHOWER
-  ============================================================ */}
+  {/* SHOWER */}
   <section class="section" id="shower" data-reveal>
-    <div class="container feature-block feature-block--slim">
-      <div class="feature-block__head">
-        <span class="feature-block__icon" aria-hidden="true">
-          <span class="deco-icon deco-icon--lg deco-icon--droplet"></span>
-        </span>
-        <span class="feature-block__num" aria-hidden="true">03</span>
-        <div>
-          <p class="eyebrow">Included</p>
-          <h2>The shower</h2>
-        </div>
+    <div class="container shower-row">
+      <div>
+        <p class="eyebrow">Included</p>
+        <h2>The shower</h2>
+        <p class="lede">
+          Every session includes a private shower, with towels and natural soap.
+          Rinse before you begin, and again at the end — warm water, a clean finish,
+          and somewhere private to change.
+        </p>
       </div>
-      <div class="feature-block__body feature-block__body--single">
-        <div class="feature-block__copy">
-          <p>
-            Every session includes access to a private shower, with towels and
-            natural soap provided. Rinse off before you begin, and again at the
-            end before you head back out into the world. Nothing complicated
-            — just warm water, a clean finish, and somewhere to change in
-            private.
-          </p>
-        </div>
-      </div>
+      <figure class="img-panel shower-row__img">
+        <img src="/images/gallery/detail-wood-grain.jpg" alt="Warm wood detail near the wash area" loading="lazy" decoding="async" />
+        <figcaption class="img-panel__caption">Wood & water</figcaption>
+      </figure>
     </div>
   </section>
 
   <SectionDivider />
 
-  {/* ============================================================
-       4. CHOOSE YOUR SESSION
-  ============================================================ */}
+  {/* CHOOSE */}
   <section class="section" id="choose" data-reveal>
     <div class="container">
       <div class="block-head">
         <p class="eyebrow">Two ways to visit</p>
         <h2>Choose your session</h2>
         <p class="lede">
-          Both options include the full sauna and steam experience. The only
-          difference is whether you add the ice bath.
+          Both include the full sauna and steam experience. The only difference is the ice bath.
         </p>
       </div>
 
@@ -270,7 +237,7 @@ const faqs = [
         {
           sessions.map((s, i) => (
             <article
-              class:list={['session-card', { 'session-card--featured': s.featured }]}
+              class:list={['session-card surface-card', { 'session-card--featured': s.featured }]}
               data-reveal
               style={`--reveal-delay: ${i * 80}ms`}
             >
@@ -304,24 +271,21 @@ const faqs = [
 
   <SectionDivider />
 
-  {/* ============================================================
-       5. FAQ
-  ============================================================ */}
+  {/* FAQ */}
   <section class="section" id="faq" data-reveal>
     <div class="container narrow">
       <div class="block-head">
         <p class="eyebrow">First-timers</p>
         <h2>Questions before you book</h2>
         <p class="lede">
-          If something’s holding you back, there’s a decent chance
-          it’s on this list. If not, we’re happy to answer it directly.
+          If something’s holding you back, there’s a decent chance it’s on this list.
         </p>
       </div>
 
       <div class="faq">
         {
           faqs.map((item) => (
-            <details class="faq__item">
+            <details class="faq__item surface-card">
               <summary>
                 <span>{item.q}</span>
               </summary>
@@ -340,17 +304,12 @@ const faqs = [
     </div>
   </section>
 
-  {/* ============================================================
-       CTA BAND
-  ============================================================ */}
   <section class="section" data-reveal>
     <div class="container cta-band">
       <div>
         <p class="eyebrow">Ready when you are</p>
         <h2>You’ve read enough. Come feel it.</h2>
-        <p class="lede">
-          First-timers are always welcome. We’ll walk you through every step.
-        </p>
+        <p class="lede">First-timers are always welcome. We’ll walk you through every step.</p>
       </div>
       <CTAButton href="/book" variant="primary" size="lg">Book a Session</CTAButton>
     </div>
@@ -358,7 +317,6 @@ const faqs = [
 </BaseLayout>
 
 <style>
-  /* ---- shared section heading ---------------------------------------- */
   .block-head {
     display: flex;
     flex-direction: column;
@@ -366,86 +324,139 @@ const faqs = [
     margin-bottom: var(--space-5);
     max-width: var(--container-narrow);
   }
-  .block-head h2 { max-width: 20ch; }
+  .block-head h2 { max-width: 20ch; color: var(--forest-deep); }
   .narrow { max-width: var(--container-narrow); }
 
-  /* ---- feature blocks (sections 1–3) -------------------------------- */
-  .feature-block {
+  .dual-intro { padding-block: var(--space-5); }
+  .dual-intro__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-3);
+  }
+  .snap {
+    position: relative;
+    display: block;
+    aspect-ratio: 16 / 10;
+    border-radius: var(--radius-2xl);
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    text-decoration: none;
+  }
+  .snap img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform var(--duration-slow) var(--ease-out), filter var(--duration-medium) var(--ease-soft);
+  }
+  .snap--heat img { filter: brightness(1.1) saturate(1.1); }
+  .snap--ice img { filter: brightness(1.14) saturate(0.95); }
+  .snap:hover img { transform: scale(1.05); }
+  .snap__label {
+    position: absolute;
+    left: var(--space-3);
+    bottom: var(--space-3);
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.45rem 0.9rem;
+    border-radius: var(--radius-pill);
+    background: rgba(20, 14, 10, 0.5);
+    backdrop-filter: blur(10px);
+    color: #fff8ef;
+    font-size: var(--text-xs);
+    font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-caps);
+    text-transform: uppercase;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+  }
+
+  .feature {
+    display: grid;
+    grid-template-columns: 1fr 1.1fr;
+    gap: var(--space-6);
+    align-items: start;
+  }
+  .feature--flip .feature__visual { order: 2; }
+  .feature--flip .feature__copy { order: 1; }
+  .feature__visual {
+    position: sticky;
+    top: calc(var(--header-height) + var(--space-3));
+    border-radius: var(--radius-2xl);
+    overflow: hidden;
+    border: 1px solid var(--color-border);
+    min-height: 420px;
+    box-shadow: var(--shadow-md);
+  }
+  .feature__visual img {
+    width: 100%;
+    height: 100%;
+    min-height: 420px;
+    object-fit: cover;
+    filter: brightness(1.08) saturate(1.06);
+  }
+  .feature__visual--ice {
+    display: grid;
+    grid-template-rows: 1.4fr 0.8fr;
+    gap: var(--space-2);
+    background: transparent;
+    border: none;
+    box-shadow: none;
+    min-height: auto;
+  }
+  .feature__visual--ice > img:first-child {
+    border-radius: var(--radius-2xl);
+    min-height: 300px;
+    border: 1px solid var(--color-border);
+    box-shadow: var(--shadow-md);
+  }
+  .feature__visual-sub {
+    border-radius: var(--radius-xl) !important;
+    min-height: 160px !important;
+    border: 1px solid var(--color-border);
+    filter: brightness(1.15) saturate(0.9) !important;
+  }
+  .feature__copy {
     display: flex;
     flex-direction: column;
-    gap: var(--space-5);
+    gap: var(--space-2);
   }
-  .feature-block__head {
+  .feature__head {
     display: flex;
     align-items: flex-start;
     gap: var(--space-3);
+    margin-bottom: var(--space-2);
   }
-  .feature-block__icon {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.75rem;
-    height: 2.75rem;
-    flex-shrink: 0;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--color-border);
-    background: var(--wood-burnt);
-    color: var(--hot-coal-bright);
-  }
-  .feature-block__num {
-    font-family: var(--font-mono);
-    font-size: var(--text-sm);
-    color: var(--hot-coal-bright);
-    font-weight: var(--weight-bold);
-    line-height: 1.4;
-    flex-shrink: 0;
-    padding-top: 0.35rem;
-  }
-  .feature-block__head h2 {
+  .feature__head h2 {
     font-size: var(--text-2xl);
-    margin-top: var(--space-1);
+    color: var(--forest-deep);
+    margin-top: 0.15rem;
   }
-
-  .feature-block__body {
-    display: grid;
-    grid-template-columns: 1.5fr 1fr;
-    gap: var(--space-5);
-    align-items: start;
+  .icon-badge--ice {
+    color: var(--ice-deep);
+    background: linear-gradient(145deg, rgba(126, 182, 212, 0.22), rgba(255, 255, 255, 0.5));
   }
-  .feature-block__body--single {
-    grid-template-columns: 1fr;
-    max-width: var(--container-narrow);
-  }
-  .feature-block__copy h3 {
+  .feature__copy h3 {
     font-size: var(--text-lg);
-    margin-top: var(--space-4);
-    margin-bottom: var(--space-1);
-    color: var(--birch-white);
+    margin-top: var(--space-3);
+    color: var(--forest-deep);
   }
-  .feature-block__copy h3:first-child { margin-top: 0; }
-  .feature-block__copy p {
+  .feature__copy > p {
     font-size: var(--text-base);
     color: var(--color-ink-muted);
     line-height: var(--leading-loose);
   }
-
-  /* ---- benefits aside ------------------------------------------------ */
-  .feature-block__benefits {
-    background: var(--wood-burnt);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
-    padding: var(--space-5);
-    position: sticky;
-    top: calc(var(--header-height) + var(--space-3));
+  .feature__aside {
+    margin-top: var(--space-4);
+    padding: var(--space-4);
   }
-  .feature-block__benefits h3 {
+  .feature__aside h3 {
     font-size: var(--text-sm);
     text-transform: uppercase;
     letter-spacing: var(--tracking-caps);
     color: var(--color-ink-subtle);
-    margin-bottom: var(--space-3);
+    margin: 0 0 var(--space-3);
   }
-  .feature-block__benefits ul {
+  .feature__aside ul {
     list-style: none;
     padding: 0;
     margin: 0;
@@ -453,56 +464,59 @@ const faqs = [
     flex-direction: column;
     gap: var(--space-2);
   }
-  .feature-block__benefits li {
+  .feature__aside li {
     position: relative;
     padding-left: var(--space-4);
     color: var(--color-ink-muted);
     font-size: var(--text-sm);
-    line-height: var(--leading-normal);
   }
-  .feature-block__benefits li::before {
-    content: '\2713';
+  .feature__aside li::before {
+    content: '✓';
     position: absolute;
     left: 0;
     color: #7a9a6e;
-    font-weight: var(--weight-bold);
+    font-weight: bold;
   }
-  .feature-block__disclaimer {
-    margin-top: var(--space-4);
+  .feature__aside--ice li::before { color: var(--ice-deep); }
+  .feature__note {
+    margin-top: var(--space-3);
     padding-top: var(--space-3);
     border-top: 1px solid var(--color-border);
     font-size: var(--text-xs);
     color: var(--color-ink-subtle);
-    line-height: var(--leading-normal);
     font-style: italic;
   }
 
-  /* ---- session comparison cards -------------------------------------- */
+  .shower-row {
+    display: grid;
+    grid-template-columns: 1.1fr 0.9fr;
+    gap: var(--space-6);
+    align-items: center;
+  }
+  .shower-row h2 { color: var(--forest-deep); }
+  .shower-row__img { min-height: 280px; aspect-ratio: 4/3; }
+
   .session-grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
     gap: var(--space-4);
-    align-items: stretch;
   }
   .session-card {
     position: relative;
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
-    background: var(--wood-burnt);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
     padding: var(--space-5);
   }
   .session-card--featured {
-    border-color: var(--clay-terracotta);
-    box-shadow: var(--shadow-glow);
+    border-color: var(--ice-mid);
+    box-shadow: var(--shadow-md), 0 0 32px var(--ice-glow);
   }
   .session-card__badge {
     position: absolute;
     top: calc(-1 * var(--space-2));
     left: var(--space-4);
-    background: var(--clay-deep);          /* AA-safe contrast with birch-white text */
+    background: var(--clay-deep);
     color: var(--birch-white);
     font-size: var(--text-xs);
     font-weight: var(--weight-semibold);
@@ -511,13 +525,11 @@ const faqs = [
     padding: 2px var(--space-2);
     border-radius: var(--radius-pill);
   }
-  .session-card__icon {
-    color: var(--hot-coal-bright);
-    margin-top: var(--space-1);
-  }
+  .session-card__icon { color: var(--hot-coal-bright); margin-top: var(--space-1); }
+  .session-card--featured .session-card__icon { color: var(--ice-deep); }
   .session-card h3 {
     font-size: var(--text-xl);
-    color: var(--birch-white);
+    color: var(--forest-deep);
     margin-top: var(--space-1);
   }
   .session-card__duration {
@@ -526,6 +538,7 @@ const faqs = [
     color: var(--hot-coal-bright);
     font-weight: var(--weight-semibold);
   }
+  .session-card--featured .session-card__duration { color: var(--ice-deep); }
   .session-card__list {
     list-style: none;
     padding: 0;
@@ -542,11 +555,11 @@ const faqs = [
     font-size: var(--text-sm);
   }
   .session-card__list li::before {
-    content: '\2713';
+    content: '✓';
     position: absolute;
     left: 0;
     color: #7a9a6e;
-    font-weight: var(--weight-bold);
+    font-weight: bold;
   }
   .session-card__note {
     font-size: var(--text-sm);
@@ -556,62 +569,46 @@ const faqs = [
   }
   .session-card__cta { margin-top: auto; width: 100%; }
 
-  /* ---- FAQ accordion ------------------------------------------------- */
   .faq {
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
-    margin-top: var(--space-5);
+    margin-top: var(--space-4);
   }
   .faq__item {
-    background: var(--wood-burnt);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-md);
     overflow: hidden;
-    transition: border-color var(--duration-fast) var(--ease-soft);
+    padding: 0;
   }
-  .faq__item[open] { border-color: var(--color-border-strong); }
   .faq__item summary {
     cursor: pointer;
     padding: var(--space-3) var(--space-4);
     font-family: var(--font-serif);
     font-size: var(--text-md);
     font-weight: var(--weight-semibold);
-    color: var(--birch-white);
+    color: var(--forest-deep);
     list-style: none;
     display: flex;
     justify-content: space-between;
     align-items: center;
     gap: var(--space-3);
-    transition: color var(--duration-fast) var(--ease-soft);
   }
-  .faq__item summary:hover { color: var(--hot-coal-bright); }
   .faq__item summary::-webkit-details-marker { display: none; }
   .faq__item summary::after {
     content: '+';
     font-family: var(--font-sans);
     font-size: var(--text-lg);
     color: var(--hot-coal-bright);
-    transition: transform var(--duration-fast) var(--ease-soft);
     flex-shrink: 0;
+    transition: transform var(--duration-fast) var(--ease-soft);
   }
   .faq__item[open] summary::after { transform: rotate(45deg); }
-  .faq__item[open] summary {
-    border-bottom: 1px solid var(--color-border);
-  }
-
-  /* Animated expand/collapse using the grid-template-rows 0fr → 1fr trick.
-     The wrapper grid animates its row from 0 to auto height smoothly.
-     Fallback: browsers without fr-unit animation get instant show/hide,
-     which is acceptable. */
+  .faq__item[open] summary { border-bottom: 1px solid var(--color-border); }
   .faq__answer {
     display: grid;
     grid-template-rows: 0fr;
     transition: grid-template-rows var(--duration-medium) var(--ease-out);
   }
-  .faq__item[open] .faq__answer {
-    grid-template-rows: 1fr;
-  }
+  .faq__item[open] .faq__answer { grid-template-rows: 1fr; }
   .faq__answer > p {
     overflow: hidden;
     padding: 0 var(--space-4);
@@ -635,23 +632,14 @@ const faqs = [
   }
   .faq__cta a { font-weight: var(--weight-semibold); }
 
-  /* ---- CTA band ------------------------------------------------------ */
-  .cta-band {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: var(--space-5);
-    flex-wrap: wrap;
-    background: var(--wood-burnt);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-xl);
-    padding: var(--space-6);
-  }
-  @media (max-width: 720px) {
-    .feature-block__body { grid-template-columns: 1fr; }
-    .feature-block__benefits {
-      position: static;
-    }
-    .cta-band { flex-direction: column; align-items: flex-start; }
+  @media (max-width: 880px) {
+    .feature,
+    .feature--flip { grid-template-columns: 1fr; }
+    .feature--flip .feature__visual,
+    .feature--flip .feature__copy { order: unset; }
+    .feature__visual { position: static; min-height: 280px; }
+    .feature__visual img { min-height: 280px; }
+    .shower-row { grid-template-columns: 1fr; }
+    .dual-intro__grid { grid-template-columns: 1fr; }
   }
 </style>

@@ -20,7 +20,7 @@ import BookingEmbed from '../components/BookingEmbed.astro';
       <h1>Book your session.</h1>
       <p class="lede">
         Pick a slot below. You'll get a confirmation by email and a reminder the
-        day before. First time? We'll walk you through every step when you arrive.
+        day before. First time? We'll walk you through the heat, the ice, and every step when you arrive.
       </p>
     </div>
 
@@ -66,7 +66,7 @@ import BookingEmbed from '../components/BookingEmbed.astro';
 </BaseLayout>
 
 <style>
-  .book { padding-top: var(--space-6); }
+  .book { padding-top: calc(var(--header-height) + var(--space-6)); }
 
   .book__head {
     display: flex;
@@ -75,7 +75,7 @@ import BookingEmbed from '../components/BookingEmbed.astro';
     max-width: var(--container-narrow);
     margin-bottom: var(--space-6);
   }
-  .book__head h1 { font-size: var(--text-3xl); }
+  .book__head h1 { font-size: var(--text-3xl); color: var(--forest-deep); }
   .book__head .lede {
     font-size: var(--text-md);
     color: var(--color-ink-muted);
@@ -90,7 +90,7 @@ import BookingEmbed from '../components/BookingEmbed.astro';
     max-width: var(--container-narrow);
     margin-bottom: var(--space-5);
     padding: var(--space-4) var(--space-5);
-    background: var(--wood-burnt);
+    background: var(--color-bg-elevated);
     border: 1px solid var(--color-border);
     border-left: 3px solid var(--clay-terracotta);
     border-radius: var(--radius-md);
@@ -98,7 +98,7 @@ import BookingEmbed from '../components/BookingEmbed.astro';
   .book__intro-heading {
     font-size: var(--text-lg);
     margin-bottom: var(--space-2);
-    color: var(--birch-white);
+    color: var(--forest-deep);
   }
   .book__intro p {
     font-size: var(--text-base);
@@ -106,7 +106,7 @@ import BookingEmbed from '../components/BookingEmbed.astro';
     line-height: var(--leading-loose);
   }
   .book__intro strong {
-    color: var(--birch-white);
+    color: var(--forest-deep);
     font-weight: var(--weight-semibold);
   }
   .book__intro a {
@@ -120,14 +120,15 @@ import BookingEmbed from '../components/BookingEmbed.astro';
     margin-top: var(--space-2);
   }
   .book__aside-item {
-    background: var(--wood-burnt);
+    background: var(--color-bg-elevated);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-xl);
     padding: var(--space-4) var(--space-5);
   }
   .book__aside-item h2 {
     font-size: var(--text-lg);
     margin-bottom: var(--space-2);
+    color: var(--forest-deep);
   }
   .book__aside-item p {
     font-size: var(--text-sm);
