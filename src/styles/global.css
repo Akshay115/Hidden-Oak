@@ -5,9 +5,9 @@
 
 :root {
   /* ── Raw palette ─────────────────────────────────────────────────── */
-  --linen-bg:        #F7F3EC;
-  --linen-card:      #FFFDF9;
-  --linen-muted:     #EFEAE0;
+  --linen-bg:        #ebd9c2; /* Soft terracotta-tinted peach sand dusk background */
+  --linen-card:      #f6e8d5; /* Lighter sunset glow card surface */
+  --linen-muted:     #dec9ad; /* Warm dusk shadow */
 
   --wood-charred:    #1e1510;
   --wood-burnt:      #2f2118;
