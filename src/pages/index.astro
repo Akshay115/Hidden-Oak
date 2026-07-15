@@ -287,7 +287,7 @@ const reasons = [
     box-shadow: var(--shadow-lg), var(--shadow-glow-soft);
   }
   .stats__item {
-    background: rgba(47, 33, 24, 0.92);
+    background: rgba(255, 255, 255, 0.85);
     backdrop-filter: blur(12px);
     padding: var(--space-4) var(--space-3);
     display: flex;
@@ -297,7 +297,7 @@ const reasons = [
     transition: background var(--duration-fast) var(--ease-soft);
   }
   .stats__item:hover {
-    background: rgba(63, 45, 32, 0.95);
+    background: rgba(255, 255, 255, 0.95);
   }
   .stats__k {
     font-size: var(--text-xs);
@@ -308,7 +308,7 @@ const reasons = [
   .stats__v {
     font-family: var(--font-serif);
     font-size: var(--text-xl);
-    color: var(--birch-white);
+    color: var(--forest-deep);
     font-weight: var(--weight-bold);
   }
   .stats__s {
@@ -364,10 +364,10 @@ const reasons = [
     overflow: hidden;
     margin: 0;
     border: 1px solid var(--color-border);
-    background: var(--wood-burnt);
+    background: var(--color-bg-elevated);
   }
   .place__frame img { width: 100%; height: 100%; object-fit: cover; transition: transform 900ms var(--ease-out), filter 500ms var(--ease-soft); }
-  .place__frame::after { content: ''; position: absolute; inset: 40% 0 0; background: linear-gradient(transparent, rgba(18, 19, 12, .8)); pointer-events: none; }
+  .place__frame::after { content: ''; position: absolute; inset: 40% 0 0; background: linear-gradient(transparent, rgba(30, 21, 16, 0.7)); pointer-events: none; }
   .place__frame:hover img { transform: scale(1.07); filter: saturate(1.12); }
   .place__frame figcaption { position: absolute; left: var(--space-2); bottom: var(--space-2); z-index: 1; color: var(--birch-white); font: 500 var(--text-xs) var(--font-sans); letter-spacing: var(--tracking-caps); text-transform: uppercase; }
   .place__frame--tall { grid-row: span 2; border-radius: 120px 120px var(--radius-xl) var(--radius-xl); }
@@ -402,7 +402,7 @@ const reasons = [
     gap: var(--space-3);
   }
   .journey__card {
-    background: var(--wood-burnt);
+    background: var(--color-bg-elevated);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-xl);
     padding: var(--space-4);
@@ -433,7 +433,7 @@ const reasons = [
   }
   .journey__card h3 {
     font-size: var(--text-xl);
-    color: var(--birch-white);
+    color: var(--forest-deep);
   }
   .journey__card p {
     font-size: var(--text-sm);
@@ -464,7 +464,7 @@ const reasons = [
     gap: var(--space-3);
   }
   .why__point {
-    background: linear-gradient(165deg, rgba(63, 45, 32, 0.9), rgba(47, 33, 24, 0.95));
+    background: var(--color-bg-elevated);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-xl);
     padding: var(--space-5);
@@ -478,7 +478,7 @@ const reasons = [
   }
   .why__point:hover {
     transform: translateY(-4px);
-    border-color: rgba(212, 161, 90, 0.35);
+    border-color: rgba(61, 90, 72, 0.25);
     box-shadow: var(--shadow-md);
   }
   .why__num {
@@ -489,7 +489,7 @@ const reasons = [
   }
   .why__point h3 {
     font-size: var(--text-lg);
-    color: var(--birch-white);
+    color: var(--forest-deep);
   }
   .why__point p {
     font-size: var(--text-sm);
@@ -505,7 +505,7 @@ const reasons = [
   }
   .price-card {
     position: relative;
-    background: var(--wood-burnt);
+    background: var(--color-bg-elevated);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-2xl);
     padding: var(--space-5);
@@ -518,15 +518,15 @@ const reasons = [
     border-color: var(--clay-terracotta);
     box-shadow: var(--shadow-lg), var(--shadow-glow);
     background:
-      radial-gradient(ellipse 80% 50% at 50% 0%, rgba(196, 106, 40, 0.15), transparent 60%),
-      var(--wood-burnt);
+      radial-gradient(ellipse 80% 50% at 50% 0%, rgba(61, 90, 72, 0.08), transparent 60%),
+      var(--color-bg-elevated);
   }
   .price-card__badge {
     position: absolute;
     top: calc(-1 * var(--space-2));
     left: var(--space-5);
     background: var(--clay-deep);
-    color: var(--birch-white);
+    color: #fff;
     font-size: var(--text-xs);
     font-weight: var(--weight-semibold);
     letter-spacing: var(--tracking-wide);
@@ -536,7 +536,7 @@ const reasons = [
   }
   .price-card h2 {
     font-size: var(--text-3xl);
-    color: var(--birch-white);
+    color: var(--forest-deep);
   }
   .price-card__sub,
   .price-card__price span {
@@ -547,7 +547,7 @@ const reasons = [
     font-family: var(--font-serif);
     font-size: var(--text-3xl);
     font-weight: var(--weight-bold);
-    color: var(--birch-white);
+    color: var(--forest-deep);
   }
   .price-card ul {
     list-style: none;

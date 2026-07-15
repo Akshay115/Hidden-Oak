@@ -80,7 +80,7 @@ const isActive = (href: string) =>
     position: sticky;
     top: 0;
     z-index: var(--z-header);
-    background: rgba(30, 21, 16, 0.55);
+    background: rgba(247, 243, 236, 0.65);
     backdrop-filter: saturate(150%) blur(16px);
     -webkit-backdrop-filter: saturate(150%) blur(16px);
     border-bottom: 1px solid transparent;
@@ -90,9 +90,9 @@ const isActive = (href: string) =>
       box-shadow var(--duration-fast) var(--ease-soft);
   }
   .site-header[data-scrolled='true'] {
-    background: rgba(30, 21, 16, 0.9);
+    background: rgba(247, 243, 236, 0.92);
     border-bottom-color: var(--color-border);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.35);
+    box-shadow: 0 4px 20px rgba(61, 90, 72, 0.08);
   }
 
   .site-header__inner {
@@ -117,15 +117,15 @@ const isActive = (href: string) =>
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    color: var(--gold-ember);
-    background: linear-gradient(145deg, rgba(196, 106, 40, 0.22), rgba(30, 21, 16, 0.5));
+    color: var(--forest-green);
+    background: linear-gradient(145deg, rgba(61, 90, 72, 0.12), rgba(247, 243, 236, 0.5));
     border: 1px solid var(--color-border);
     box-shadow: var(--shadow-inset);
     transition: color var(--duration-fast) var(--ease-soft),
       box-shadow var(--duration-fast) var(--ease-soft);
   }
   .brand:hover .brand__mark {
-    color: var(--hot-coal-bright);
+    color: var(--color-primary-hover);
     box-shadow: var(--shadow-glow-soft);
   }
   .brand__text {
@@ -138,7 +138,7 @@ const isActive = (href: string) =>
     font-size: var(--text-md);
     font-weight: var(--weight-bold);
     letter-spacing: var(--tracking-tight);
-    color: var(--birch-white);
+    color: var(--forest-deep);
   }
   .brand__locale {
     font-size: 0.65rem;
@@ -169,12 +169,12 @@ const isActive = (href: string) =>
       background var(--duration-fast) var(--ease-soft);
   }
   .site-nav__link:hover {
-    color: var(--birch-white);
-    background: rgba(244, 234, 212, 0.06);
+    color: var(--forest-green);
+    background: rgba(61, 90, 72, 0.06);
   }
   .site-nav__link.active {
-    color: var(--hot-coal-bright);
-    background: rgba(232, 93, 50, 0.1);
+    color: var(--forest-green);
+    background: rgba(61, 90, 72, 0.1);
   }
   .site-nav__link.active::after {
     content: '';
@@ -184,7 +184,7 @@ const isActive = (href: string) =>
     width: 14px;
     height: 2px;
     border-radius: 2px;
-    background: var(--hot-coal);
+    background: var(--forest-green);
     transform: translateX(-50%);
   }
 
@@ -201,7 +201,7 @@ const isActive = (href: string) =>
       align-items: center;
       width: 46px;
       height: 46px;
-      background: rgba(47, 33, 24, 0.7);
+      background: rgba(247, 243, 236, 0.8);
       border: 1px solid var(--color-border);
       border-radius: var(--radius-md);
       cursor: pointer;
@@ -212,7 +212,7 @@ const isActive = (href: string) =>
       display: block;
       height: 2px;
       width: 20px;
-      background: var(--birch-white);
+      background: var(--forest-deep);
       border-radius: 2px;
       transition: transform var(--duration-fast) var(--ease-soft),
         opacity var(--duration-fast) var(--ease-soft);
@@ -224,7 +224,7 @@ const isActive = (href: string) =>
       top: 100%;
       left: 0;
       right: 0;
-      background: rgba(30, 21, 16, 0.97);
+      background: rgba(247, 243, 236, 0.98);
       backdrop-filter: blur(18px);
       border-bottom: 1px solid var(--color-border);
       max-height: 0;
