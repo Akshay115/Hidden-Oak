@@ -5,6 +5,10 @@
 
 :root {
   /* ── Raw palette ─────────────────────────────────────────────────── */
+  --linen-bg:        #F7F3EC;
+  --linen-card:      #FFFDF9;
+  --linen-muted:     #EFEAE0;
+
   --wood-charred:    #1e1510;
   --wood-burnt:      #2f2118;
   --wood-smolder:    #3f2d20;
@@ -19,28 +23,28 @@
   --forest-deep:     #2a3f32;
   --hot-coal:        #e85d32;
   --hot-coal-bright: #f27448;
-  --hot-coal-glow:   rgba(232, 93, 50, 0.38);
-  --gold-ember:      #d4a15a;
-  --mist:            rgba(244, 234, 212, 0.08);
+  --hot-coal-glow:   rgba(61, 90, 72, 0.15);
+  --gold-ember:      #b88a44;
+  --mist:            rgba(61, 90, 72, 0.05);
 
-  --ink-full:    #f4ead4;
-  --ink-80:      #dcd0b6;
-  --ink-60:      #b8ab90;
+  --ink-full:    #2f2118;
+  --ink-80:      #4f3a2a;
+  --ink-60:      #6c5a4b;
   --ink-40:      #8c7f68;
-  --ink-20:      #5a5044;
-  --ink-on-light:       #1e1510;
-  --ink-on-light-muted: #5c4d3c;
+  --ink-20:      #b8ab90;
+  --ink-on-light:       #2f2118;
+  --ink-on-light-muted: #4f3a2a;
 
   /* ── Semantic ────────────────────────────────────────────────────── */
-  --color-bg:            var(--wood-charred);
-  --color-bg-elevated:   var(--wood-burnt);
-  --color-bg-muted:      var(--wood-smolder);
-  --color-surface:       var(--wood-smolder);
-  --color-surface-light: var(--birch-white);
+  --color-bg:            var(--linen-bg);
+  --color-bg-elevated:   var(--linen-card);
+  --color-bg-muted:      var(--linen-muted);
+  --color-surface:       var(--linen-muted);
+  --color-surface-light: var(--linen-card);
 
-  --color-border:        rgba(212, 161, 90, 0.18);
-  --color-border-strong: rgba(212, 161, 90, 0.32);
-  --color-border-light:  rgba(30, 21, 16, 0.14);
+  --color-border:        rgba(61, 90, 72, 0.12);
+  --color-border-strong: rgba(61, 90, 72, 0.24);
+  --color-border-light:  rgba(61, 90, 72, 0.08);
 
   --color-ink:        var(--ink-full);
   --color-ink-muted:  var(--ink-80);
@@ -48,16 +52,16 @@
   --color-ink-on-light:        var(--ink-on-light);
   --color-ink-on-light-muted:  var(--ink-on-light-muted);
 
-  --color-primary:        var(--clay-terracotta);
-  --color-primary-hover:  var(--hot-coal);
-  --color-primary-bright: var(--clay-light);
-  --color-primary-deep:   var(--clay-deep);
-  --color-secondary:      var(--forest-green);
-  --color-secondary-hover: var(--forest-light);
-  --color-secondary-deep: var(--forest-deep);
-  --color-accent:         var(--hot-coal-bright);
-  --color-accent-bright:  var(--hot-coal-bright);
-  --color-cream:          var(--birch-warm);
+  --color-primary:        var(--forest-green);
+  --color-primary-hover:  var(--forest-light);
+  --color-primary-bright: var(--forest-light);
+  --color-primary-deep:   var(--forest-deep);
+  --color-secondary:      var(--clay-terracotta);
+  --color-secondary-hover: var(--clay-light);
+  --color-secondary-deep: var(--clay-deep);
+  --color-accent:         var(--gold-ember);
+  --color-accent-bright:  var(--gold-ember);
+  --color-cream:          var(--forest-deep);
   --color-gold:           var(--gold-ember);
 
   --color-success: #6f8a5a;
@@ -228,11 +232,8 @@ body {
   text-rendering: optimizeLegibility;
   min-height: 100vh;
   background-image:
-    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(196, 106, 40, 0.12), transparent 55%),
-    linear-gradient(rgba(30, 21, 16, 0.88), rgba(30, 21, 16, 0.88)),
-    var(--img-wood-tile);
-  background-repeat: no-repeat, no-repeat, repeat;
-  background-size: auto, auto, var(--texture-tile-size) var(--texture-tile-size);
+    radial-gradient(ellipse 80% 50% at 50% -10%, rgba(61, 90, 72, 0.06), transparent 55%);
+  background-repeat: no-repeat;
   overflow-x: hidden;
 }
 
