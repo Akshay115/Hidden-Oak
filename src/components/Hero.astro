@@ -345,6 +345,18 @@ const showAtm = atmosphere && !bgImage && !hasVideo;
   }
   .hero--center .hero__actions { justify-content: center; }
 
+  .hero :global(.cta--ghost) {
+    color: #ffffff !important;
+    border-color: rgba(255, 255, 255, 0.45) !important;
+    background: rgba(255, 255, 255, 0.05) !important;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.5);
+  }
+  .hero :global(.cta--ghost:hover) {
+    color: #ffffff !important;
+    border-color: var(--hot-coal-bright) !important;
+    background: rgba(232, 93, 50, 0.15) !important;
+  }
+
   .hero__scroll {
     position: absolute;
     bottom: var(--space-4);
