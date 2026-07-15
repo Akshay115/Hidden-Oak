@@ -284,23 +284,23 @@ const showAtm = atmosphere && !bgImage && !hasVideo;
     background:
       linear-gradient(
         180deg,
-        rgba(30, 21, 16, 0.3) 0%,
-        rgba(30, 21, 16, 0.1) 38%,
-        rgba(30, 21, 16, 0.5) 78%,
-        rgba(30, 21, 16, 0.82) 100%
+        rgba(13, 11, 9, 0.5) 0%,
+        rgba(13, 11, 9, 0.28) 38%,
+        rgba(13, 11, 9, 0.62) 78%,
+        rgba(13, 11, 9, 0.92) 100%
       ),
-      radial-gradient(120% 100% at 50% 50%, transparent 45%, rgba(30, 21, 16, 0.25) 100%);
+      radial-gradient(120% 100% at 50% 50%, transparent 45%, rgba(13, 11, 9, 0.4) 100%);
   }
   .hero--left .hero__overlay {
     background:
       linear-gradient(
         180deg,
-        rgba(30, 21, 16, 0.4) 0%,
-        rgba(30, 21, 16, 0.15) 40%,
-        rgba(30, 21, 16, 0.55) 80%,
-        rgba(30, 21, 16, 0.85) 100%
+        rgba(13, 11, 9, 0.48) 0%,
+        rgba(13, 11, 9, 0.25) 40%,
+        rgba(13, 11, 9, 0.65) 80%,
+        rgba(13, 11, 9, 0.94) 100%
       ),
-      linear-gradient(90deg, rgba(30, 21, 16, 0.75) 0%, rgba(30, 21, 16, 0.3) 42%, transparent 72%);
+      linear-gradient(90deg, rgba(13, 11, 9, 0.78) 0%, rgba(13, 11, 9, 0.4) 42%, transparent 72%);
   }
 
   .hero__content {
@@ -320,19 +320,22 @@ const showAtm = atmosphere && !bgImage && !hasVideo;
     font-size: var(--text-5xl);
     line-height: var(--leading-tight);
     max-width: 14ch;
-    color: #fffaf0;
-    text-shadow: 0 2px 14px rgba(30, 21, 16, 0.85), 0 1px 4px rgba(30, 21, 16, 0.9);
+    text-shadow: 0 4px 28px rgba(0, 0, 0, 0.55);
+    background: linear-gradient(180deg, var(--birch-white) 0%, var(--birch-warm) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
   }
   /* Fallback if clip unsupported */
   @supports not (background-clip: text) {
-    .hero__title { color: #fffaf0; background: none; }
+    .hero__title { color: var(--birch-white); background: none; }
   }
   .hero__subtitle {
     font-size: var(--text-md);
-    color: #f7ede2;
+    color: #ffffff;
     max-width: 48ch;
     line-height: var(--leading-loose);
-    text-shadow: 0 2px 10px rgba(30, 21, 16, 0.85), 0 1px 3px rgba(30, 21, 16, 0.9);
+    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.75), 0 1px 3px rgba(0, 0, 0, 0.85);
   }
   .hero__actions {
     display: flex;
@@ -377,9 +380,20 @@ const showAtm = atmosphere && !bgImage && !hasVideo;
   }
 
   @media (max-width: 640px) {
-    .hero { min-height: clamp(480px, 86vh, 720px); }
-    .hero__title { font-size: var(--text-4xl); max-width: 12ch; }
-    .hero__subtitle { font-size: var(--text-base); }
+    .hero {
+      min-height: auto;
+      padding-block: calc(var(--header-height) + var(--space-4)) var(--space-6);
+    }
+    .hero--compact {
+      min-height: auto;
+    }
+    .hero__title {
+      font-size: var(--text-3xl);
+      max-width: 14ch;
+    }
+    .hero__subtitle {
+      font-size: var(--text-sm);
+    }
     .hero__overlay {
       background: linear-gradient(
         180deg,
