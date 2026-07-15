@@ -245,7 +245,8 @@ body::before {
   z-index: 0;
   background:
     radial-gradient(ellipse 40% 30% at 15% 80%, rgba(232, 93, 50, 0.06), transparent 70%),
-    radial-gradient(ellipse 35% 25% at 85% 20%, rgba(212, 161, 90, 0.05), transparent 70%);
+    radial-gradient(ellipse 35% 25% at 85% 20%, rgba(212, 161, 90, 0.05), transparent 70%),
+    radial-gradient(ellipse 45% 35% at 92% 78%, rgba(61, 90, 72, 0.08), transparent 70%);
   animation: ambient-breathe 14s var(--ease-in-out) infinite alternate;
 }
 
