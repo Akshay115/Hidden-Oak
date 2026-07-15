@@ -49,18 +49,19 @@ const walkIns = [
 ];
 
 // --- Section 2: Monthly memberships -------------------------------------
+// sessions = short differentiator under the price (not repeated in the list)
 const tiers = [
   {
     name: 'Steam Only',
     price: '₹3,500',
-    cadence: 'per month',
+    cadence: '/ month',
     sessions: '8 sessions',
     icon: 'flame' as const,
     features: [
-      '8 sessions / month',
       'Sauna & steam room',
       'No ice bath access',
-      'Shower included',
+      'Shower & tea included',
+      'Cancel any time',
     ],
     featured: false,
     cta: 'Choose Steam Only',
@@ -68,14 +69,14 @@ const tiers = [
   {
     name: 'Full Reset',
     price: '₹7,000',
-    cadence: 'per month',
-    sessions: '8 sessions + ice bath',
+    cadence: '/ month',
+    sessions: '8 sessions · ice included',
     icon: 'branch' as const,
     features: [
-      '8 sessions / month',
       'Sauna & steam room',
-      'Ice bath included',
-      'Shower included',
+      'Ice bath every visit',
+      'Shower & tea included',
+      'Cancel any time',
     ],
     featured: true,
     cta: 'Choose Full Reset',
@@ -83,32 +84,32 @@ const tiers = [
   {
     name: 'Unlimited Local',
     price: '₹15,000',
-    cadence: 'per month',
-    sessions: 'Unlimited (1/day)',
+    cadence: '/ month',
+    sessions: 'Unlimited · 1 / day',
     icon: 'droplet' as const,
     features: [
-      'Unlimited sessions',
-      'Fair-use cap of 1 / day',
       'Sauna, steam & ice bath',
-      'Shower included',
+      'Fair-use cap of 1 / day',
+      'Shower & tea included',
+      'Built for locals',
     ],
     featured: false,
     cta: 'Choose Unlimited',
   },
   {
-    name: "Couple's Membership",
+    name: 'Couple’s',
     price: '₹12,000',
-    cadence: 'per month',
-    sessions: '8 each, for two',
+    cadence: '/ month',
+    sessions: '8 each · for two',
     icon: 'branch' as const,
     features: [
-      '8 sessions each, for 2 people',
-      'Sauna & steam room',
-      'Ice bath included',
-      'Shower included',
+      '8 sessions each (2 people)',
+      'Sauna, steam & ice bath',
+      'Shower & tea included',
+      'Cancel any time',
     ],
     featured: false,
-    cta: "Choose Couple's",
+    cta: 'Choose Couple’s',
   },
 ];
 ---
@@ -153,11 +154,13 @@ const tiers = [
               style={`--reveal-delay: ${i * 80}ms`}
             >
               {w.featured && <span class="card__badge">Most popular</span>}
-              <span
-                class:list={['card__icon', 'deco-icon', 'deco-icon--md', `deco-icon--${w.icon}`]}
-                aria-hidden="true"
-              ></span>
-              <h3>{w.name}</h3>
+              <header class="card__header">
+                <span
+                  class:list={['card__icon', 'deco-icon', 'deco-icon--md', `deco-icon--${w.icon}`]}
+                  aria-hidden="true"
+                ></span>
+                <h3>{w.name}</h3>
+              </header>
               <div class="card__price">
                 <span class="card__amount">{w.price}</span>
                 <span class="card__cadence">{w.cadence}</span>
@@ -167,14 +170,16 @@ const tiers = [
                 {w.features.map((f) => <li>{f}</li>)}
               </ul>
               <p class="card__note">{w.note}</p>
-              <CTAButton
-                href="/book"
-                variant={w.featured ? 'primary' : 'ghost'}
-                size="md"
-                class="card__cta"
-              >
-                Book this session
-              </CTAButton>
+              <div class="card__footer">
+                <CTAButton
+                  href="/book"
+                  variant={w.featured ? 'primary' : 'ghost'}
+                  size="md"
+                  class="card__cta"
+                >
+                  Book this session
+                </CTAButton>
+              </div>
             </article>
           ))
         }
@@ -207,11 +212,13 @@ const tiers = [
               style={`--reveal-delay: ${i * 80}ms`}
             >
               {t.featured && <span class="card__badge">Recommended</span>}
-              <span
-                class:list={['card__icon', 'deco-icon', 'deco-icon--md', `deco-icon--${t.icon}`]}
-                aria-hidden="true"
-              ></span>
-              <h3>{t.name}</h3>
+              <header class="card__header">
+                <span
+                  class:list={['card__icon', 'deco-icon', 'deco-icon--md', `deco-icon--${t.icon}`]}
+                  aria-hidden="true"
+                ></span>
+                <h3>{t.name}</h3>
+              </header>
               <div class="card__price">
                 <span class="card__amount">{t.price}</span>
                 <span class="card__cadence">{t.cadence}</span>
@@ -220,14 +227,16 @@ const tiers = [
               <ul class="card__list">
                 {t.features.map((f) => <li>{f}</li>)}
               </ul>
-              <CTAButton
-                href="/book"
-                variant={t.featured ? 'primary' : 'ghost'}
-                size="md"
-                class="card__cta"
-              >
-                {t.cta}
-              </CTAButton>
+              <div class="card__footer">
+                <CTAButton
+                  href="/book"
+                  variant={t.featured ? 'primary' : 'ghost'}
+                  size="md"
+                  class="card__cta"
+                >
+                  {t.cta}
+                </CTAButton>
+              </div>
             </article>
           ))
         }
@@ -310,11 +319,19 @@ const tiers = [
     align-items: stretch;
   }
   .cards--walkin {
-    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    grid-template-columns: repeat(2, 1fr);
     max-width: 760px;
+    padding-top: var(--space-3);
   }
+  .card--walkin .card__header {
+    min-height: 4.5rem;
+  }
+  /* 4 equal membership columns on wide screens; never orphan a card */
   .cards--tiers {
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-3);
+    /* Room for the "Recommended" badge that sits above the card edge */
+    padding-top: var(--space-3);
   }
 
   /* ---- card ---------------------------------------------------------- */
@@ -322,12 +339,13 @@ const tiers = [
     position: relative;
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
+    gap: 0;
     background: var(--color-bg-elevated);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-xl);
-    padding: var(--space-5);
+    padding: var(--space-4) var(--space-4) var(--space-4);
     box-shadow: var(--shadow-sm);
+    min-width: 0; /* prevent grid blowout from long words */
     transition: transform var(--transition-base), border-color var(--transition-base),
       box-shadow var(--transition-base);
   }
@@ -352,7 +370,8 @@ const tiers = [
   .card__badge {
     position: absolute;
     top: calc(-1 * var(--space-2));
-    left: var(--space-4);
+    left: 50%;
+    transform: translateX(-50%);
     background: var(--clay-deep);
     color: var(--birch-white);
     font-family: var(--font-sans);
@@ -360,47 +379,67 @@ const tiers = [
     font-weight: var(--weight-semibold);
     letter-spacing: var(--tracking-wide);
     text-transform: uppercase;
-    padding: 3px var(--space-2);
+    padding: 4px 12px;
     border-radius: var(--radius-pill);
     box-shadow: var(--shadow-sm);
+    white-space: nowrap;
+    z-index: 1;
   }
 
+  .card__header {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--space-2);
+    min-height: 4.75rem; /* equal title band across cards */
+    margin-bottom: var(--space-3);
+  }
   .card__icon {
     color: var(--hot-coal-bright);
-    margin-top: var(--space-1);
+    flex-shrink: 0;
   }
   .card--featured .card__icon { color: var(--ice-deep); }
   .card h3 {
     font-family: var(--font-serif);
-    font-size: var(--text-xl);
+    font-size: var(--text-lg);
+    line-height: var(--leading-snug);
     color: var(--forest-deep);
-    margin-top: var(--space-1);
+    margin: 0;
+    text-wrap: balance;
   }
 
   .card__price {
     display: flex;
+    flex-wrap: wrap;
     align-items: baseline;
-    gap: var(--space-2);
-    margin-top: var(--space-1);
+    gap: 0.35rem 0.5rem;
+    margin-bottom: 0.35rem;
   }
   .card__amount {
     font-family: var(--font-serif);
-    font-size: var(--text-3xl);
+    font-size: clamp(1.65rem, 1.4rem + 0.8vw, 2.1rem);
     font-weight: var(--weight-bold);
     color: var(--forest-deep);
     line-height: 1;
+    letter-spacing: var(--tracking-tight);
   }
   .card__cadence {
     font-size: var(--text-sm);
     color: var(--color-ink-subtle);
+    white-space: nowrap;
   }
   .card__duration,
   .card__sessions {
     font-family: var(--font-mono);
-    font-size: var(--text-sm);
+    font-size: var(--text-xs);
     color: var(--hot-coal-bright);
     font-weight: var(--weight-semibold);
-    margin-top: var(--space-1);
+    letter-spacing: 0.02em;
+    line-height: 1.35;
+    min-height: 2.1em; /* two lines max, keeps feature lists aligned */
+    margin: 0 0 var(--space-3);
+    padding-bottom: var(--space-3);
+    border-bottom: 1px solid var(--color-border);
   }
   .card--featured .card__duration,
   .card--featured .card__sessions { color: var(--ice-deep); }
@@ -408,23 +447,24 @@ const tiers = [
   .card__list {
     list-style: none;
     padding: 0;
-    margin: var(--space-2) 0 0;
+    margin: 0 0 var(--space-4);
     display: flex;
     flex-direction: column;
-    gap: var(--space-2);
+    gap: 0.65rem;
     flex: 1;
   }
   .card__list li {
     position: relative;
-    padding-left: var(--space-4);
+    padding-left: 1.35rem;
     color: var(--color-ink-muted);
     font-size: var(--text-sm);
-    line-height: var(--leading-normal);
+    line-height: 1.4;
   }
   .card__list li::before {
     content: '✓';
     position: absolute;
     left: 0;
+    top: 0.05em;
     color: #7a9a6e;
     font-weight: var(--weight-bold);
   }
@@ -433,12 +473,19 @@ const tiers = [
     font-size: var(--text-sm);
     color: var(--color-ink-subtle);
     font-style: italic;
-    margin-top: var(--space-1);
+    margin: 0 0 var(--space-3);
   }
 
-  .card__cta {
-    margin-top: var(--space-3);
+  .card__footer {
+    margin-top: auto;
+    padding-top: var(--space-1);
+  }
+  /* Reach into CTAButton child root (scoped styles don't otherwise apply) */
+  .card__footer :global(.card__cta),
+  .card :global(.card__cta) {
     width: 100%;
+    display: inline-flex;
+    justify-content: center;
   }
 
   /* ---- good to know policies ---------------------------------------- */
@@ -488,8 +535,13 @@ const tiers = [
   .need-help a { font-weight: var(--weight-semibold); }
 
   /* ---- responsive --------------------------------------------------- */
+  @media (max-width: 1100px) {
+    .cards--tiers { grid-template-columns: repeat(2, 1fr); gap: var(--space-4); }
+    .card__header { min-height: 4.25rem; }
+  }
   @media (max-width: 600px) {
     .cards--walkin,
     .cards--tiers { grid-template-columns: 1fr; }
+    .card__header { min-height: 0; }
   }
 </style>
