@@ -4,9 +4,8 @@
  *
  * Masonry-style grid with category filtering and an accessible lightbox.
  *
- * Images: themed SVG placeholders (public/images/gallery/) standing in for
- * real photography. Each entry has a base src + intrinsic width/height so the
- * layout reserves correct space before load (no layout shift).
+ * Images are local, lightweight visual studies. Each entry has a base src +
+ * intrinsic width/height so the layout reserves correct space before load.
  *
  * Responsive images: uses Cloudflare Image Resizing when available (via /cdn-cgi/image/
  * path), with standard <img> srcset as fallback. Pattern documented in the
@@ -163,10 +162,7 @@ function isRaster(filename: string): boolean {
         }
       </div>
 
-      <p class="gallery-note">
-        These are placeholder images. Real photography will replace them — the layout,
-        lazy-loading, and lightbox are all ready.
-      </p>
+      <p class="gallery-note">A small study in heat, texture, water, and the green around us.</p>
     </div>
   </section>
 
