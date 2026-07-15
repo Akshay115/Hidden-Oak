@@ -1,7 +1,6 @@
 ---
 /**
- * CTAButton — primary call-to-action link.
- * Renders as an <a> (no client JS). Variants: primary | ghost | light.
+ * CTAButton — primary / ghost / light call-to-action.
  */
 interface Props {
   href: string;
@@ -22,15 +21,18 @@ const {
   href={href}
   class:list={['cta', `cta--${variant}`, `cta--${size}`, className]}
 >
-  <slot />
+  <span class="cta__shine" aria-hidden="true"></span>
+  <span class="cta__label"><slot /></span>
 </a>
 
 <style>
   .cta {
+    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: var(--space-2);
+    overflow: hidden;
     font-family: var(--font-sans);
     font-weight: 600;
     letter-spacing: var(--tracking-wide);
@@ -38,7 +40,9 @@ const {
     border: 1px solid transparent;
     text-decoration: none;
     cursor: pointer;
-    transition: transform var(--duration-fast) var(--ease-soft),
+    isolation: isolate;
+    transition:
+      transform var(--duration-fast) var(--ease-spring),
       background-color var(--duration-fast) var(--ease-soft),
       color var(--duration-fast) var(--ease-soft),
       border-color var(--duration-fast) var(--ease-soft),
@@ -47,30 +51,60 @@ const {
     white-space: nowrap;
   }
 
-  .cta--md { padding: var(--space-3) var(--space-5); font-size: var(--text-base); }
-  .cta--lg { padding: var(--space-4) var(--space-6); font-size: var(--text-md); }
+  .cta__label { position: relative; z-index: 1; }
+  .cta__shine {
+    position: absolute;
+    inset: 0;
+    z-index: 0;
+    background: linear-gradient(
+      105deg,
+      transparent 35%,
+      rgba(255, 255, 255, 0.22) 48%,
+      transparent 62%
+    );
+    transform: translateX(-120%) skewX(-18deg);
+    pointer-events: none;
+    opacity: 0;
+  }
+  .cta:hover .cta__shine {
+    opacity: 1;
+    animation: shine-sweep 0.85s var(--ease-out) forwards;
+  }
+
+  .cta--md {
+    padding: 0.85rem 1.55rem;
+    font-size: var(--text-sm);
+    min-height: 48px;
+  }
+  .cta--lg {
+    padding: 1.05rem 1.9rem;
+    font-size: var(--text-base);
+    min-height: 56px;
+  }
 
   .cta--primary {
-    background: linear-gradient(135deg, var(--clay-terracotta), var(--clay-deep));
+    background: linear-gradient(135deg, var(--clay-light) 0%, var(--clay-terracotta) 45%, var(--clay-deep) 100%);
     color: var(--birch-white);
-    box-shadow: var(--shadow-md);
+    box-shadow: var(--shadow-md), 0 0 0 1px rgba(244, 234, 212, 0.08) inset;
   }
   .cta--primary:hover {
     color: var(--birch-white);
     transform: translateY(var(--hover-lift));
-    filter: brightness(1.12);
+    filter: brightness(1.08);
     box-shadow: var(--shadow-lg), var(--shadow-glow);
   }
+  .cta--primary:active { transform: translateY(-1px) scale(0.99); }
 
   .cta--ghost {
-    background: transparent;
+    background: rgba(244, 234, 212, 0.03);
     color: var(--color-ink);
     border-color: var(--color-border-strong);
   }
   .cta--ghost:hover {
     color: var(--birch-white);
     border-color: var(--hot-coal-bright);
-    background: rgba(228, 87, 46, 0.10);
+    background: rgba(232, 93, 50, 0.1);
+    transform: translateY(-2px);
   }
 
   .cta--light {
@@ -79,8 +113,7 @@ const {
   }
   .cta--light:hover {
     color: var(--color-bg);
-    background: #fff;
+    background: #fff8ea;
     transform: translateY(var(--hover-lift));
-    filter: brightness(0.97);
   }
 </style>

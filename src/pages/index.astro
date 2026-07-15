@@ -1,34 +1,67 @@
 ---
 /**
- * Home — /
- *
- * Copy map (earthy/calm tone, short evocative sentences):
- *   1. Hero        — headline + subheadline
- *   2. What we offer — 2-3 sentence intro
- *   3. Why Hidden Oak — 4 short value points
- *   4. Pricing teaser
- *   5. Membership teaser
- *   6. Closing CTA — drives to /book
- *
- * [IMAGE: ...] placeholders render as visible labeled blocks in dev/preview
- * so you know what to shoot or source. Replace with <img> when photos are ready.
+ * Home — cinematic landing for Hidden Oak Banya.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import SectionDivider from '../components/SectionDivider.astro';
 import CTAButton from '../components/CTAButton.astro';
+
+const journey = [
+  {
+    step: '01',
+    icon: 'flame',
+    title: 'Heat',
+    body: 'Settle into the steam. Soft light, hot stone, and the quiet weight of warmth on your shoulders.',
+  },
+  {
+    step: '02',
+    icon: 'snowflake',
+    title: 'Cold',
+    body: 'Optional ice plunge — sharp, brief, and clarifying. The contrast is half the ritual.',
+  },
+  {
+    step: '03',
+    icon: 'droplet',
+    title: 'Rest',
+    body: 'Tea, stillness, and time between rounds. This is where the body finishes what heat began.',
+  },
+  {
+    step: '04',
+    icon: 'branch',
+    title: 'Repeat',
+    body: 'Two or three rounds at your pace. Leave lighter than you arrived — that is the whole point.',
+  },
+];
+
+const reasons = [
+  {
+    num: '01',
+    title: 'Authentic ritual',
+    body: 'Steam over hot stone. Venik. Heat, cold, rest — the same cycle Russian villages have kept for centuries.',
+  },
+  {
+    num: '02',
+    title: 'Jungle setting',
+    body: 'Earth walls, local timber, palms overhead. You hear birds, not traffic. The quiet does half the work.',
+  },
+  {
+    num: '03',
+    title: 'Cold plunge',
+    body: 'The part everyone remembers. Optional always — remarkable, usually. We guide first-timers gently.',
+  },
+  {
+    num: '04',
+    title: 'Made for regulars',
+    body: 'Memberships for locals and long-stayers. Better rates, a place that starts to feel like yours.',
+  },
+];
 ---
 
 <BaseLayout
   title="Hidden Oak"
   description="A traditional Russian banya in Arambol, Goa. Wood-fired steam, ice bath, and venik ritual — hidden among the palms. Sessions from ₹500. Book online."
 >
-  {/* ===== 1. HERO ======================================================
-       Full-bleed background. Currently uses a themed SVG poster (placeholder).
-       To use a looping video instead, drop a .mp4 in /public/video/ and add:
-         video="/video/hero-loop.mp4"
-       The poster stays as the mobile/reduced-motion fallback automatically.
-  */}
   <Hero
     eyebrow="Russian Banya · Arambol, Goa"
     title="Steam and stillness, in the trees."
@@ -38,161 +71,244 @@ import CTAButton from '../components/CTAButton.astro';
     secondaryCta={{ href: '/the-banya', label: 'Read our story' }}
   />
 
-  {/* ===== 2. WHAT WE OFFER ============================================= */}
+  <div id="main-content"></div>
+
+  {/* Stats strip */}
+  <section class="stats-strip" aria-label="At a glance">
+    <div class="container stats">
+      {
+        [
+          { k: 'From', v: '₹500', s: 'per session' },
+          { k: 'Sessions', v: '75–90', s: 'minutes' },
+          { k: 'Open', v: 'Daily', s: '6 PM – midnight' },
+          { k: 'Where', v: 'Arambol', s: 'North Goa' },
+        ].map((item, i) => (
+          <div class="stats__item" data-reveal style={`--reveal-delay: ${i * 70}ms`}>
+            <span class="stats__k">{item.k}</span>
+            <span class="stats__v">{item.v}</span>
+            <span class="stats__s">{item.s}</span>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  {/* Offer */}
   <section class="section" data-reveal>
     <div class="container offer">
       <div class="offer__copy">
         <p class="eyebrow">What we offer</p>
         <h2>Heat, cold, and the space between.</h2>
         <p class="lede">
-          A traditional Russian banya, built from Goan earth and wood. Steam rooms warmed
-          over hot stone, a cold plunge to follow, and time to rest. No rush. Just the slow,
-          deep reset your body already knows how to want.
+          A traditional Russian banya, built from Goan earth and wood. Steam rooms warmed over hot
+          stone, a cold plunge to follow, and time to rest. No rush — just the deep reset your body
+          already knows how to want.
         </p>
-        <CTAButton href="/services" variant="ghost" size="md">What you'll experience →</CTAButton>
+        <div class="offer__actions">
+          <CTAButton href="/services" variant="ghost" size="md">What you'll experience →</CTAButton>
+          <CTAButton href="/gallery" variant="ghost" size="md">See the space</CTAButton>
+        </div>
       </div>
       <aside class="imgslot" aria-label="Image placeholder">
-        <span>[IMAGE: Warm interior of the banya — wooden bench, steam rising, clay walls catching firelight. Landscape orientation.]</span>
+        <span class="imgslot__glow" aria-hidden="true"></span>
+        <span class="deco-icon deco-icon--xl deco-icon--flame imgslot__icon" aria-hidden="true"></span>
+        <span>
+          [IMAGE: Warm interior — wooden bench, steam rising, clay walls catching firelight. Landscape.]
+        </span>
       </aside>
     </div>
   </section>
 
   <SectionDivider />
 
-  {/* ===== 3. WHY HIDDEN OAK =========================================== */}
+  {/* Journey */}
+  <section class="section section--band" data-reveal>
+    <div class="container">
+      <div class="block-head">
+        <p class="eyebrow">The session</p>
+        <h2>How a visit unfolds.</h2>
+        <p class="lede">
+          You are never rushed. Two or three rounds of heat, with rest — and cold if you want it —
+          is the classic rhythm.
+        </p>
+      </div>
+      <div class="journey">
+        {
+          journey.map((j, i) => (
+            <article
+              class="journey__card"
+              data-reveal
+              style={`--reveal-delay: ${i * 90}ms`}
+            >
+              <div class="journey__top">
+                <span class="icon-badge" aria-hidden="true">
+                  <span class={`deco-icon deco-icon--md deco-icon--${j.icon}`}></span>
+                </span>
+                <span class="journey__step">{j.step}</span>
+              </div>
+              <h3>{j.title}</h3>
+              <p>{j.body}</p>
+            </article>
+          ))
+        }
+      </div>
+      <div class="journey__cta">
+        <CTAButton href="/services" variant="primary" size="md">Full experience guide</CTAButton>
+      </div>
+    </div>
+  </section>
+
+  <SectionDivider />
+
+  {/* Why */}
   <section class="section" data-reveal>
     <div class="container why">
       <div class="why__head">
         <p class="eyebrow">Why Hidden Oak</p>
         <h2>An old practice, kept honest.</h2>
         <p class="lede">
-          We haven't reinvented the banya. We've just given it a home — and let the place do half the work.
+          We have not reinvented the banya. We have given it a home — and let the place do half the
+          work.
         </p>
       </div>
-
       <div class="why__grid">
-        <article class="why__point" data-reveal style="--reveal-delay: 0ms">
-          <span class="why__num">01</span>
-          <h3>Authentic Russian ritual</h3>
-          <p>
-            Steam over hot stone. Birch and oak venik. The cycle of heat, cold, and rest —
-            the same one Russian villages have kept for a thousand years. Nothing added, nothing lost.
-          </p>
-        </article>
-
-        <article class="why__point" data-reveal style="--reveal-delay: 80ms">
-          <span class="why__num">02</span>
-          <h3>A jungle setting</h3>
-          <p>
-            No tiles, no fluorescent light. Earth walls, local timber, palms overhead.
-            You hear birds, not traffic. The banya sits inside the quiet — that's most of what we offer.
-          </p>
-        </article>
-
-        <article class="why__point" data-reveal style="--reveal-delay: 160ms">
-          <span class="why__num">03</span>
-          <h3>The cold plunge</h3>
-          <p>
-            After the heat, the cold. It's the half everyone remembers — the sharp wake-up that makes
-            the warmth that follows feel earned. Optional, always. Remarkable, usually.
-          </p>
-        </article>
-
-        <article class="why__point" data-reveal style="--reveal-delay: 240ms">
-          <span class="why__num">04</span>
-          <h3>Community &amp; membership</h3>
-          <p>
-            A banya is better when it's yours. Members get regular slots, better rates, and a place
-            that starts to feel like yours. Locals and long-stayers tend to stay.
-          </p>
-        </article>
+        {
+          reasons.map((r, i) => (
+            <article class="why__point" data-reveal style={`--reveal-delay: ${i * 80}ms`}>
+              <span class="why__num">{r.num}</span>
+              <h3>{r.title}</h3>
+              <p>{r.body}</p>
+            </article>
+          ))
+        }
       </div>
-
       <aside class="imgslot imgslot--wide" aria-label="Image placeholder">
-        <span>[IMAGE: Exterior of the banya in its jungle setting — mud/clay walls, surrounded by palms and greenery, warm light from the doorway at dusk. Wide landscape.]</span>
+        <span class="imgslot__glow" aria-hidden="true"></span>
+        <span>
+          [IMAGE: Exterior at dusk — mud walls, palms, warm light from the doorway. Wide landscape.]
+        </span>
       </aside>
     </div>
   </section>
 
   <SectionDivider />
 
-  {/* ===== 4. PRICING TEASER =========================================== */}
+  {/* Pricing + membership */}
   <section class="section" data-reveal>
-    <div class="container teaser teaser--pricing">
-      <div class="teaser__copy">
-        <p class="eyebrow">Pricing</p>
-        <h2>Simple, honest pricing.</h2>
-        <p class="lede">
-          Pay per session, or come back often. No joining fees, no lock-in — just a price that makes sense.
-        </p>
-        <CTAButton href="/pricing" variant="ghost" size="md">See full pricing</CTAButton>
-      </div>
-      <aside class="teaser__card">
-        <p class="teaser__card-eyebrow">From</p>
-        <p class="teaser__card-price">₹[TODO]</p>
-        <p class="teaser__card-unit">per session</p>
-        <ul class="teaser__card-list">
+    <div class="container price-grid">
+      <article class="price-card" data-reveal>
+        <p class="eyebrow">Walk-in</p>
+        <h2>From ₹500</h2>
+        <p class="price-card__sub">per session · ~75–90 min</p>
+        <ul>
           <li>Sauna &amp; steam room</li>
-          <li>Cold plunge available</li>
-          <li>Shower, towel &amp; tea included</li>
+          <li>Cold plunge available (+₹500)</li>
+          <li>Shower, towel &amp; tea</li>
+          <li>No joining fee</li>
         </ul>
-      </aside>
-    </div>
-  </section>
+        <CTAButton href="/pricing" variant="ghost" size="md">See full pricing</CTAButton>
+      </article>
 
-  <SectionDivider />
-
-  {/* ===== 5. MEMBERSHIP TEASER ======================================== */}
-  <section class="section" data-reveal>
-    <div class="container teaser teaser--member">
-      <aside class="teaser__card teaser__card--feature">
-        <p class="teaser__card-eyebrow">Membership</p>
-        <h3>[TODO tier name]</h3>
-        <p class="teaser__card-price">₹[TODO]<span class="teaser__card-unit">/ month</span></p>
-        <ul class="teaser__card-list">
-          <li>Four or more sessions a month</li>
-          <li>Priority booking windows</li>
-          <li>Discount on venik &amp; add-ons</li>
-          <li>Bring a friend, once a month</li>
+      <article class="price-card price-card--feature" data-reveal style="--reveal-delay: 100ms">
+        <span class="price-card__badge">Most loved</span>
+        <p class="eyebrow">Membership</p>
+        <h2>Full Reset</h2>
+        <p class="price-card__price">
+          ₹7,000<span>/ month</span>
+        </p>
+        <ul>
+          <li>8 sessions with ice bath</li>
+          <li>Sauna, steam &amp; shower</li>
+          <li>No lock-in · pause any time</li>
+          <li>Built for regulars</li>
         </ul>
         <CTAButton href="/pricing" variant="primary" size="md">View memberships</CTAButton>
-      </aside>
-      <div class="teaser__copy">
-        <p class="eyebrow">Become a regular</p>
-        <h2>Make it yours.</h2>
-        <p class="lede">
-          For the people who keep coming back. Members get regular slots, better rates, and a place
-          that starts to feel like theirs.
-        </p>
-        <CTAButton href="/pricing" variant="ghost" size="md">See membership options →</CTAButton>
-      </div>
+      </article>
     </div>
   </section>
 
-  {/* ===== 6. CLOSING CTA ============================================== */}
-  <section class="section" data-reveal>
-    <div class="container closing">
+  {/* Closing */}
+  <section class="section closing-section" data-reveal>
+    <div class="container closing glass-card">
       <div class="closing__copy">
         <p class="eyebrow">Ready when you are</p>
         <h2>The best way to understand it is to step inside.</h2>
         <p class="lede">
-          First-timers always welcome. We'll walk you through every step — the steam,
-          the cold, the long quiet rest in between.
+          First-timers always welcome. We will walk you through every step — the steam, the cold,
+          and the long quiet rest in between.
         </p>
         <div class="closing__actions">
           <CTAButton href="/book" variant="primary" size="lg">Book a Session</CTAButton>
           <CTAButton href="/location" variant="ghost" size="lg">Find us in Arambol</CTAButton>
         </div>
       </div>
-      <aside class="imgslot" aria-label="Image placeholder">
-        <span>[IMAGE: A guest mid-session — feet on a wooden bench, hands resting, steam softening the frame. Warm tones, calm mood. Portrait or square.]</span>
+      <aside class="imgslot imgslot--closing" aria-label="Image placeholder">
+        <span class="deco-icon deco-icon--xl deco-icon--branch imgslot__icon" aria-hidden="true"></span>
+        <span>
+          [IMAGE: Guest mid-session — calm, steam-softened frame. Portrait or square.]
+        </span>
       </aside>
     </div>
   </section>
 </BaseLayout>
 
 <style>
-  /* ---- what we offer ------------------------------------------------- */
+  /* Stats */
+  .stats-strip {
+    position: relative;
+    margin-top: calc(-1 * var(--space-5));
+    z-index: 5;
+    padding-inline: var(--space-3);
+  }
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--color-border);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    overflow: hidden;
+    box-shadow: var(--shadow-lg), var(--shadow-glow-soft);
+  }
+  .stats__item {
+    background: rgba(47, 33, 24, 0.92);
+    backdrop-filter: blur(12px);
+    padding: var(--space-4) var(--space-3);
+    display: flex;
+    flex-direction: column;
+    gap: 0.25rem;
+    text-align: center;
+    transition: background var(--duration-fast) var(--ease-soft);
+  }
+  .stats__item:hover {
+    background: rgba(63, 45, 32, 0.95);
+  }
+  .stats__k {
+    font-size: var(--text-xs);
+    text-transform: uppercase;
+    letter-spacing: var(--tracking-caps);
+    color: var(--color-ink-subtle);
+  }
+  .stats__v {
+    font-family: var(--font-serif);
+    font-size: var(--text-xl);
+    color: var(--birch-white);
+    font-weight: var(--weight-bold);
+  }
+  .stats__s {
+    font-size: var(--text-xs);
+    color: var(--color-gold);
+  }
+
+  .block-head {
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    max-width: var(--container-narrow);
+    margin-bottom: var(--space-6);
+  }
+
+  /* Offer */
   .offer {
     display: grid;
     grid-template-columns: 1.1fr 1fr;
@@ -203,11 +319,68 @@ import CTAButton from '../components/CTAButton.astro';
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: var(--space-2);
+    gap: var(--space-3);
   }
-  .offer__copy h2 { max-width: 16ch; }
+  .offer__copy h2 { max-width: 14ch; }
+  .offer__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-1);
+  }
 
-  /* ---- why hidden oak ----------------------------------------------- */
+  /* Journey */
+  .journey {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: var(--space-3);
+  }
+  .journey__card {
+    background: var(--wood-burnt);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-xl);
+    padding: var(--space-4);
+    display: flex;
+    flex-direction: column;
+    gap: var(--space-2);
+    min-height: 100%;
+    transition:
+      transform var(--duration-fast) var(--ease-spring),
+      border-color var(--duration-fast) var(--ease-soft),
+      box-shadow var(--duration-fast) var(--ease-soft);
+  }
+  .journey__card:hover {
+    transform: translateY(-6px);
+    border-color: var(--color-border-strong);
+    box-shadow: var(--shadow-md), var(--shadow-glow-soft);
+  }
+  .journey__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .journey__step {
+    font-family: var(--font-mono);
+    font-size: var(--text-xs);
+    color: var(--color-gold);
+    letter-spacing: 0.08em;
+  }
+  .journey__card h3 {
+    font-size: var(--text-xl);
+    color: var(--birch-white);
+  }
+  .journey__card p {
+    font-size: var(--text-sm);
+    color: var(--color-ink-muted);
+    line-height: var(--leading-normal);
+  }
+  .journey__cta {
+    margin-top: var(--space-5);
+    display: flex;
+    justify-content: center;
+  }
+
+  /* Why */
   .why {
     display: flex;
     flex-direction: column;
@@ -222,16 +395,25 @@ import CTAButton from '../components/CTAButton.astro';
   .why__grid {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
-    gap: var(--space-4);
+    gap: var(--space-3);
   }
   .why__point {
-    background: var(--wood-burnt);
+    background: linear-gradient(165deg, rgba(63, 45, 32, 0.9), rgba(47, 33, 24, 0.95));
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-xl);
     padding: var(--space-5);
     display: flex;
     flex-direction: column;
     gap: var(--space-2);
+    transition:
+      transform var(--duration-fast) var(--ease-spring),
+      border-color var(--duration-fast) var(--ease-soft),
+      box-shadow var(--duration-fast) var(--ease-soft);
+  }
+  .why__point:hover {
+    transform: translateY(-4px);
+    border-color: rgba(212, 161, 90, 0.35);
+    box-shadow: var(--shadow-md);
   }
   .why__num {
     font-family: var(--font-mono);
@@ -246,139 +428,165 @@ import CTAButton from '../components/CTAButton.astro';
   .why__point p {
     font-size: var(--text-sm);
     color: var(--color-ink-muted);
-    line-height: var(--leading-normal);
   }
 
-  /* ---- teasers ------------------------------------------------------- */
-  .teaser {
+  /* Price grid */
+  .price-grid {
     display: grid;
-    grid-template-columns: 1.2fr 1fr;
-    gap: var(--space-6);
-    align-items: center;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-4);
+    align-items: stretch;
   }
-  .teaser--member { grid-template-columns: 1fr 1.2fr; }
-  .teaser__copy {
-    display: flex;
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-2);
-  }
-  .teaser__copy h2 { max-width: 18ch; }
-
-  .teaser__card {
+  .price-card {
+    position: relative;
     background: var(--wood-burnt);
     border: 1px solid var(--color-border);
-    border-radius: var(--radius-xl);
+    border-radius: var(--radius-2xl);
     padding: var(--space-5);
     display: flex;
     flex-direction: column;
-    gap: var(--space-1);
-    align-items: flex-start;
+    gap: var(--space-2);
+    box-shadow: var(--shadow-md);
   }
-  .teaser__card--feature {
+  .price-card--feature {
     border-color: var(--clay-terracotta);
-    box-shadow: var(--shadow-glow);
+    box-shadow: var(--shadow-lg), var(--shadow-glow);
+    background:
+      radial-gradient(ellipse 80% 50% at 50% 0%, rgba(196, 106, 40, 0.15), transparent 60%),
+      var(--wood-burnt);
   }
-  .teaser__card-eyebrow {
+  .price-card__badge {
+    position: absolute;
+    top: calc(-1 * var(--space-2));
+    left: var(--space-5);
+    background: var(--clay-deep);
+    color: var(--birch-white);
     font-size: var(--text-xs);
-    text-transform: uppercase;
-    letter-spacing: var(--tracking-caps);
-    color: var(--hot-coal-bright);
     font-weight: var(--weight-semibold);
+    letter-spacing: var(--tracking-wide);
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: var(--radius-pill);
   }
-  .teaser__card-price {
+  .price-card h2 {
+    font-size: var(--text-3xl);
+    color: var(--birch-white);
+  }
+  .price-card__sub,
+  .price-card__price span {
+    font-size: var(--text-sm);
+    color: var(--color-ink-subtle);
+  }
+  .price-card__price {
     font-family: var(--font-serif);
     font-size: var(--text-3xl);
     font-weight: var(--weight-bold);
     color: var(--birch-white);
-    line-height: 1;
   }
-  .teaser__card-unit {
-    font-family: var(--font-sans);
-    font-size: var(--text-sm);
-    color: var(--color-ink-subtle);
-    margin-left: var(--space-1);
-  }
-  .teaser__card-list {
+  .price-card ul {
     list-style: none;
     padding: 0;
-    margin: var(--space-2) 0 var(--space-1);
+    margin: var(--space-2) 0 var(--space-3);
     display: flex;
     flex-direction: column;
-    gap: var(--space-1);
+    gap: var(--space-2);
+    flex: 1;
   }
-  .teaser__card-list li {
+  .price-card li {
     position: relative;
     padding-left: var(--space-4);
-    color: var(--color-ink-muted);
     font-size: var(--text-sm);
+    color: var(--color-ink-muted);
   }
-  .teaser__card-list li::before {
+  .price-card li::before {
     content: '✓';
     position: absolute;
     left: 0;
     color: #7a9a6e;
-    font-weight: var(--weight-bold);
+    font-weight: bold;
   }
 
-  /* ---- closing CTA -------------------------------------------------- */
+  /* Closing */
+  .closing-section { padding-bottom: var(--space-8); }
   .closing {
     display: grid;
-    grid-template-columns: 1.1fr 1fr;
+    grid-template-columns: 1.2fr 1fr;
     gap: var(--space-6);
     align-items: center;
+    padding: var(--space-6);
   }
   .closing__copy {
     display: flex;
     flex-direction: column;
     align-items: flex-start;
-    gap: var(--space-2);
+    gap: var(--space-3);
   }
-  .closing__copy h2 { max-width: 20ch; }
+  .closing__copy h2 { max-width: 18ch; }
   .closing__actions {
     display: flex;
-    gap: var(--space-2);
     flex-wrap: wrap;
-    margin-top: var(--space-2);
+    gap: var(--space-2);
+    margin-top: var(--space-1);
   }
 
-  /* ---- image placeholder slots -------------------------------------- */
-  /* Renders [IMAGE: ...] as a visible labeled block in dev/preview so you
-     know what to shoot or source. Swap for an <img> when the photo is ready. */
+  /* Image placeholders (real photos still pending) */
   .imgslot {
-    background: repeating-linear-gradient(
-      45deg,
-      var(--wood-smolder),
-      var(--wood-smolder) 12px,
-      var(--wood-burnt) 12px,
-      var(--wood-burnt) 24px
-    );
+    position: relative;
+    background:
+      linear-gradient(145deg, rgba(63, 45, 32, 0.9), rgba(30, 21, 16, 0.95)),
+      var(--img-ornament);
+    background-size: auto, 280px;
+    background-blend-mode: normal, soft-light;
     border: 1px dashed var(--color-border-strong);
-    border-radius: var(--radius-lg);
+    border-radius: var(--radius-xl);
     aspect-ratio: 4 / 3;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
     padding: var(--space-4);
     text-align: center;
+    overflow: hidden;
   }
   .imgslot--wide { aspect-ratio: 21 / 9; }
-  .imgslot span {
+  .imgslot--closing { aspect-ratio: 1; min-height: 220px; }
+  .imgslot__glow {
+    position: absolute;
+    width: 60%;
+    height: 60%;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(232, 93, 50, 0.18), transparent 70%);
+    filter: blur(20px);
+    animation: ambient-breathe 8s ease-in-out infinite alternate;
+  }
+  .imgslot__icon {
+    color: var(--hot-coal-bright);
+    opacity: 0.55;
+    margin-bottom: var(--space-2);
+    position: relative;
+  }
+  .imgslot span:last-child {
+    position: relative;
     font-family: var(--font-mono);
     font-size: var(--text-xs);
     color: var(--color-ink-subtle);
-    background: rgba(13, 11, 9, 0.78);
+    background: rgba(13, 11, 9, 0.72);
     padding: var(--space-2) var(--space-3);
     border-radius: var(--radius-md);
     line-height: var(--leading-normal);
     max-width: 42ch;
   }
 
-  /* ---- responsive --------------------------------------------------- */
-  @media (max-width: 760px) {
+  @media (max-width: 900px) {
+    .stats { grid-template-columns: repeat(2, 1fr); }
+    .journey { grid-template-columns: repeat(2, 1fr); }
+    .price-grid { grid-template-columns: 1fr; }
     .offer,
-    .teaser,
-    .teaser--member,
     .closing { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 520px) {
+    .stats { grid-template-columns: 1fr 1fr; }
+    .journey { grid-template-columns: 1fr; }
+    .stats-strip { margin-top: calc(-1 * var(--space-3)); }
   }
 </style>
