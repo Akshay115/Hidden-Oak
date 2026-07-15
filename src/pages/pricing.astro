@@ -22,6 +22,7 @@ const walkIns = [
     price: '₹500',
     cadence: 'per session',
     duration: '~75 min',
+    icon: 'flame' as const,
     features: [
       'Sauna & steam room',
       'Two or three heat rounds',
@@ -35,6 +36,7 @@ const walkIns = [
     price: '₹1000',
     cadence: 'per session',
     duration: '~90 min',
+    icon: 'snowflake' as const,
     features: [
       'Everything in the base session',
       'Cold plunge between rounds',
@@ -53,6 +55,7 @@ const tiers = [
     price: '₹3,500',
     cadence: 'per month',
     sessions: '8 sessions',
+    icon: 'flame' as const,
     features: [
       '8 sessions / month',
       'Sauna & steam room',
@@ -67,6 +70,7 @@ const tiers = [
     price: '₹7,000',
     cadence: 'per month',
     sessions: '8 sessions + ice bath',
+    icon: 'branch' as const,
     features: [
       '8 sessions / month',
       'Sauna & steam room',
@@ -81,6 +85,7 @@ const tiers = [
     price: '₹14,000',
     cadence: 'per month',
     sessions: 'Unlimited (1/day)',
+    icon: 'droplet' as const,
     features: [
       'Unlimited sessions',
       'Fair-use cap of 1 / day',
@@ -95,6 +100,7 @@ const tiers = [
     price: '₹14,000',
     cadence: 'per month',
     sessions: '8 each, for two',
+    icon: 'branch' as const,
     features: [
       '8 sessions each, for 2 people',
       'Sauna & steam room',
@@ -144,6 +150,10 @@ const tiers = [
               style={`--reveal-delay: ${i * 80}ms`}
             >
               {w.featured && <span class="card__badge">Most popular</span>}
+              <span
+                class:list={['card__icon', 'deco-icon', 'deco-icon--md', `deco-icon--${w.icon}`]}
+                aria-hidden="true"
+              ></span>
               <h3>{w.name}</h3>
               <div class="card__price">
                 <span class="card__amount">{w.price}</span>
@@ -194,6 +204,10 @@ const tiers = [
               style={`--reveal-delay: ${i * 80}ms`}
             >
               {t.featured && <span class="card__badge">Recommended</span>}
+              <span
+                class:list={['card__icon', 'deco-icon', 'deco-icon--md', `deco-icon--${t.icon}`]}
+                aria-hidden="true"
+              ></span>
               <h3>{t.name}</h3>
               <div class="card__price">
                 <span class="card__amount">{t.price}</span>
@@ -346,6 +360,10 @@ const tiers = [
     box-shadow: var(--shadow-sm);
   }
 
+  .card__icon {
+    color: var(--hot-coal-bright);
+    margin-top: var(--space-1);
+  }
   .card h3 {
     font-family: var(--font-serif);
     font-size: var(--text-xl);

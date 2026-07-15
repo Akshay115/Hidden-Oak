@@ -1,10 +1,10 @@
 ---
 /**
  * SectionDivider — ornamental break between page sections.
- * A centered oak-leaf glyph flanked by hairline rules. Purely decorative.
+ * Centered birch/oak venik motif (generated SVG) flanked by hairline rules.
  */
 interface Props {
-  variant?: 'glyph' | 'line';
+  variant?: 'glyph' | 'line' | 'motif';
   class?: string;
 }
 
@@ -15,11 +15,12 @@ const { variant = 'glyph', class: className = '' } = Astro.props;
   <span class="divider__rule"></span>
   {
     variant === 'glyph' && (
-      <svg class="divider__glyph" viewBox="0 0 24 24" width="22" height="22">
-        <path
-          d="M12 2c-.9 1.2-2.3 1.6-3.3 2.4-1.5 1.1-2.5 2.7-2.5 4.7 0 .8.1 1.4.4 2.1-1 .6-1.6 1.6-1.6 2.9 0 1 .5 2 1.2 2.6-.3.5-.5 1.1-.5 1.8 0 .6.2 1.2.5 1.6-.8.5-1.4 1.4-1.4 2.5 0 .4.1.7.2 1h1.8c-.2-.3-.3-.6-.3-1 0-.7.5-1.2 1.1-1.3.4.2.8.4 1.2.4v1.9h1.8v-1.9c.4-.1.8-.2 1.2-.4.6.1 1.1.6 1.1 1.3 0 .4-.1.7-.3 1h1.8c.1-.3.2-.6.2-1 0-1.1-.6-2-1.4-2.5.3-.4.5-1 .5-1.6 0-.7-.2-1.3-.5-1.8.7-.6 1.2-1.6 1.2-2.6 0-1.3-.6-2.3-1.6-2.9.3-.7.4-1.3.4-2.1 0-2-1-3.6-2.5-4.7-1-.8-2.4-1.2-3.3-2.4z"
-          fill="currentColor"></path>
-      </svg>
+      <span class="divider__glyph deco-motif deco-motif--glyph"></span>
+    )
+  }
+  {
+    variant === 'motif' && (
+      <span class="divider__motif deco-motif"></span>
     )
   }
   <span class="divider__rule"></span>
@@ -56,18 +57,28 @@ const { variant = 'glyph', class: className = '' } = Astro.props;
 
   .divider__glyph {
     flex-shrink: 0;
-    opacity: 0.85;
+    opacity: 0.9;
+  }
+
+  .divider__motif {
+    flex-shrink: 0;
+    opacity: 0.8;
   }
 
   .divider--line {
     gap: 0;
   }
-  .divider--line .divider__glyph {
+  .divider--line .divider__glyph,
+  .divider--line .divider__motif {
     display: none;
   }
   .divider--line .divider__rule {
     width: 100%;
     max-width: var(--container-max);
     background: var(--color-border);
+  }
+
+  .divider--motif .divider__rule {
+    width: clamp(40px, 12vw, 120px);
   }
 </style>

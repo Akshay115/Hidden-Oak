@@ -238,33 +238,82 @@ const radiusSteps = [
         <p class="eyebrow">06 · Texture</p>
         <h2>Background patterns</h2>
         <p class="lede">
-          Tileable CSS gradients — no image downloads. Subtle by design; applied
-          at low opacity so they read as material, not decoration.
+          AI-generated tileable assets under a warm color wash. Subtle by design
+          so they read as material, not decoration. Files live in
+          <code>public/images/generated/</code>.
         </p>
       </div>
       <div class="texture-grid">
         <figure class="texture">
-          <div class="texture__panel" style="background-image: var(--texture-wood); background-color: var(--wood-charred);"></div>
+          <div class="texture__panel texture__panel--tile" style="background-image: var(--texture-wood); background-color: var(--wood-charred);"></div>
           <figcaption>
             <code>--texture-wood</code>
-            <span>Repeating vertical streaks — charred oak planking.</span>
+            <span>Generated wood-grain tile + dark wash (wood-texture-tile.png).</span>
           </figcaption>
         </figure>
         <figure class="texture">
-          <div class="texture__panel" style="background-image: var(--texture-clay); background-color: var(--wood-burnt);"></div>
+          <div class="texture__panel texture__panel--tile" style="background-image: var(--texture-clay); background-color: var(--wood-burnt);"></div>
           <figcaption>
             <code>--texture-clay</code>
-            <span>Mottled radial gradients — troweled clay plaster.</span>
+            <span>Generated clay/plaster tile + wash (clay-texture-tile.png).</span>
           </figcaption>
         </figure>
         <figure class="texture">
-          <div class="texture__panel" style="background-image: var(--texture-banya); background-color: var(--wood-charred);"></div>
+          <div class="texture__panel texture__panel--tile" style="background-image: var(--texture-banya); background-color: var(--wood-charred);"></div>
           <figcaption>
             <code>--texture-banya</code>
-            <span>Wood base + faint ember glow — full-bleed section bg.</span>
+            <span>Wood tile + faint ember glow — full-bleed section bg.</span>
           </figcaption>
         </figure>
       </div>
+    </section>
+
+    <!-- ======================================================== MOTIF + ICONS -->
+    <section class="section container" id="ornament">
+      <div class="block-head">
+        <p class="eyebrow">07 · Ornament</p>
+        <h2>Motifs &amp; icons</h2>
+        <p class="lede">
+          Decorative only — birch/oak venik motif for dividers, line icons for
+          services and pricing. Color via <code>currentColor</code> masks.
+        </p>
+      </div>
+      <div class="ornament-row">
+        <figure class="ornament">
+          <div class="ornament__swatch" style="color: var(--clay-terracotta)">
+            <span class="deco-motif"></span>
+          </div>
+          <figcaption><code>birch-motif.svg</code><span>Section ornament / wide divider.</span></figcaption>
+        </figure>
+        <figure class="ornament">
+          <div class="ornament__swatch" style="color: var(--clay-terracotta)">
+            <span class="deco-motif deco-motif--glyph"></span>
+          </div>
+          <figcaption><code>birch-motif-glyph.svg</code><span>Compact divider glyph.</span></figcaption>
+        </figure>
+      </div>
+      <div class="icon-row">
+        {
+          (['flame', 'droplet', 'snowflake', 'branch'] as const).map((name) => (
+            <figure class="ornament">
+              <div class="ornament__swatch ornament__swatch--icon" style="color: var(--hot-coal-bright)">
+                <span class={`deco-icon deco-icon--lg deco-icon--${name}`}></span>
+              </div>
+              <figcaption><code>icon-{name}.svg</code></figcaption>
+            </figure>
+          ))
+        }
+      </div>
+      <figure class="ornament ornament--steam">
+        <div
+          class="ornament__steam"
+          style="background-image: linear-gradient(rgba(13,11,9,0.85), rgba(13,11,9,0.85)), var(--img-steam); background-size: cover;"
+        ></div>
+        <figcaption>
+          <code>steam-overlay.png</code>
+          <span>Hero mist layer (screen-blended, slow drift).</span>
+        </figcaption>
+      </figure>
     </section>
 
     <!-- ====================================================== CLOSE -->
@@ -496,6 +545,15 @@ const radiusSteps = [
     border: 1px solid var(--color-border);
     box-shadow: var(--shadow-sm);
   }
+  .texture__panel--tile {
+    background-repeat: no-repeat, repeat;
+    background-size: auto, var(--texture-tile-size) var(--texture-tile-size);
+  }
+  /* banya token has 3 layers */
+  .texture__panel--tile[style*='texture-banya'] {
+    background-repeat: no-repeat, no-repeat, repeat;
+    background-size: auto, auto, var(--texture-tile-size) var(--texture-tile-size);
+  }
   .texture figcaption {
     margin-top: var(--space-2);
     display: flex;
@@ -504,6 +562,42 @@ const radiusSteps = [
   }
   .texture figcaption code { font-size: var(--text-sm); color: var(--color-ink); }
   .texture figcaption span { font-size: var(--text-xs); color: var(--color-ink-subtle); }
+
+  /* ----------------------------------------------------------------- ornament */
+  .ornament-row,
+  .icon-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: var(--space-4);
+    margin-top: var(--space-4);
+  }
+  .ornament { margin: 0; }
+  .ornament__swatch {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 88px;
+    padding: var(--space-3);
+    background: var(--wood-burnt);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-lg);
+  }
+  .ornament__swatch--icon { min-height: 72px; }
+  .ornament figcaption {
+    margin-top: var(--space-2);
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .ornament figcaption code { font-size: var(--text-sm); color: var(--color-ink); }
+  .ornament figcaption span { font-size: var(--text-xs); color: var(--color-ink-subtle); }
+  .ornament--steam { margin-top: var(--space-5); }
+  .ornament__steam {
+    height: 120px;
+    border-radius: var(--radius-lg);
+    border: 1px solid var(--color-border);
+    background-position: center;
+  }
 
   /* ------------------------------------------------------------- cta return */
   .cta-return {

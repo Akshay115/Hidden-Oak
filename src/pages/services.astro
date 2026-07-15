@@ -25,6 +25,7 @@ const sessions = [
     name: 'Without Ice Bath',
     badge: 'Base session',
     duration: '~75 min',
+    icon: 'flame' as const,
     includes: [
       'Sauna & steam room',
       'Two or three heat rounds',
@@ -37,6 +38,7 @@ const sessions = [
     name: 'With Ice Bath',
     badge: 'Most popular',
     duration: '~90 min',
+    icon: 'snowflake' as const,
     includes: [
       'Everything in the base session',
       'Cold plunge between rounds',
@@ -95,6 +97,9 @@ const faqs = [
   <section class="section" id="sauna-steam" data-reveal>
     <div class="container feature-block">
       <div class="feature-block__head">
+        <span class="feature-block__icon" aria-hidden="true">
+          <span class="deco-icon deco-icon--lg deco-icon--flame"></span>
+        </span>
         <span class="feature-block__num" aria-hidden="true">01</span>
         <div>
           <p class="eyebrow">The heart of it</p>
@@ -155,6 +160,9 @@ const faqs = [
   <section class="section" id="ice-bath" data-reveal>
     <div class="container feature-block">
       <div class="feature-block__head">
+        <span class="feature-block__icon" aria-hidden="true">
+          <span class="deco-icon deco-icon--lg deco-icon--snowflake"></span>
+        </span>
         <span class="feature-block__num" aria-hidden="true">02</span>
         <div>
           <p class="eyebrow">Optional add-on</p>
@@ -218,6 +226,9 @@ const faqs = [
   <section class="section" id="shower" data-reveal>
     <div class="container feature-block feature-block--slim">
       <div class="feature-block__head">
+        <span class="feature-block__icon" aria-hidden="true">
+          <span class="deco-icon deco-icon--lg deco-icon--droplet"></span>
+        </span>
         <span class="feature-block__num" aria-hidden="true">03</span>
         <div>
           <p class="eyebrow">Included</p>
@@ -263,6 +274,10 @@ const faqs = [
               style={`--reveal-delay: ${i * 80}ms`}
             >
               {s.badge && <span class="session-card__badge">{s.badge}</span>}
+              <span
+                class:list={['session-card__icon', 'deco-icon', 'deco-icon--md', `deco-icon--${s.icon}`]}
+                aria-hidden="true"
+              ></span>
               <h3>{s.name}</h3>
               <p class="session-card__duration">{s.duration}</p>
               <ul class="session-card__list">
@@ -364,6 +379,18 @@ const faqs = [
     align-items: flex-start;
     gap: var(--space-3);
   }
+  .feature-block__icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    flex-shrink: 0;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border);
+    background: var(--wood-burnt);
+    color: var(--hot-coal-bright);
+  }
   .feature-block__num {
     font-family: var(--font-mono);
     font-size: var(--text-sm);
@@ -371,6 +398,7 @@ const faqs = [
     font-weight: var(--weight-bold);
     line-height: 1.4;
     flex-shrink: 0;
+    padding-top: 0.35rem;
   }
   .feature-block__head h2 {
     font-size: var(--text-2xl);
@@ -481,6 +509,10 @@ const faqs = [
     text-transform: uppercase;
     padding: 2px var(--space-2);
     border-radius: var(--radius-pill);
+  }
+  .session-card__icon {
+    color: var(--hot-coal-bright);
+    margin-top: var(--space-1);
   }
   .session-card h3 {
     font-size: var(--text-xl);

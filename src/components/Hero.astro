@@ -107,10 +107,9 @@ const hasVideo = Boolean(video);
   <div class="hero__overlay" aria-hidden="true"></div>
 
   {/* ---- Ambient steam drift (optional, tasteful) ---------------------
-       Two soft radial-gradient "steam clouds" drifting slowly across the hero.
-       Very low opacity (~0.15), 20–28s loop, behind the text.
-       Disabled entirely under prefers-reduced-motion via the global kill switch.
-       Review note: if this feels gimmicky, remove this block + the CSS below. */}
+       Generated steam-overlay.png drifts slowly across the hero.
+       Low opacity, 24–32s loop, behind the text (z below content).
+       Disabled entirely under prefers-reduced-motion via the global kill switch. */}
   {(bgImage || hasVideo) && (
     <div class="hero__steam" aria-hidden="true">
       <span class="hero__steam-cloud hero__steam-cloud--a"></span>
@@ -197,8 +196,8 @@ const hasVideo = Boolean(video);
   .hero__video { z-index: 2; }
 
   /* ---- Ambient steam drift -------------------------------------------
-     Two soft blurred clouds drifting across the hero at very low opacity.
-     Uses the --duration-slow token and a custom easing for organic feel.
+     Generated steam-overlay.png (public/images/generated/) as soft mist.
+     Two layers drift at different speeds; very low opacity under text.
      The global reduced-motion kill switch hides .hero__steam entirely. */
   .hero__steam {
     position: absolute;
@@ -209,39 +208,40 @@ const hasVideo = Boolean(video);
   }
   .hero__steam-cloud {
     position: absolute;
-    width: 60%;
-    height: 40%;
-    border-radius: 50%;
-    filter: blur(40px);
-    opacity: 0.12;
-    background: radial-gradient(
-      ellipse at center,
-      rgba(241, 231, 208, 0.7) 0%,
-      rgba(241, 231, 208, 0.3) 40%,
-      transparent 70%
-    );
+    width: 85%;
+    height: 70%;
+    background-image: var(--img-steam);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+    filter: blur(6px);
+    opacity: 0.22;
+    mix-blend-mode: screen;
     will-change: transform, opacity;
   }
   .hero__steam-cloud--a {
-    top: 15%;
-    left: -20%;
-    animation: steam-drift-a 24s var(--ease-in-out) infinite;
+    top: 5%;
+    left: -25%;
+    animation: steam-drift-a 26s var(--ease-in-out) infinite;
   }
   .hero__steam-cloud--b {
-    bottom: 10%;
-    right: -20%;
-    animation: steam-drift-b 28s var(--ease-in-out) infinite;
-    animation-delay: -8s;
+    bottom: -5%;
+    right: -30%;
+    width: 90%;
+    height: 75%;
+    opacity: 0.16;
+    animation: steam-drift-b 32s var(--ease-in-out) infinite;
+    animation-delay: -10s;
   }
   @keyframes steam-drift-a {
-    0%   { transform: translate(0, 0) scale(1);    opacity: 0.10; }
-    50%  { transform: translate(40vw, 30px) scale(1.15); opacity: 0.16; }
-    100% { transform: translate(80vw, 0) scale(1);  opacity: 0.10; }
+    0%   { transform: translate(0, 0) scale(1);    opacity: 0.14; }
+    50%  { transform: translate(35vw, 24px) scale(1.08); opacity: 0.26; }
+    100% { transform: translate(70vw, 0) scale(1);  opacity: 0.14; }
   }
   @keyframes steam-drift-b {
-    0%   { transform: translate(0, 0) scale(1);    opacity: 0.08; }
-    50%  { transform: translate(-40vw, -20px) scale(1.2); opacity: 0.14; }
-    100% { transform: translate(-80vw, 0) scale(1);  opacity: 0.08; }
+    0%   { transform: translate(0, 0) scale(1.05);    opacity: 0.10; }
+    50%  { transform: translate(-35vw, -18px) scale(1.12); opacity: 0.20; }
+    100% { transform: translate(-70vw, 0) scale(1.05);  opacity: 0.10; }
   }
 
   /* ---- Gradient overlay for readability ------------------------------ */

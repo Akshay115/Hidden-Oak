@@ -216,49 +216,49 @@
   --z-toast: 400;
 
   /* =========================================================================
-     8. TEXTURES — tileable CSS background patterns (no image downloads)
-        Subtle, applied at low opacity. Each defines a --texture-* var that
-        holds a stack of layered gradients; use as `background: var(--texture-wood);`
-        and overlay content above. Tile size is fixed so they repeat seamlessly.
+     8. TEXTURES — AI-generated tileable assets (public/images/generated/)
+        Subtle image tiles sit under a warm color wash so they never fight text.
+        Use as `background-image: var(--texture-wood);` + background-color.
+        Tile size: 256px assets, drawn a bit larger for softness.
      ========================================================================= */
 
-  /* Wood grain — repeating vertical streaks over a warm base.
-     Simulates the soft figure of charred oak planking. */
+  /* Paths to generated decorative assets */
+  --img-wood-tile: url('/images/generated/wood-texture-tile.png');
+  --img-clay-tile: url('/images/generated/clay-texture-tile.png');
+  --img-steam:     url('/images/generated/steam-overlay.png');
+  --img-birch-motif: url('/images/generated/birch-motif.svg');
+  --img-birch-glyph: url('/images/generated/birch-motif-glyph.svg');
+  --img-icon-flame: url('/images/generated/icon-flame.svg');
+  --img-icon-droplet: url('/images/generated/icon-droplet.svg');
+  --img-icon-snowflake: url('/images/generated/icon-snowflake.svg');
+  --img-icon-branch: url('/images/generated/icon-branch.svg');
+
+  --texture-tile-size: 280px;
+
+  /* Wood grain — generated charred-oak tile + dark wash for legibility */
   --texture-wood:
-    repeating-linear-gradient(
-      90deg,
-      transparent 0 38px,
-      rgba(0, 0, 0, 0.05) 38px 39px,
-      transparent 39px 78px,
-      rgba(241, 231, 208, 0.018) 78px 79px
-    ),
-    repeating-linear-gradient(
-      90deg,
-      rgba(0, 0, 0, 0.03) 0 120px,
-      transparent 120px 240px
-    ),
     linear-gradient(
-      105deg,
-      rgba(0, 0, 0, 0.05) 0%,
-      transparent 8%,
-      transparent 88%,
-      rgba(0, 0, 0, 0.06) 100%
-    );
+      rgba(43, 29, 20, 0.82),
+      rgba(43, 29, 20, 0.82)
+    ),
+    var(--img-wood-tile);
 
-  /* Clay / plaster — a mottled, slightly uneven render finish.
-     Built from radial gradients to read as troweled clay. */
+  /* Clay / plaster — generated troweled earth tile + burnt-wood wash */
   --texture-clay:
-    radial-gradient(circle at 18% 24%, rgba(255, 255, 255, 0.04) 0 9%, transparent 10%),
-    radial-gradient(circle at 76% 68%, rgba(0, 0, 0, 0.05) 0 12%, transparent 13%),
-    radial-gradient(circle at 42% 88%, rgba(255, 255, 255, 0.03) 0 7%, transparent 8%),
-    radial-gradient(circle at 90% 12%, rgba(0, 0, 0, 0.04) 0 8%, transparent 9%),
-    radial-gradient(circle at 8% 70%, rgba(241, 231, 208, 0.025) 0 10%, transparent 11%);
+    linear-gradient(
+      rgba(58, 40, 24, 0.78),
+      rgba(58, 40, 24, 0.78)
+    ),
+    var(--img-clay-tile);
 
-  /* Combined utility — wood base with a faint clay overlay.
-     Useful for full-bleed section backgrounds. */
+  /* Combined utility — wood base with a faint clay overlay + coal glow */
   --texture-banya:
-    radial-gradient(circle at 50% 0%, rgba(228, 87, 46, 0.05), transparent 60%),
-    var(--texture-wood);
+    radial-gradient(circle at 50% 0%, rgba(228, 87, 46, 0.06), transparent 60%),
+    linear-gradient(
+      rgba(43, 29, 20, 0.80),
+      rgba(43, 29, 20, 0.80)
+    ),
+    var(--img-wood-tile);
 }
 
 /* ===========================================================================
@@ -288,9 +288,11 @@ body {
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
   min-height: 100vh;
-  /* whisper the wood texture across the whole page background */
+  /* whisper the generated wood texture across the whole page background */
   background-image: var(--texture-wood);
-  background-repeat: repeat;
+  background-repeat: no-repeat, repeat;
+  /* wash covers full canvas; tile repeats at fixed size */
+  background-size: auto, var(--texture-tile-size) var(--texture-tile-size);
 }
 
 h1, h2, h3, h4, h5 {
@@ -416,9 +418,74 @@ code, kbd, samp, pre {
 }
 
 /* utility surface classes for applying textures */
-.bg-wood   { background-image: var(--texture-wood);  background-color: var(--color-bg); }
-.bg-clay   { background-image: var(--texture-clay);  background-color: var(--wood-burnt); }
-.bg-banya  { background-image: var(--texture-banya); background-color: var(--color-bg); }
+.bg-wood,
+.bg-clay,
+.bg-banya {
+  /* last layer = tile; preceding layers = full-area washes */
+  background-repeat: no-repeat, no-repeat, repeat;
+  background-size: auto, auto, var(--texture-tile-size) var(--texture-tile-size);
+}
+.bg-wood {
+  background-image: var(--texture-wood);
+  background-color: var(--color-bg);
+  background-repeat: no-repeat, repeat;
+  background-size: auto, var(--texture-tile-size) var(--texture-tile-size);
+}
+.bg-clay {
+  background-image: var(--texture-clay);
+  background-color: var(--wood-burnt);
+  background-repeat: no-repeat, repeat;
+  background-size: auto, var(--texture-tile-size) var(--texture-tile-size);
+}
+.bg-banya {
+  background-image: var(--texture-banya);
+  background-color: var(--color-bg);
+  background-repeat: no-repeat, no-repeat, repeat;
+  background-size: auto, auto, var(--texture-tile-size) var(--texture-tile-size);
+}
+
+/* ===========================================================================
+   DECORATIVE ICONS — monochrome masks from generated SVGs
+   Set color with `color:`; size with width/height or font-size on .deco-icon.
+   =========================================================================== */
+.deco-icon {
+  display: inline-block;
+  flex-shrink: 0;
+  width: 1.5rem;
+  height: 1.5rem;
+  background-color: currentColor;
+  -webkit-mask-position: center;
+  mask-position: center;
+  -webkit-mask-size: contain;
+  mask-size: contain;
+  -webkit-mask-repeat: no-repeat;
+  mask-repeat: no-repeat;
+}
+.deco-icon--sm { width: 1.15rem; height: 1.15rem; }
+.deco-icon--md { width: 1.5rem; height: 1.5rem; }
+.deco-icon--lg { width: 2rem; height: 2rem; }
+.deco-icon--flame     { -webkit-mask-image: var(--img-icon-flame);     mask-image: var(--img-icon-flame); }
+.deco-icon--droplet   { -webkit-mask-image: var(--img-icon-droplet);   mask-image: var(--img-icon-droplet); }
+.deco-icon--snowflake { -webkit-mask-image: var(--img-icon-snowflake); mask-image: var(--img-icon-snowflake); }
+.deco-icon--branch    { -webkit-mask-image: var(--img-icon-branch);    mask-image: var(--img-icon-branch); }
+
+/* Birch / oak venik motif — wide ornament (section accents) */
+.deco-motif {
+  display: block;
+  width: min(180px, 42vw);
+  height: 36px;
+  margin-inline: auto;
+  background-color: currentColor;
+  -webkit-mask: var(--img-birch-motif) center / contain no-repeat;
+  mask: var(--img-birch-motif) center / contain no-repeat;
+  opacity: 0.85;
+}
+.deco-motif--glyph {
+  width: 28px;
+  height: 28px;
+  -webkit-mask-image: var(--img-birch-glyph);
+  mask-image: var(--img-birch-glyph);
+}
 
 /* ===========================================================================
    SCROLL REVEAL

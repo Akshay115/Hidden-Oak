@@ -94,7 +94,9 @@ const directUrl = `https://cal.com/${calLink}`;
       p(ar[0], Array.prototype.slice.call(arguments, 1));
       return cal;
     };
-  })(window, "https://script.cal.com/embed.js", "init");
+  // Loader URL: use app.cal.com (script.cal.com does not reliably resolve).
+  // Official docs also accept https://cal.com/embed/embed.js as an alias.
+  })(window, "https://app.cal.com/embed/embed.js", "init");
 
   Cal("init", { origin: "https://cal.com" });
 
@@ -148,7 +150,8 @@ const directUrl = `https://cal.com/${calLink}`;
        burnt-wood elevated surface. This is what makes the embed feel built-in. */
     background-color: var(--wood-burnt);
     background-image: var(--texture-wood);
-    background-repeat: repeat;
+    background-repeat: no-repeat, repeat;
+    background-size: auto, var(--texture-tile-size) var(--texture-tile-size);
     border: 1px solid var(--color-border);
     /* Organic radius from tokens — soft, hand-built feel, no sharp corners. */
     border-radius: var(--radius-xl);
