@@ -74,7 +74,7 @@
   --color-secondary:      var(--forest-green);      /* secondary accent    */
   --color-secondary-hover: var(--forest-light);
   --color-secondary-deep: var(--forest-deep);
-  --color-accent:         var(--hot-coal);          /* highlights          */
+  --color-accent:         var(--hot-coal-bright);   /* highlights (AA-safe on dark) */
   --color-accent-bright:  var(--hot-coal-bright);
   --color-cream:          var(--birch-warm);
 
@@ -181,6 +181,32 @@
   --transition-base: 240ms cubic-bezier(0.4, 0, 0.2, 1);
   --transition-slow: 450ms cubic-bezier(0.22, 1, 0.36, 1);
   --transition-spring: 380ms cubic-bezier(0.34, 1.56, 0.64, 1);
+
+  /* ---- Shared animation system ---------------------------------------- */
+  /* Named easings — use these everywhere so motion feels consistent.
+     "ease-out" is the default feel: things arrive gently and settle. */
+  --ease-out: cubic-bezier(0.22, 1, 0.36, 1);     /* decelerating, gentle   */
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);   /* smooth in and out      */
+  --ease-soft: cubic-bezier(0.4, 0, 0.2, 1);       /* material standard      */
+
+  /* Named durations — the site's motion vocabulary.
+     Short for feedback, medium for reveals, long for ambient. */
+  --duration-instant: 0ms;       /* reduced-motion: everything snaps        */
+  --duration-fast: 150ms;        /* hover, focus, color changes             */
+  --duration-medium: 500ms;      /* scroll-reveal, accordion, lightbox      */
+  --duration-slow: 800ms;        /* ambient loops (steam drift)             */
+
+  /* Scroll-reveal travel distances — small, never distracting. */
+  --reveal-rise: 20px;           /* default upward translate                */
+  --reveal-rise-lg: 32px;        /* slightly more for feature blocks        */
+
+  /* Hover lift amounts. */
+  --hover-lift: -4px;            /* card translateY on hover                */
+  --hover-scale: 1.02;           /* subtle button/image scale               */
+
+  /* Stagger: delay between items in a revealed group, so a row of cards
+     doesn't all arrive at the same instant. */
+  --reveal-stagger: 80ms;
 
   --z-base: 1;
   --z-header: 100;
@@ -352,6 +378,9 @@ code, kbd, samp, pre {
 
 .section {
   padding-block: var(--space-6);
+  /* Offset for the sticky header when jumping to #anchors within a page.
+     Without this, the header would overlap the top of the target section. */
+  scroll-margin-top: calc(var(--header-height) + var(--space-3));
 }
 @media (min-width: 880px) {
   .section { padding-block: var(--space-7); }
@@ -392,14 +421,53 @@ code, kbd, samp, pre {
 .bg-banya  { background-image: var(--texture-banya); background-color: var(--color-bg); }
 
 /* ===========================================================================
-   MOTION PREFERENCES
+   SCROLL REVEAL
+   Elements with [data-reveal] start hidden + translated down; the
+   IntersectionObserver script (in BaseLayout) adds .is-visible to bring
+   them in. Stagger via [data-reveal-delay="N"] (ms) or .reveal-stagger
+   on a parent whose children reveal in sequence.
+   =========================================================================== */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(var(--reveal-rise));
+  transition:
+    opacity var(--duration-medium) var(--ease-out),
+    transform var(--duration-medium) var(--ease-out);
+  transition-delay: var(--reveal-delay, 0ms);
+  will-change: opacity, transform;
+}
+[data-reveal="rise-lg"] {
+  transform: translateY(var(--reveal-rise-lg));
+}
+[data-reveal="fade"] {
+  transform: none; /* fade only, no movement */
+}
+.is-visible[data-reveal] {
+  opacity: 1;
+  transform: none;
+}
+
+/* ===========================================================================
+   MOTION PREFERENCES — global kill switch
+   Users who opted out get instant state changes and zero decoration.
    =========================================================================== */
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
+
+  /* No transitions or animations anywhere. */
   *, *::before, *::after {
-    animation-duration: 0.01ms !important;
+    animation-duration: var(--duration-instant) !important;
     animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
+    transition-duration: var(--duration-instant) !important;
     scroll-behavior: auto !important;
   }
+
+  /* Scroll-reveal: everything visible immediately, no transform. */
+  [data-reveal] {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+
+  /* No ambient decoration. */
+  .hero__steam { display: none !important; }
 }

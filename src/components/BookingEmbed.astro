@@ -201,6 +201,10 @@ const directUrl = `https://cal.com/${calLink}`;
   @keyframes cal-spin {
     to { transform: rotate(360deg); }
   }
+  /* Hide the spinner entirely under reduced motion — static "Loading…" text remains. */
+  @media (prefers-reduced-motion: reduce) {
+    .booking-embed__spinner { display: none; }
+  }
 
   .booking-embed__noscript {
     padding: var(--space-4);

@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <defs><linearGradient id="g_exterior_approach" x1="0" y1="0" x2="1200" y2="800" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3a2818"/>, <stop offset="50%" stop-color="#6e5839"/>, <stop offset="100%" stop-color="#8a6a3b"/></linearGradient></defs>
+  
+      <rect width="1200" height="800" fill="url(#g_exterior_approach)"/>
+      <rect width="1200" height="800" fill="url(#g_exterior_approach)" opacity="0.5"/>
+      <!-- subtle grain -->
+      <filter id="grain_g_exterior_approach">
+        <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="noise"/>
+        <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.06 0"/>
+      </filter>
+      <rect width="1200" height="800" filter="url(#grain_g_exterior_approach)"/>
+    
+  
+      <rect x="40" y="710" width="308" height="50" rx="8"
+            fill="#0d0b09" fill-opacity="0.72"/>
+      <text x="56" y="743" font-family="ui-sans-serif, system-ui, sans-serif"
+            font-size="20" fill="#f1e7d0" font-weight="500">Exterior · The approach</text>
+    
+</svg>

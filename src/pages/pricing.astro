@@ -121,7 +121,7 @@ const tiers = [
   {/* ============================================================
        1. WALK-IN SESSIONS
   ============================================================ */}
-  <section class="section" id="walk-in">
+  <section class="section" id="walk-in" data-reveal>
     <div class="container">
       <div class="block-head">
         <p class="eyebrow">Walk-in</p>
@@ -137,8 +137,12 @@ const tiers = [
 
       <div class="cards cards--walkin">
         {
-          walkIns.map((w) => (
-            <article class:list={['card', 'card--walkin', { 'card--featured': w.featured }]}>
+          walkIns.map((w, i) => (
+            <article
+              class:list={['card', 'card--walkin', { 'card--featured': w.featured }]}
+              data-reveal
+              style={`--reveal-delay: ${i * 80}ms`}
+            >
               {w.featured && <span class="card__badge">Most popular</span>}
               <h3>{w.name}</h3>
               <div class="card__price">
@@ -170,7 +174,7 @@ const tiers = [
   {/* ============================================================
        2. MONTHLY MEMBERSHIPS
   ============================================================ */}
-  <section class="section" id="memberships">
+  <section class="section" id="memberships" data-reveal>
     <div class="container">
       <div class="block-head">
         <p class="eyebrow">Memberships</p>
@@ -183,8 +187,12 @@ const tiers = [
 
       <div class="cards cards--tiers">
         {
-          tiers.map((t) => (
-            <article class:list={['card', 'card--tier', { 'card--featured': t.featured }]}>
+          tiers.map((t, i) => (
+            <article
+              class:list={['card', 'card--tier', { 'card--featured': t.featured }]}
+              data-reveal
+              style={`--reveal-delay: ${i * 80}ms`}
+            >
               {t.featured && <span class="card__badge">Recommended</span>}
               <h3>{t.name}</h3>
               <div class="card__price">
@@ -215,7 +223,7 @@ const tiers = [
   {/* ============================================================
        3. GOOD TO KNOW
   ============================================================ */}
-  <section class="section" id="good-to-know">
+  <section class="section" id="good-to-know" data-reveal>
     <div class="container narrow">
       <div class="block-head">
         <p class="eyebrow">Good to know</p>
@@ -326,7 +334,7 @@ const tiers = [
     position: absolute;
     top: calc(-1 * var(--space-2));
     left: var(--space-4);
-    background: var(--clay-terracotta);
+    background: var(--clay-deep);          /* darker fill for AA contrast with birch-white text */
     color: var(--birch-white);
     font-family: var(--font-sans);
     font-size: var(--text-xs);
@@ -366,7 +374,7 @@ const tiers = [
   .card__sessions {
     font-family: var(--font-mono);
     font-size: var(--text-sm);
-    color: var(--hot-coal);
+    color: var(--hot-coal-bright);
     font-weight: var(--weight-semibold);
     margin-top: var(--space-1);
   }
@@ -391,7 +399,7 @@ const tiers = [
     content: '✓';
     position: absolute;
     left: 0;
-    color: var(--forest-light);
+    color: #7a9a6e;
     font-weight: var(--weight-bold);
   }
 
@@ -432,7 +440,7 @@ const tiers = [
     font-size: var(--text-xs);
     text-transform: uppercase;
     letter-spacing: var(--tracking-caps);
-    color: var(--hot-coal);
+    color: var(--hot-coal-bright);
     font-weight: var(--weight-semibold);
     margin-bottom: var(--space-1);
   }

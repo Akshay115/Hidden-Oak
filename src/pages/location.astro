@@ -1,173 +1,284 @@
 ---
 /**
  * Location & Contact — /location
- * Map embed, address, directions, opening hours, contact form.
- * The form has no backend yet — point its action at Formspree / a Cloudflare
- * Worker / InsForge function when ready. Until then it's a styled shell.
+ *
+ * All contact details sourced from the Google Maps listing:
+ *   The Hidden Oak - sauna & ice bath
+ *   H. No. 613/2, Madhalawada, Arambol, Goa 403524
+ *   Phone/WhatsApp: +91 98180 83992
+ *   Plus Code: MPQ5+95 Arambol, Goa
+ *   Coordinates: 15.688385, 73.7053839
+ *
+ * The contact form posts to /api/contact (Cloudflare Pages Function)
+ * which dispatches to Brevo CRM + email. See functions/api/contact.ts.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import SectionDivider from '../components/SectionDivider.astro';
 import CTAButton from '../components/CTAButton.astro';
 
+// ---- Contact details (single source of truth for this page) -------------
+const PHONE_DISPLAY = '+91 98180 83992';
+const PHONE_INTL = '+919818083992';            // for tel: and wa.me links
+const EMAIL = 'thehiddenoak@gmail.com';
+const WHATSAPP_MSG = "Hi Hidden Oak, I'd like to book a banya session.";
+const MAPS_LINK = 'https://maps.app.goo.gl/HTjXm77Z5ggcumkR7';
+const ADDRESS_LINES = ['H. No. 613/2, Madhalawada', 'Arambol, Goa 403524', 'India'];
+const PLUS_CODE = 'MPQ5+95 Arambol, Goa';
+
+// Google Maps embed — no API key required for the basic embed.
+const MAP_QUERY = 'The Hidden Oak sauna ice bath H. No. 613/2 Madhalawada Arambol Goa 403524';
+const MAP_EMBED = `https://maps.google.com/maps?q=${encodeURIComponent(MAP_QUERY)}&z=15&output=embed`;
+
 const hours = [
-  { day: 'Monday',    time: '[TODO]' },
-  { day: 'Tuesday',   time: '[TODO]' },
-  { day: 'Wednesday', time: '[TODO]' },
-  { day: 'Thursday',  time: '[TODO]' },
-  { day: 'Friday',    time: '[TODO]' },
-  { day: 'Saturday',  time: '[TODO]' },
-  { day: 'Sunday',    time: '[TODO]' },
+  { day: 'Monday',    time: '6:00 PM – 12:00 AM' },
+  { day: 'Tuesday',   time: '6:00 PM – 12:00 AM' },
+  { day: 'Wednesday', time: '6:00 PM – 12:00 AM' },
+  { day: 'Thursday',  time: '6:00 PM – 12:00 AM' },
+  { day: 'Friday',    time: '6:00 PM – 12:00 AM' },
+  { day: 'Saturday',  time: '6:00 PM – 12:00 AM' },
+  { day: 'Sunday',    time: '6:00 PM – 12:00 AM' },
 ];
 ---
 
 <BaseLayout
   title="Location & Contact"
-  description="[TODO meta description — how to find Hidden Oak banya in Arambol, Goa.]"
+  description="Find Hidden Oak banya in Arambol, Goa. H. No. 613/2, Madhalawada — open 6 PM to midnight, seven days a week. Call, WhatsApp, or book online."
 >
   <Hero
     eyebrow="Find Us"
     title="Location & Contact"
-    subtitle="[TODO hero subtitle — a line about Arambol and how to reach us.]"
+    subtitle="Hidden among the palms at the quiet end of Arambol. Come for the steam, stay for the quiet."
     primaryCta={{ href: '/book', label: 'Book a Session' }}
   />
 
-  {/* ===== 1. MAP + ADDRESS ============================================= */}
-  <section class="section">
+  {/* ============================================================
+       1. MAP + ADDRESS + QUICK CONTACT
+  ============================================================ */}
+  <section class="section" data-reveal id="map">
     <div class="container loc-grid">
       <div class="loc-info">
         <p class="eyebrow">Address</p>
         <address class="address">
-          [TODO street / landmark]<br />
-          Arambol Beach<br />
-          North Goa 403524<br />
-          India
+          {ADDRESS_LINES.map((l) => <span>{l}</span>)}
         </address>
+        <p class="plus-code">
+          <span class="plus-code__label">Plus Code</span>
+          <a href={MAPS_LINK} target="_blank" rel="noopener">{PLUS_CODE}</a>
+        </p>
 
-        <p class="eyebrow" style="margin-top: var(--space-4);">Get in touch</p>
-        <ul class="channels">
-          <li>
-            <span class="channels__label">Phone</span>
-            <a href="tel:+91[TODO]">+91 [TODO]</a>
-          </li>
-          <li>
-            <span class="channels__label">WhatsApp</span>
-            <a href="https://wa.me/91[TODO]">+91 [TODO]</a>
-          </li>
-          <li>
-            <span class="channels__label">Email</span>
-            <a href="mailto:hello@hiddenoak.example">hello@hiddenoak.example</a>
-          </li>
-          <li>
-            <span class="channels__label">Instagram</span>
-            <a href="https://instagram.com">@hiddenoak.banya</a>
-          </li>
-        </ul>
+        <div class="quick-contact">
+          <a href={`tel:${PHONE_INTL}`} class="quick-contact__btn quick-contact__btn--call">
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M6.62 10.79a15.05 15.05 0 006.59 6.59l2.2-2.2a1 1 0 011.01-.24 11.36 11.36 0 003.56.57 1 1 0 011 1V20a1 1 0 01-1 1A17 17 0 013 4a1 1 0 011-1h3.5a1 1 0 011 1c0 1.25.2 2.45.57 3.56a1 1 0 01-.25 1.01l-2.2 2.2z" fill="currentColor"/></svg>
+            <span>Call {PHONE_DISPLAY}</span>
+          </a>
+          <a
+            href={`https://wa.me/${PHONE_INTL.replace('+','')}?text=${encodeURIComponent(WHATSAPP_MSG)}`}
+            class="quick-contact__btn quick-contact__btn--wa"
+            target="_blank"
+            rel="noopener"
+          >
+            <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M.057 24l1.687-6.163a11.867 11.867 0 01-1.587-5.946C.16 5.335 5.495 0 12.05 0a11.817 11.817 0 018.413 3.488 11.824 11.824 0 013.48 8.414c-.003 6.557-5.338 11.892-11.893 11.892a11.9 11.9 0 01-5.688-1.448L.057 24zm6.597-3.807c1.676.995 3.276 1.591 5.392 1.592 5.448 0 9.886-4.434 9.889-9.885.002-5.462-4.415-9.89-9.881-9.892-5.452 0-9.887 4.434-9.889 9.884a9.86 9.86 0 001.519 5.26l-.999 3.648 3.97-1.057zm11.387-5.464c-.074-.124-.272-.198-.57-.347-.297-.149-1.758-.868-2.031-.967-.272-.099-.47-.149-.669.149-.198.297-.768.967-.941 1.165-.173.198-.347.223-.644.074-.297-.149-1.255-.462-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.297-.347.446-.521.151-.172.2-.296.3-.495.099-.198.05-.372-.025-.521-.075-.148-.669-1.611-.916-2.206-.242-.579-.487-.501-.669-.51l-.57-.01c-.198 0-.52.074-.792.372s-1.04 1.016-1.04 2.479 1.065 2.876 1.213 3.074c.149.198 2.095 3.2 5.076 4.487.709.306 1.263.489 1.694.626.712.226 1.36.194 1.872.118.571-.085 1.758-.719 2.006-1.413.248-.695.248-1.29.173-1.414z" fill="currentColor"/></svg>
+            <span>WhatsApp us</span>
+          </a>
+        </div>
       </div>
 
       <div class="loc-map">
-        {/*
-          TODO: paste the live Google Maps embed iframe here.
-          Replace src with the share → embed map link for the Arambol address.
-          Kept as a styled placeholder until the exact coords are confirmed.
-        */}
-        <div class="loc-map__placeholder">
-          <span>[ Map embed · Google Maps iframe ]</span>
-        </div>
+        <iframe
+          src={MAP_EMBED}
+          title="Hidden Oak location on Google Maps — Arambol, Goa"
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+          allowfullscreen
+        ></iframe>
       </div>
     </div>
   </section>
 
   <SectionDivider />
 
-  {/* ===== 2. DIRECTIONS =============================================== */}
-  <section class="section">
+  {/* ============================================================
+       2. OPENING HOURS
+  ============================================================ */}
+  <section class="section" data-reveal id="hours">
     <div class="container narrow">
-      <p class="eyebrow">Getting here</p>
-      <h2>[TODO heading — directions]</h2>
-      <div class="directions">
-        <article class="direction">
-          <h3>From [TODO — nearest main town]</h3>
-          <p>[TODO step-by-step — route, landmarks, travel time.]</p>
-        </article>
-        <article class="direction">
-          <h3>From [TODO — airport / station]</h3>
-          <p>[TODO step-by-step — taxi, bus, scooter options.]</p>
-        </article>
-        <article class="direction">
-          <h3>On foot in Arambol</h3>
-          <p>[TODO — how to find us once you're in Arambol village/beach.]</p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <SectionDivider />
-
-  {/* ===== 3. OPENING HOURS ============================================ */}
-  <section class="section">
-    <div class="container narrow">
-      <p class="eyebrow">When we're open</p>
-      <h2>[TODO heading — opening hours]</h2>
-      <ul class="hours">
+      <p class="eyebrow">Opening Hours</p>
+      <h2>When we're open</h2>
+      <p class="lede">Evenings, seven days a week. Booking ahead recommended — we keep the space quiet and uncrowded.</p>
+      <ul class="hours-list">
         {
           hours.map((h) => (
-            <li>
-              <span class="hours__day">{h.day}</span>
-              <span class="hours__time">{h.time}</span>
+            <li class="hours-list__item">
+              <span class="hours-list__day">{h.day}</span>
+              <span class="hours-list__time">{h.time}</span>
             </li>
           ))
         }
       </ul>
-      <p class="hours-note">[TODO note — e.g. booking recommended, holidays.]</p>
+      <div class="hours-note">
+        <p>Looking to visit outside these hours? <a href={`https://wa.me/${PHONE_INTL.replace('+','')}`}>Message us on WhatsApp</a> — private sessions can sometimes be arranged.</p>
+      </div>
     </div>
   </section>
 
   <SectionDivider />
 
-  {/* ===== 4. CONTACT FORM ============================================= */}
-  <section class="section">
+  {/* ============================================================
+       3. DIRECTIONS
+  ============================================================ */}
+  <section class="section" data-reveal id="directions">
     <div class="container narrow">
-      <p class="eyebrow">Send a message</p>
-      <h2>[TODO heading — contact form]</h2>
-      <p class="lede">[TODO one-liner — what to expect when they hit send.]</p>
+      <p class="eyebrow">Getting Here</p>
+      <h2>Finding us in Arambol</h2>
+      <div class="directions">
+        <article class="direction">
+          <h3>From Arambol beach road</h3>
+          <p>
+            Head inland from the main Arambol beach strip toward Madhalawada.
+            Look for H. No. 613/2 — we're set back from the lane, among the palms.
+            Follow the <a href={MAPS_LINK} target="_blank" rel="noopener">Google Maps pin</a> for the last stretch.
+          </p>
+        </article>
+        <article class="direction">
+          <h3>From Mapusa / Panjim</h3>
+          <p>
+            Drive north to Arambol (about 30–45 min from Mapusa). Follow signs to
+            Arambol beach, then turn inland at Madhalawada. Taxis and scooters
+            are the easiest way to reach us.
+          </p>
+        </article>
+        <article class="direction">
+          <h3>On foot or by scooter</h3>
+          <p>
+            Once in Arambol village, open the <a href={MAPS_LINK} target="_blank" rel="noopener">Google Maps pin</a>
+            and search for "The Hidden Oak." The lane narrows near the end — park
+            at the last wide spot and walk the final 50 metres.
+          </p>
+        </article>
+      </div>
+    </div>
+  </section>
 
-      {/*
-        Static shell — no action/handler yet. Wire to Formspree, a Cloudflare
-        Worker, or InsForge function when ready. Field names are kebab-case
-        to map cleanly onto a backend.
-      */}
-      <form class="contact-form" method="POST" action="[TODO form endpoint]">
+  <SectionDivider />
+
+  {/* ============================================================
+       4. CONTACT FORM (→ Brevo + email via Pages Function)
+  ============================================================ */}
+  <section class="section" data-reveal id="contact-form">
+    <div class="container narrow">
+      <p class="eyebrow">Send a Message</p>
+      <h2>Get in touch</h2>
+      <p class="lede">
+        Questions about sessions, group bookings, or memberships? Drop us a note
+        and we'll get back to you — usually within a day.
+      </p>
+
+      <form class="contact-form" id="contact-form-el" method="POST" action="/api/contact">
         <div class="field-row">
           <label class="field">
-            <span class="field__label">Name</span>
-            <input type="text" name="name" required placeholder="Your name" autocomplete="name" />
+            <span class="field__label">Name <span class="field__req">*</span></span>
+            <input type="text" name="name" required autocomplete="name" placeholder="Your name" />
           </label>
           <label class="field">
-            <span class="field__label">Email</span>
-            <input type="email" name="email" required placeholder="you@example.com" autocomplete="email" />
+            <span class="field__label">Email <span class="field__req">*</span></span>
+            <input type="email" name="email" required autocomplete="email" placeholder="you@example.com" />
           </label>
         </div>
         <label class="field">
-          <span class="field__label">Phone <span class="field__optional">(optional)</span></span>
-          <input type="tel" name="phone" placeholder="+91 …" autocomplete="tel" />
+          <span class="field__label">Phone <span class="field__opt">(optional)</span></span>
+          <input type="tel" name="phone" autocomplete="tel" placeholder="+91 ..." />
         </label>
         <label class="field">
-          <span class="field__label">Message</span>
-          <textarea name="message" rows="5" required placeholder="[TODO — what would you like to know?]"></textarea>
+          <span class="field__label">Message <span class="field__req">*</span></span>
+          <textarea name="message" rows="5" required placeholder="Tell us when you'd like to visit, how many people, or anything else we should know."></textarea>
         </label>
-        <div class="contact-form__actions">
-          <CTAButton href="#" variant="primary" size="md" class="contact-form__submit">
-            Send message
-          </CTAButton>
-          <span class="contact-form__note">[TODO — typical response time.]</span>
+
+        {/* Honeypot: bots fill this hidden field; humans never see it */}
+        <div class="field-honeypot" aria-hidden="true">
+          <label>Leave this field empty: <input type="text" name="website" tabindex="-1" autocomplete="off" /></label>
         </div>
+
+        <div class="contact-form__actions">
+          <button type="submit" class="contact-form__submit cta cta--primary cta--md">
+            <span class="contact-form__submit-label">Send message</span>
+          </button>
+        </div>
+
+        {/* Status messages — shown/hidden via JS after submit */}
+        <div class="contact-form__status" id="form-status" role="status" aria-live="polite" hidden></div>
       </form>
+
+      <p class="contact-form__alt">
+        Prefer to talk now? <a href={`tel:${PHONE_INTL}`}>Call {PHONE_DISPLAY}</a> or
+        <a href={`https://wa.me/${PHONE_INTL.replace('+','')}`}>WhatsApp us</a>.
+      </p>
     </div>
   </section>
 </BaseLayout>
 
+<script>
+  // =====================================================================
+  // CONTACT FORM — progressive enhancement.
+  // Posts to /api/contact (Cloudflare Pages Function) which forwards to
+  // Brevo CRM + sends an email to thehiddenoak@gmail.com.
+  // If JS is disabled, the form still POSTs (full page reload to JSON).
+  // =====================================================================
+  (() => {
+    const form = document.getElementById('contact-form-el') as HTMLFormElement | null;
+    const status = document.getElementById('form-status') as HTMLElement | null;
+    if (!form || !status) return;
+
+    const setBtn = (label: string, disabled: boolean) => {
+      const btn = form.querySelector('.contact-form__submit-label');
+      if (btn) btn.textContent = label;
+      (form.querySelector('.contact-form__submit') as HTMLButtonElement).disabled = disabled;
+    };
+
+    const showStatus = (msg: string, ok: boolean) => {
+      status.hidden = false;
+      status.textContent = msg;
+      status.className = 'contact-form__status' + (ok ? ' contact-form__status--ok' : ' contact-form__status--err');
+    };
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const data = new FormData(form);
+      // Honeypot check: if filled, silently "succeed" but don't send.
+      if (data.get('website')) {
+        showStatus('Thank you — your message has been sent.', true);
+        form.reset();
+        return;
+      }
+      setBtn('Sending…', true);
+      try {
+        const res = await fetch('/api/contact', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            name: data.get('name'),
+            email: data.get('email'),
+            phone: data.get('phone'),
+            message: data.get('message'),
+          }),
+        });
+        if (res.ok) {
+          showStatus('Thank you — your message has been sent. We will get back to you shortly.', true);
+          form.reset();
+        } else {
+          showStatus('Something went wrong. Please try again, or WhatsApp us directly.', false);
+        }
+      } catch (err) {
+        showStatus('Network error. Please try again, or WhatsApp us directly.', false);
+      } finally {
+        setBtn('Send message', false);
+      }
+    });
+  })();
+</script>
+
 <style>
+  /* ---- Map + address grid ------------------------------------------- */
   .loc-grid {
     display: grid;
     grid-template-columns: 1fr 1.3fr;
@@ -177,52 +288,91 @@ const hours = [
   .address {
     font-style: normal;
     font-size: var(--text-md);
-    color: var(--color-ink);
+    color: var(--birch-white);
     line-height: var(--leading-normal);
-  }
-  .channels {
-    list-style: none;
-    padding: 0;
+    display: flex;
+    flex-direction: column;
     margin-top: var(--space-2);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
   }
-  .channels li {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-  }
-  .channels__label {
+  .plus-code { margin-top: var(--space-3); font-size: var(--text-sm); }
+  .plus-code__label {
+    display: block;
     font-size: var(--text-xs);
     text-transform: uppercase;
     letter-spacing: var(--tracking-caps);
     color: var(--color-ink-subtle);
     font-weight: var(--weight-semibold);
+    margin-bottom: 2px;
   }
-  .channels a {
-    font-size: var(--text-md);
-    color: var(--birch-white);
-  }
-  .loc-map__placeholder {
-    aspect-ratio: 4 / 3;
-    background: var(--wood-smolder);
-    border: 1px solid var(--color-border);
-    border-radius: var(--radius-lg);
+  .plus-code a { font-family: var(--font-mono); font-size: var(--text-sm); }
+
+  /* ---- Quick contact buttons ---------------------------------------- */
+  .quick-contact {
     display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-top: var(--space-5);
+  }
+  .quick-contact__btn {
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    color: var(--color-ink-subtle);
+    gap: var(--space-2);
+    padding: var(--space-2) var(--space-4);
+    border-radius: var(--radius-pill);
     font-size: var(--text-sm);
+    font-weight: var(--weight-semibold);
+    border: 1px solid var(--color-border-strong);
+    transition: transform var(--duration-fast) var(--ease-soft),
+      background-color var(--duration-fast) var(--ease-soft),
+      border-color var(--duration-fast) var(--ease-soft);
+  }
+  .quick-contact__btn:hover { transform: translateY(var(--hover-lift)); }
+  .quick-contact__btn--call {
+    background: var(--clay-deep);  // AA-safe with birch-white text
+    color: var(--birch-white);
+    border-color: var(--clay-terracotta);
+  }
+  .quick-contact__btn--call:hover { background: var(--clay-light); color: var(--birch-white); }
+  .quick-contact__btn--wa {
+    background: #075E54;          /* WhatsApp dark teal — white text passes AAA at ~7.7:1 */
+    color: #fff;
+    border-color: #075E54;
+  }
+  .quick-contact__btn--wa:hover { background: #054e46; color: #fff; }
+
+  /* ---- Map iframe --------------------------------------------------- */
+  .loc-map iframe {
+    width: 100%;
+    height: 420px;
+    border: 0;
+    border-radius: var(--radius-lg);
+    filter: saturate(0.9) contrast(1.05);
   }
 
   .narrow { max-width: var(--container-narrow); }
-  .directions {
-    margin-top: var(--space-4);
+
+  /* ---- Hours -------------------------------------------------------- */
+  .hours-list { list-style: none; padding: 0; margin-top: var(--space-4); }
+  .hours-list__item {
     display: flex;
-    flex-direction: column;
+    justify-content: space-between;
     gap: var(--space-4);
+    padding: var(--space-2) 0;
+    border-bottom: 1px solid var(--color-border);
   }
+  .hours-list__day { color: var(--birch-white); font-weight: var(--weight-medium); }
+  .hours-list__time { color: var(--color-ink-muted); font-family: var(--font-mono); font-size: var(--text-sm); }
+  .hours-note {
+    margin-top: var(--space-4);
+    padding: var(--space-3) var(--space-4);
+    background: var(--wood-burnt);
+    border-radius: var(--radius-md);
+    font-size: var(--text-sm);
+    color: var(--color-ink-muted);
+  }
+
+  /* ---- Directions --------------------------------------------------- */
+  .directions { margin-top: var(--space-4); display: flex; flex-direction: column; gap: var(--space-4); }
   .direction h3 { font-size: var(--text-lg); margin-bottom: var(--space-1); }
   .direction p {
     font-size: var(--text-sm);
@@ -230,54 +380,13 @@ const hours = [
     line-height: var(--leading-normal);
   }
 
-  .hours {
-    list-style: none;
-    padding: 0;
-    margin-top: var(--space-4);
-    display: flex;
-    flex-direction: column;
-  }
-  .hours li {
-    display: flex;
-    justify-content: space-between;
-    gap: var(--space-4);
-    padding: var(--space-2) 0;
-    border-bottom: 1px solid var(--color-border);
-  }
-  .hours__day { color: var(--birch-white); font-weight: var(--weight-medium); }
-  .hours__time { color: var(--color-ink-muted); }
-  .hours-note {
-    margin-top: var(--space-3);
-    font-size: var(--text-sm);
-    color: var(--color-ink-subtle);
-  }
-
-  /* Contact form ------------------------------------------------------- */
-  .contact-form {
-    margin-top: var(--space-5);
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-3);
-  }
-  .field-row {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: var(--space-3);
-  }
-  .field {
-    display: flex;
-    flex-direction: column;
-    gap: var(--space-1);
-  }
-  .field__label {
-    font-size: var(--text-sm);
-    color: var(--color-ink);
-    font-weight: var(--weight-medium);
-  }
-  .field__optional {
-    font-weight: var(--weight-regular);
-    color: var(--color-ink-subtle);
-  }
+  /* ---- Contact form ------------------------------------------------- */
+  .contact-form { margin-top: var(--space-5); display: flex; flex-direction: column; gap: var(--space-3); }
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-3); }
+  .field { display: flex; flex-direction: column; gap: var(--space-1); }
+  .field__label { font-size: var(--text-sm); color: var(--birch-white); font-weight: var(--weight-medium); }
+  .field__req { color: var(--hot-coal-bright); }
+  .field__opt { color: var(--color-ink-subtle); font-weight: var(--weight-regular); }
   .contact-form input,
   .contact-form textarea {
     font: inherit;
@@ -287,12 +396,11 @@ const hours = [
     color: var(--birch-white);
     border: 1px solid var(--color-border);
     border-radius: var(--radius-md);
-    transition: border-color var(--transition-fast), box-shadow var(--transition-fast);
+    transition: border-color var(--duration-fast) var(--ease-soft),
+      box-shadow var(--duration-fast) var(--ease-soft);
   }
   .contact-form input::placeholder,
-  .contact-form textarea::placeholder {
-    color: var(--color-ink-subtle);
-  }
+  .contact-form textarea::placeholder { color: var(--color-ink-subtle); }
   .contact-form input:focus,
   .contact-form textarea:focus {
     outline: none;
@@ -300,21 +408,28 @@ const hours = [
     box-shadow: 0 0 0 3px rgba(181, 101, 29, 0.25);
   }
   .contact-form textarea { resize: vertical; min-height: 120px; }
-  .contact-form__actions {
-    display: flex;
-    align-items: center;
-    gap: var(--space-3);
-    flex-wrap: wrap;
-    margin-top: var(--space-1);
+
+  /* Honeypot: visually hidden but present in DOM for bots */
+  .field-honeypot { position: absolute; left: -9999px; top: -9999px; }
+
+  .contact-form__submit { width: auto; min-width: 180px; }
+  .contact-form__status { padding: var(--space-3); border-radius: var(--radius-md); font-size: var(--text-sm); }
+  .contact-form__status--ok {
+    background: rgba(111, 138, 90, 0.15);
+    border: 1px solid var(--forest-light);
+    color: var(--birch-white);
   }
-  :global(.contact-form__submit) { width: auto; }
-  .contact-form__note {
-    font-size: var(--text-sm);
-    color: var(--color-ink-subtle);
+  .contact-form__status--err {
+    background: rgba(196, 69, 43, 0.15);
+    border: 1px solid var(--color-danger);
+    color: var(--birch-warm);
   }
+  .contact-form__alt { margin-top: var(--space-4); font-size: var(--text-sm); color: var(--color-ink-subtle); }
+  .contact-form__alt a { font-weight: var(--weight-semibold); }
 
   @media (max-width: 720px) {
     .loc-grid { grid-template-columns: 1fr; }
     .field-row { grid-template-columns: 1fr; }
+    .loc-map iframe { height: 320px; }
   }
 </style>

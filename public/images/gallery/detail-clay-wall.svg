@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="800" viewBox="0 0 1200 800">
+  <defs><linearGradient id="g_detail_clay_wall" x1="0" y1="0" x2="1200" y2="800" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#4a3422"/>, <stop offset="50%" stop-color="#8f4d14"/>, <stop offset="100%" stop-color="#b5651d"/></linearGradient></defs>
+  
+      <rect width="1200" height="800" fill="url(#g_detail_clay_wall)"/>
+      <rect width="1200" height="800" fill="url(#g_detail_clay_wall)" opacity="0.5"/>
+      <!-- subtle grain -->
+      <filter id="grain_g_detail_clay_wall">
+        <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="noise"/>
+        <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.06 0"/>
+      </filter>
+      <rect width="1200" height="800" filter="url(#grain_g_detail_clay_wall)"/>
+    
+  
+      <rect x="40" y="710" width="356" height="50" rx="8"
+            fill="#0d0b09" fill-opacity="0.72"/>
+      <text x="56" y="743" font-family="ui-sans-serif, system-ui, sans-serif"
+            font-size="20" fill="#f1e7d0" font-weight="500">Details · Clay plaster wall</text>
+    
+</svg>

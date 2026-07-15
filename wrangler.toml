@@ -1,0 +1,31 @@
+# wrangler.toml — Cloudflare Pages configuration for Hidden Oak
+#
+# This file configures the Cloudflare Pages project. When deploying via the
+# Cloudflare dashboard (GitHub integration), these settings are picked up
+# automatically. For direct CLI deploys, `npx wrangler pages deploy dist`.
+#
+# Docs: https://developers.cloudflare.com/pages/functions/wrangler-configuration/
+
+name = "hidden-oak"
+compatibility_date = "2024-12-01"
+pages_build_output_dir = "dist"
+
+# Compatibility flags — required for the Pages Function (functions/api/contact.ts)
+# to use the modern Node.js compatibility layer.
+compatibility_flags = ["nodejs_compat"]
+
+# Environment variables that are NOT secret can be defined here.
+# Secrets (BREVO_API_KEY) must be set via the Cloudflare dashboard or
+# `wrangler pages secret put BREVO_API_KEY`.
+[vars]
+CONTACT_EMAIL = "thehiddenoak@gmail.com"
+
+# Optional: restrict the Pages Function to only run on /api/* paths, so static
+# assets are served directly without hitting the Worker runtime.
+# (If omitted, the _routes.json file in /public handles this instead.)
+
+# ----------------------------------------------------------------------------
+# Smart Placement — routes the Worker closer to backend APIs (Brevo) for
+# lower latency on form submissions. Enable after first deploy.
+# [placement]
+# mode = "smart"

@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Internal style guide — no need to index
+Disallow: /style-guide
+
+# Sitemap
+Sitemap: https://hidden-oak.pages.dev/sitemap-index.xml

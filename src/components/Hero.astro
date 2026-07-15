@@ -1,7 +1,26 @@
 ---
 /**
- * Hero — full-bleed landing hero. Used at the top of pages.
- * Background image is optional; falls back to a warm gradient.
+ * Hero — full-bleed landing hero.
+ *
+ * Background options (all optional — Hero works with just a gradient if none given):
+ *   - video:  short looping video (muted, autoplay, playsinline). MP4 for widest
+ *             browser support; WebM optional as a <source> for better compression.
+ *   - poster: static image shown on mobile, slow connections, before video loads,
+ *             and whenever prefers-reduced-motion is set. Also used as the <img>
+ *             fallback when no video is supplied (full-bleed background image).
+ *   - image:  legacy single-image prop (alias of poster). Kept so existing pages
+ *             that pass `image` keep working unchanged.
+ *
+ * Readability: a layered dark gradient overlay sits above the media so headline
+ * and subtitle stay legible against any photo. The gradient is strongest at the
+ * bottom and edges, lighter in the center.
+ *
+ * Accessibility:
+ *   - Video is decorative (muted, no controls) and hidden from screen readers
+ *     via aria-hidden + tabIndex="-1".
+ *   - prefers-reduced-motion: video is hidden entirely; poster image shows.
+ *     A tiny inline script also pauses any playing video under reduced motion.
+ *   - Mobile: <video playsinline> prevents forced fullscreen on iOS.
  */
 import CTAButton from './CTAButton.astro';
 
@@ -9,6 +28,11 @@ interface Props {
   eyebrow?: string;
   title: string;
   subtitle?: string;
+  /** Full-bleed background video (optional). e.g. '/video/hero-loop.mp4' */
+  video?: string;
+  /** Static image fallback / poster. e.g. '/images/hero-poster.jpg' */
+  poster?: string;
+  /** Legacy alias for `poster` (a background image with no video). */
   image?: string;
   primaryCta?: { href: string; label: string };
   secondaryCta?: { href: string; label: string };
@@ -19,19 +43,82 @@ const {
   eyebrow,
   title,
   subtitle,
+  video,
+  poster,
   image,
   primaryCta = { href: '/book', label: 'Book a Session' },
   secondaryCta,
   align = 'left',
 } = Astro.props;
 
-const bgStyle = image
-  ? `background-image: linear-gradient(180deg, rgba(13,11,9,0.55), rgba(13,11,9,0.92)), url('${image}');`
-  : '';
+// Resolve the background image: explicit poster wins, then legacy image prop.
+const bgImage = poster || image;
+const hasVideo = Boolean(video);
 ---
 
-<section class:list={['hero', `hero--${align}`]} style={bgStyle}>
-  <div class="hero__scrim"></div>
+<section
+  class:list={['hero', `hero--${align}`, { 'hero--has-video': hasVideo, 'hero--has-image': bgImage }]}
+  style={bgImage ? `--hero-bg-image: url('${bgImage}');` : ''}
+  data-has-video={hasVideo ? 'true' : 'false'}
+>
+  {/* ---- Background media layer --------------------------------------- */}
+  <div class="hero__media" aria-hidden="true">
+    {
+      /* Poster / static background image.
+         Rendered when: no video, or as the video's poster (shows immediately,
+         stays under the video, and is the reduced-motion fallback via CSS). */
+      bgImage && (
+        <img
+          class="hero__poster"
+          src={bgImage}
+          alt=""
+          role="presentation"
+          loading="eager"
+          decoding="async"
+          fetchpriority="high"
+        />
+      )
+    }
+
+    {
+      /* Optional looping video. Muted + autoplay + playsinline lets it play
+         without user gesture on mobile. The poster attribute ensures a frame
+         shows before the video buffers. */
+      hasVideo && video && (
+        <video
+          class="hero__video"
+          autoplay
+          muted
+          loop
+          playsinline
+          preload="auto"
+          poster={bgImage || undefined}
+          tabindex="-1"
+        >
+          <source src={video} type="video/mp4" />
+        </video>
+      )
+    }
+  </div>
+
+  {/* ---- Readability gradient overlay --------------------------------- */}
+  {/* Layered: a strong bottom-up fade plus a subtle vignette at the edges.
+       Stronger than a single linear-gradient so text stays legible on any photo. */}
+  <div class="hero__overlay" aria-hidden="true"></div>
+
+  {/* ---- Ambient steam drift (optional, tasteful) ---------------------
+       Two soft radial-gradient "steam clouds" drifting slowly across the hero.
+       Very low opacity (~0.15), 20–28s loop, behind the text.
+       Disabled entirely under prefers-reduced-motion via the global kill switch.
+       Review note: if this feels gimmicky, remove this block + the CSS below. */}
+  {(bgImage || hasVideo) && (
+    <div class="hero__steam" aria-hidden="true">
+      <span class="hero__steam-cloud hero__steam-cloud--a"></span>
+      <span class="hero__steam-cloud hero__steam-cloud--b"></span>
+    </div>
+  )}
+
+  {/* ---- Content ------------------------------------------------------- */}
   <div class="hero__content container">
     {eyebrow && <p class="eyebrow hero__eyebrow">{eyebrow}</p>}
     <h1 class="hero__title">{title}</h1>
@@ -53,34 +140,155 @@ const bgStyle = image
       }
     </div>
   </div>
+
+  {/* ---- Reduced-motion: pause video (belt-and-braces with CSS hiding it) */}
+  <script is:inline>
+    (function () {
+      var prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+      var hero = document.currentScript && document.currentScript.closest('.hero');
+      var video = hero && hero.querySelector('video.hero__video');
+      if (!video) return;
+      if (prefersReduced) {
+        video.pause();
+        video.removeAttribute('autoplay');
+      }
+      // Also react if the user toggles the OS setting while the page is open.
+      window.matchMedia('(prefers-reduced-motion: reduce)').addEventListener('change', function (e) {
+        if (e.matches) { video.pause(); } else { video.play().catch(function(){}); }
+      });
+    })();
+  </script>
 </section>
 
 <style>
   .hero {
     position: relative;
+    /* Fallback background when no image/video: warm charred-wood gradient. */
+    background:
+      radial-gradient(120% 80% at 50% 0%, rgba(228, 87, 46, 0.10), transparent 60%),
+      var(--wood-charred);
     min-height: clamp(420px, 70vh, 720px);
     display: flex;
     align-items: center;
-    background-color: var(--color-bg);
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
     overflow: hidden;
   }
   .hero--center .hero__content { text-align: center; align-items: center; }
-  .hero__scrim {
+
+  /* ---- Media layer --------------------------------------------------- */
+  .hero__media {
     position: absolute;
     inset: 0;
-    background: radial-gradient(
-      120% 80% at 50% 0%,
-      rgba(196, 99, 31, 0.12),
-      transparent 60%
-    );
-    pointer-events: none;
+    z-index: 0;
+    overflow: hidden;
   }
+  .hero__poster,
+  .hero__video {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center;
+  }
+
+  /* Default: poster shows. Video sits above poster (later in DOM + z-index)
+     and covers it once it starts playing. */
+  .hero__poster { z-index: 1; }
+  .hero__video { z-index: 2; }
+
+  /* ---- Ambient steam drift -------------------------------------------
+     Two soft blurred clouds drifting across the hero at very low opacity.
+     Uses the --duration-slow token and a custom easing for organic feel.
+     The global reduced-motion kill switch hides .hero__steam entirely. */
+  .hero__steam {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    overflow: hidden;
+  }
+  .hero__steam-cloud {
+    position: absolute;
+    width: 60%;
+    height: 40%;
+    border-radius: 50%;
+    filter: blur(40px);
+    opacity: 0.12;
+    background: radial-gradient(
+      ellipse at center,
+      rgba(241, 231, 208, 0.7) 0%,
+      rgba(241, 231, 208, 0.3) 40%,
+      transparent 70%
+    );
+    will-change: transform, opacity;
+  }
+  .hero__steam-cloud--a {
+    top: 15%;
+    left: -20%;
+    animation: steam-drift-a 24s var(--ease-in-out) infinite;
+  }
+  .hero__steam-cloud--b {
+    bottom: 10%;
+    right: -20%;
+    animation: steam-drift-b 28s var(--ease-in-out) infinite;
+    animation-delay: -8s;
+  }
+  @keyframes steam-drift-a {
+    0%   { transform: translate(0, 0) scale(1);    opacity: 0.10; }
+    50%  { transform: translate(40vw, 30px) scale(1.15); opacity: 0.16; }
+    100% { transform: translate(80vw, 0) scale(1);  opacity: 0.10; }
+  }
+  @keyframes steam-drift-b {
+    0%   { transform: translate(0, 0) scale(1);    opacity: 0.08; }
+    50%  { transform: translate(-40vw, -20px) scale(1.2); opacity: 0.14; }
+    100% { transform: translate(-80vw, 0) scale(1);  opacity: 0.08; }
+  }
+
+  /* ---- Gradient overlay for readability ------------------------------ */
+  /* Two stacked layers: a bottom-up dark fade for text contrast, and a
+     subtle edge vignette so the center reads brighter than the frame. */
+  .hero__overlay {
+    position: absolute;
+    inset: 0;
+    z-index: 3;
+    pointer-events: none;
+    background:
+      linear-gradient(
+        180deg,
+        rgba(13, 11, 9, 0.55) 0%,
+        rgba(13, 11, 9, 0.30) 40%,
+        rgba(13, 11, 9, 0.65) 78%,
+        rgba(13, 11, 9, 0.88) 100%
+      ),
+      radial-gradient(
+        120% 100% at 50% 50%,
+        transparent 50%,
+        rgba(13, 11, 9, 0.35) 100%
+      );
+  }
+  /* Left-aligned heroes get a stronger left-side fade so text (which sits
+     left) always has contrast behind it, regardless of the photo. */
+  .hero--left .hero__overlay {
+    background:
+      linear-gradient(
+        180deg,
+        rgba(13, 11, 9, 0.55) 0%,
+        rgba(13, 11, 9, 0.30) 40%,
+        rgba(13, 11, 9, 0.65) 78%,
+        rgba(13, 11, 9, 0.88) 100%
+      ),
+      linear-gradient(
+        90deg,
+        rgba(13, 11, 9, 0.72) 0%,
+        rgba(13, 11, 9, 0.40) 38%,
+        transparent 70%
+      );
+  }
+
+  /* ---- Content ------------------------------------------------------- */
   .hero__content {
     position: relative;
-    z-index: 1;
+    z-index: 4;
     display: flex;
     flex-direction: column;
     gap: var(--space-5);
@@ -93,12 +301,14 @@ const bgStyle = image
     font-size: var(--text-4xl);
     line-height: var(--leading-tight);
     max-width: 16ch;
+    text-shadow: 0 2px 16px rgba(0, 0, 0, 0.5);
   }
   .hero__subtitle {
     font-size: var(--text-md);
-    color: var(--color-ink-muted);
+    color: var(--color-ink);
     max-width: 52ch;
     line-height: var(--leading-loose);
+    text-shadow: 0 1px 8px rgba(0, 0, 0, 0.6);
   }
   .hero__actions {
     display: flex;
@@ -107,8 +317,37 @@ const bgStyle = image
     margin-top: var(--space-3);
   }
   .hero--center .hero__actions { justify-content: center; }
+
+  /* ---- Responsive ---------------------------------------------------- */
   @media (max-width: 640px) {
     .hero__title { font-size: var(--text-3xl); }
     .hero__subtitle { font-size: var(--text-base); }
+    /* On mobile, strengthen the overlay slightly — small screens with a photo
+       behind text need more contrast, not less. */
+    .hero__overlay {
+      background:
+        linear-gradient(
+          180deg,
+          rgba(13, 11, 9, 0.62) 0%,
+          rgba(13, 11, 9, 0.45) 40%,
+          rgba(13, 11, 9, 0.75) 80%,
+          rgba(13, 11, 9, 0.92) 100%
+        );
+    }
   }
+
+  /* =====================================================================
+     REDUCED MOTION
+     Hide video entirely; show the poster image. Video is paused via JS too,
+     but this ensures nothing animates even if the script fails.
+  ===================================================================== */
+  @media (prefers-reduced-motion: reduce) {
+    .hero__video { display: none; }
+    /* No animation on the poster — it's a static image already. */
+  }
+
+  /* ---- Legacy fallback (no image, no video) ------------------------- */
+  /* When neither poster nor video is provided, .hero has no media layer
+     visible — the warm gradient background shows, which is the original
+     behavior. This keeps every other page using <Hero> working unchanged. */
 </style>

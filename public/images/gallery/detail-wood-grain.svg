@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1200" height="1200" viewBox="0 0 1200 1200">
+  <defs><linearGradient id="g_detail_wood_grain" x1="0" y1="0" x2="1200" y2="1200" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#3a2818"/>, <stop offset="50%" stop-color="#5e4727"/>, <stop offset="100%" stop-color="#8a6a3b"/></linearGradient></defs>
+  
+      <rect width="1200" height="1200" fill="url(#g_detail_wood_grain)"/>
+      <rect width="1200" height="1200" fill="url(#g_detail_wood_grain)" opacity="0.5"/>
+      <!-- subtle grain -->
+      <filter id="grain_g_detail_wood_grain">
+        <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="2" result="noise"/>
+        <feColorMatrix in="noise" type="matrix" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 0.06 0"/>
+      </filter>
+      <rect width="1200" height="1200" filter="url(#grain_g_detail_wood_grain)"/>
+    
+  
+      <rect x="40" y="1110" width="272" height="50" rx="8"
+            fill="#0d0b09" fill-opacity="0.72"/>
+      <text x="56" y="1143" font-family="ui-sans-serif, system-ui, sans-serif"
+            font-size="20" fill="#f1e7d0" font-weight="500">Details · Wood grain</text>
+    
+</svg>

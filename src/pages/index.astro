@@ -19,18 +19,27 @@ import SectionDivider from '../components/SectionDivider.astro';
 import CTAButton from '../components/CTAButton.astro';
 ---
 
-<BaseLayout title="Hidden Oak">
-  {/* ===== 1. HERO ====================================================== */}
+<BaseLayout
+  title="Hidden Oak"
+  description="A traditional Russian banya in Arambol, Goa. Wood-fired steam, ice bath, and venik ritual — hidden among the palms. Sessions from ₹500. Book online."
+>
+  {/* ===== 1. HERO ======================================================
+       Full-bleed background. Currently uses a themed SVG poster (placeholder).
+       To use a looping video instead, drop a .mp4 in /public/video/ and add:
+         video="/video/hero-loop.mp4"
+       The poster stays as the mobile/reduced-motion fallback automatically.
+  */}
   <Hero
     eyebrow="Russian Banya · Arambol, Goa"
     title="Steam and stillness, in the trees."
     subtitle="An old ritual of heat and cold. Wood walls, warm fire, and quiet — hidden among the palms of Arambol."
+    poster="/images/hero/hero-poster.svg"
     primaryCta={{ href: '/book', label: 'Book a Session' }}
     secondaryCta={{ href: '/the-banya', label: 'Read our story' }}
   />
 
   {/* ===== 2. WHAT WE OFFER ============================================= */}
-  <section class="section">
+  <section class="section" data-reveal>
     <div class="container offer">
       <div class="offer__copy">
         <p class="eyebrow">What we offer</p>
@@ -51,7 +60,7 @@ import CTAButton from '../components/CTAButton.astro';
   <SectionDivider />
 
   {/* ===== 3. WHY HIDDEN OAK =========================================== */}
-  <section class="section">
+  <section class="section" data-reveal>
     <div class="container why">
       <div class="why__head">
         <p class="eyebrow">Why Hidden Oak</p>
@@ -62,7 +71,7 @@ import CTAButton from '../components/CTAButton.astro';
       </div>
 
       <div class="why__grid">
-        <article class="why__point">
+        <article class="why__point" data-reveal style="--reveal-delay: 0ms">
           <span class="why__num">01</span>
           <h3>Authentic Russian ritual</h3>
           <p>
@@ -71,7 +80,7 @@ import CTAButton from '../components/CTAButton.astro';
           </p>
         </article>
 
-        <article class="why__point">
+        <article class="why__point" data-reveal style="--reveal-delay: 80ms">
           <span class="why__num">02</span>
           <h3>A jungle setting</h3>
           <p>
@@ -80,7 +89,7 @@ import CTAButton from '../components/CTAButton.astro';
           </p>
         </article>
 
-        <article class="why__point">
+        <article class="why__point" data-reveal style="--reveal-delay: 160ms">
           <span class="why__num">03</span>
           <h3>The cold plunge</h3>
           <p>
@@ -89,7 +98,7 @@ import CTAButton from '../components/CTAButton.astro';
           </p>
         </article>
 
-        <article class="why__point">
+        <article class="why__point" data-reveal style="--reveal-delay: 240ms">
           <span class="why__num">04</span>
           <h3>Community &amp; membership</h3>
           <p>
@@ -108,7 +117,7 @@ import CTAButton from '../components/CTAButton.astro';
   <SectionDivider />
 
   {/* ===== 4. PRICING TEASER =========================================== */}
-  <section class="section">
+  <section class="section" data-reveal>
     <div class="container teaser teaser--pricing">
       <div class="teaser__copy">
         <p class="eyebrow">Pricing</p>
@@ -134,7 +143,7 @@ import CTAButton from '../components/CTAButton.astro';
   <SectionDivider />
 
   {/* ===== 5. MEMBERSHIP TEASER ======================================== */}
-  <section class="section">
+  <section class="section" data-reveal>
     <div class="container teaser teaser--member">
       <aside class="teaser__card teaser__card--feature">
         <p class="teaser__card-eyebrow">Membership</p>
@@ -161,7 +170,7 @@ import CTAButton from '../components/CTAButton.astro';
   </section>
 
   {/* ===== 6. CLOSING CTA ============================================== */}
-  <section class="section">
+  <section class="section" data-reveal>
     <div class="container closing">
       <div class="closing__copy">
         <p class="eyebrow">Ready when you are</p>
@@ -227,7 +236,7 @@ import CTAButton from '../components/CTAButton.astro';
   .why__num {
     font-family: var(--font-mono);
     font-size: var(--text-sm);
-    color: var(--hot-coal);
+    color: var(--hot-coal-bright);
     font-weight: var(--weight-bold);
   }
   .why__point h3 {
@@ -274,7 +283,7 @@ import CTAButton from '../components/CTAButton.astro';
     font-size: var(--text-xs);
     text-transform: uppercase;
     letter-spacing: var(--tracking-caps);
-    color: var(--hot-coal);
+    color: var(--hot-coal-bright);
     font-weight: var(--weight-semibold);
   }
   .teaser__card-price {
@@ -308,7 +317,7 @@ import CTAButton from '../components/CTAButton.astro';
     content: '✓';
     position: absolute;
     left: 0;
-    color: var(--forest-light);
+    color: #7a9a6e;
     font-weight: var(--weight-bold);
   }
 

@@ -38,8 +38,12 @@ const {
     border: 1px solid transparent;
     text-decoration: none;
     cursor: pointer;
-    transition: transform var(--transition-fast), background-color var(--transition-fast),
-      color var(--transition-fast), border-color var(--transition-fast), box-shadow var(--transition-fast);
+    transition: transform var(--duration-fast) var(--ease-soft),
+      background-color var(--duration-fast) var(--ease-soft),
+      color var(--duration-fast) var(--ease-soft),
+      border-color var(--duration-fast) var(--ease-soft),
+      box-shadow var(--duration-fast) var(--ease-soft),
+      filter var(--duration-fast) var(--ease-soft);
     white-space: nowrap;
   }
 
@@ -47,13 +51,14 @@ const {
   .cta--lg { padding: var(--space-4) var(--space-6); font-size: var(--text-md); }
 
   .cta--primary {
-    background: linear-gradient(135deg, var(--color-ember), var(--color-oak));
-    color: var(--color-cream);
+    background: linear-gradient(135deg, var(--clay-terracotta), var(--clay-deep));
+    color: var(--birch-white);
     box-shadow: var(--shadow-md);
   }
   .cta--primary:hover {
-    color: var(--color-cream);
-    transform: translateY(-2px);
+    color: var(--birch-white);
+    transform: translateY(var(--hover-lift));
+    filter: brightness(1.12);
     box-shadow: var(--shadow-lg), var(--shadow-glow);
   }
 
@@ -63,9 +68,9 @@ const {
     border-color: var(--color-border-strong);
   }
   .cta--ghost:hover {
-    color: var(--color-cream);
-    border-color: var(--color-ember-bright);
-    background: rgba(196, 99, 31, 0.08);
+    color: var(--birch-white);
+    border-color: var(--hot-coal-bright);
+    background: rgba(228, 87, 46, 0.10);
   }
 
   .cta--light {
@@ -75,6 +80,7 @@ const {
   .cta--light:hover {
     color: var(--color-bg);
     background: #fff;
-    transform: translateY(-2px);
+    transform: translateY(var(--hover-lift));
+    filter: brightness(0.97);
   }
 </style>

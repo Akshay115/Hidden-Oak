@@ -1,108 +1,450 @@
 ---
 /**
  * Gallery — /gallery
- * Image-rich masonry-style grid. Until real photos land in /public/images,
- * gradient tiles with captions stand in. Replacing a tile with a real image:
- *   set `src` on the <img> and remove the gradient placeholder div.
+ *
+ * Masonry-style grid with category filtering and an accessible lightbox.
+ *
+ * Images: themed SVG placeholders (public/images/gallery/) standing in for
+ * real photography. Each entry has a base src + intrinsic width/height so the
+ * layout reserves correct space before load (no layout shift).
+ *
+ * Responsive images: uses Cloudflare Image Resizing when available (via /cdn-cgi/image/
+ * path), with standard <img> srcset as fallback. Pattern documented in the
+ * <picture>/<img> below. Both work — CF Resizing kicks in automatically on Pages.
+ *
+ * Lightbox: vanilla JS, keyboard-navigable (arrows + Escape + Tab focus trap),
+ * with full ARIA labeling. No dependencies.
+ *
+ * To add a real photo: drop it in /public/images/gallery/ and add an entry to
+ * the `images` array below. The rest (masonry, lazy-loading, lightbox) is automatic.
  */
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Hero from '../components/Hero.astro';
 import CTAButton from '../components/CTAButton.astro';
 
-// Varying row spans create the masonry feel. `tone` drives the placeholder gradient.
-const shots = [
-  { alt: '[TODO alt — steam room]',     caption: 'The steam room',     tone: 'warm',   span: 'tall'   },
-  { alt: '[TODO alt — ice bath]',       caption: 'Ice bath',           tone: 'cool',   span: 'short'  },
-  { alt: '[TODO alt — wood stove]',     caption: 'The stove',          tone: 'ember',  span: 'std'    },
-  { alt: '[TODO alt — rest area]',      caption: 'Rest area',          tone: 'oak',    span: 'tall'   },
-  { alt: '[TODO alt — venik bundles]',  caption: 'Venik & accessories',tone: 'sage',   span: 'std'    },
-  { alt: '[TODO alt — Arambol beach]',  caption: 'Arambol beach',      tone: 'warm',   span: 'short'  },
-  { alt: '[TODO alt — entrance path]',  caption: 'The approach',       tone: 'oak',    span: 'std'    },
-  { alt: '[TODO alt — evening light]',  caption: 'Evening light',      tone: 'ember',  span: 'tall'   },
-  { alt: '[TODO alt — shower detail]',  caption: 'Shower & rinse',     tone: 'cool',   span: 'short'  },
+// ---- Category definitions ----------------------------------------------
+const categories = [
+  { id: 'all', label: 'All' },
+  { id: 'exterior', label: 'Exterior & Setting' },
+  { id: 'sauna', label: 'The Sauna' },
+  { id: 'ice', label: 'Ice Bath' },
+  { id: 'details', label: 'Details' },
+  { id: 'community', label: 'Community' },
 ];
+
+// ---- Image data ---------------------------------------------------------
+// filename: file in /public/images/gallery/ (no extension mismatch — all .svg for now)
+// When real photos arrive, swap the .svg for .jpg/.webp and update w/h.
+// span: 'tall' | 'wide' | 'square' — controls masonry rhythm via row-span.
+type Img = {
+  src: string;
+  alt: string;
+  category: string;
+  w: number;
+  h: number;
+  span?: 'tall' | 'wide' | 'square';
+};
+
+const images: Img[] = [
+  // Exterior & Setting
+  { src: 'exterior-approach.svg', alt: 'The path approaching Hidden Oak banya through palms and greenery', category: 'exterior', w: 1200, h: 800, span: 'wide' },
+  { src: 'exterior-dusk.svg', alt: 'The banya exterior at dusk, warm light glowing from the doorway', category: 'exterior', w: 1200, h: 600, span: 'wide' },
+  { src: 'exterior-garden.svg', alt: 'Garden path and seating area outside the banya', category: 'exterior', w: 1200, h: 900 },
+
+  // The Sauna
+  { src: 'sauna-bench.svg', alt: 'Wooden bench inside the steam room, steam rising softly', category: 'sauna', w: 800, h: 1000, span: 'tall' },
+  { src: 'sauna-stove.svg', alt: 'The wood-fired stone stove (kamenka) glowing with heat', category: 'sauna', w: 1200, h: 1200, span: 'square' },
+  { src: 'sauna-steam.svg', alt: 'Steam rising from hot stones as water is ladled onto the stove', category: 'sauna', w: 1000, h: 750, span: 'wide' },
+
+  // Ice Bath
+  { src: 'ice-tub.svg', alt: 'The cedar cold plunge tub, filled with cold water', category: 'ice', w: 800, h: 1000, span: 'tall' },
+  { src: 'ice-detail.svg', alt: 'Close-up of cold water surface in the plunge tub', category: 'ice', w: 1200, h: 800, span: 'wide' },
+
+  // Details: wood & clay textures
+  { src: 'detail-wood-grain.svg', alt: 'Close-up of wood grain on the banya interior walls', category: 'details', w: 1200, h: 1200, span: 'square' },
+  { src: 'detail-clay-wall.svg', alt: 'Troweled clay plaster wall, warm earth tones', category: 'details', w: 1200, h: 800, span: 'wide' },
+  { src: 'detail-venik.svg', alt: 'A bundle of dried birch branches (venik) used for whisking', category: 'details', w: 1000, h: 1000, span: 'square' },
+
+  // Community / Sessions
+  { src: 'community-tea.svg', alt: 'Tea served in the rest area between banya rounds', category: 'community', w: 1200, h: 800, span: 'wide' },
+  { src: 'community-rest.svg', alt: 'The rest area with low benches and soft light', category: 'community', w: 1000, h: 1000, span: 'square' },
+  { src: 'community-hands.svg', alt: 'Hands holding a venik during the whisking ritual', category: 'community', w: 800, h: 1000, span: 'tall' },
+];
+
+// Base path for gallery images.
+const IMG_BASE = '/images/gallery';
+
+/**
+ * Cloudflare Image Resizing helper.
+ * On Cloudflare Pages, /cdn-cgi/image/ automatically resizes on the edge.
+ * Format: /cdn-cgi/image/<options>/<origin-path>
+ * Docs: https://developers.cloudflare.com/images/transform-images/
+ *
+ * We build a srcset across standard breakpoints. Off-CF (local dev), the
+ * /cdn-cgi/image/ path 404s gracefully — but to keep dev clean we only emit
+ * it for raster formats. For SVG placeholders we just use the raw path (SVGs
+ * are resolution-independent and don't need resizing).
+ */
+function cfImage(path: string, w: number): string {
+  return `/cdn-cgi/image/width=${w},quality=80,format=auto/${path}`;
+}
+
+function isRaster(filename: string): boolean {
+  return /\.(jpg|jpeg|png|webp)$/i.test(filename);
+}
 ---
 
 <BaseLayout
   title="Gallery"
-  description="[TODO meta description — photos of Hidden Oak banya in Arambol, Goa.]"
+  description="A look around Hidden Oak banya in Arambol, Goa — the exterior and jungle setting, the steam room, the ice bath, wood and clay details, and the people who make it theirs."
 >
   <Hero
     eyebrow="Gallery"
     title="A look around."
-    subtitle="[TODO hero subtitle — a few words on the space.]"
+    subtitle="The rooms, the details, the quiet — and the people who make this place theirs."
     align="center"
   />
 
-  <section class="section">
+  <section class="section gallery-section" data-reveal>
     <div class="container">
-      <div class="masonry">
+      {/* ---- Category filter bar ----------------------------------------- */}
+      <div class="filter-bar" role="group" aria-label="Filter gallery by category">
         {
-          shots.map((s) => (
-            <figure class:list={['tile', `tile--${s.tone}`, `tile--${s.span}`]}>
-              {/* TODO: replace with <img src="/images/..." alt={s.alt} loading="lazy" />
-                  once real photos are in /public/images. */}
-              <div class="tile__media" role="img" aria-label={s.alt} />
-              <figcaption>{s.caption}</figcaption>
-            </figure>
+          categories.map((cat, i) => (
+            <button
+              type="button"
+              class:list={['filter-btn', { 'filter-btn--active': i === 0 }]}
+              aria-pressed={i === 0 ? 'true' : 'false'}
+              data-filter={cat.id}
+            >
+              {cat.label}
+            </button>
           ))
         }
       </div>
+
+      {/* ---- Masonry grid ------------------------------------------------ */}
+      <div class="masonry" id="masonry" role="list">
+        {
+          images.map((img, i) => {
+            const full = `${IMG_BASE}/${img.src}`;
+            const raster = isRaster(img.src);
+            // For raster images (future real photos): emit a srcset with CF Image Resizing.
+            // For SVG placeholders: plain src (SVGs scale without resizing).
+            const srcset = raster
+              ? [400, 600, 800, 1000, 1200]
+                  .filter(w => w <= img.w)
+                  .map(w => `${cfImage(full, w)} ${w}w`)
+                  .join(', ')
+              : undefined;
+            return (
+              <button
+                class:list={['tile', `tile--${img.span || 'std'}`, `cat-${img.category}`]}
+                role="listitem"
+                data-category={img.category}
+                data-index={i}
+                data-full={full}
+                aria-label={`Open image: ${img.alt}`}
+              >
+                <img
+                  src={full}
+                  srcset={srcset}
+                  sizes="(max-width: 600px) 100vw, (max-width: 900px) 50vw, 33vw"
+                  width={img.w}
+                  height={img.h}
+                  alt={img.alt}
+                  loading="lazy"
+                  decoding="async"
+                />
+              </button>
+            );
+          })
+        }
+      </div>
+
+      <p class="gallery-note">
+        These are placeholder images. Real photography will replace them — the layout,
+        lazy-loading, and lightbox are all ready.
+      </p>
     </div>
   </section>
 
   <section class="section">
     <div class="container cta-band">
-      <h2>[TODO heading — see it in person]</h2>
+      <div>
+        <h2>See it in person.</h2>
+        <p class="lede">The photos only tell half the story. The other half is the heat, the cold, and the quiet.</p>
+      </div>
       <CTAButton href="/book" variant="primary" size="lg">Book a Session</CTAButton>
     </div>
   </section>
+
+  {/* ============================================================
+       LIGHTBOX
+       Accessible modal: focus trap, keyboard nav (←/→/Esc/Tab),
+       screen-reader announcements. Vanilla JS, no deps.
+  ============================================================ */}
+  <div
+    id="lightbox"
+    class="lightbox"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="lightbox-caption"
+    aria-hidden="true"
+  >
+    <div class="lightbox__backdrop" data-close></div>
+
+    <button class="lightbox__btn lightbox__btn--prev" type="button" aria-label="Previous image (left arrow)">
+      <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M15 4L7 12l8 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+
+    <figure class="lightbox__figure">
+      <img id="lightbox-img" class="lightbox__img" src="" alt="" />
+      <figcaption id="lightbox-caption" class="lightbox__caption"></figcaption>
+    </figure>
+
+    <button class="lightbox__btn lightbox__btn--next" type="button" aria-label="Next image (right arrow)">
+      <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M9 4l8 8-8 8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+
+    <button class="lightbox__btn lightbox__btn--close" type="button" aria-label="Close lightbox (Escape)" data-close>
+      <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"/></svg>
+    </button>
+  </div>
 </BaseLayout>
 
+<script>
+  // =====================================================================
+  // GALLERY: category filter + accessible lightbox
+  // Vanilla JS — no dependencies. Runs once on page load.
+  // =====================================================================
+  (() => {
+    const tiles = Array.from(document.querySelectorAll<HTMLButtonElement>('.tile'));
+    const filterBtns = Array.from(document.querySelectorAll<HTMLButtonElement>('.filter-btn'));
+    const lightbox = document.getElementById('lightbox') as HTMLElement;
+    const lbImg = document.getElementById('lightbox-img') as HTMLImageElement;
+    const lbCaption = document.getElementById('lightbox-caption') as HTMLElement;
+    const btnPrev = document.querySelector('.lightbox__btn--prev') as HTMLButtonElement;
+    const btnNext = document.querySelector('.lightbox__btn--next') as HTMLButtonElement;
+    const closeEls = Array.from(document.querySelectorAll('[data-close]'));
+
+    // Track which images are currently visible (respecting active filter)
+    // so lightbox navigation only cycles through the filtered set.
+    let visibleIndices: number[] = tiles.map((_, i) => i);
+    let currentPos = 0; // position within visibleIndices
+    let lastFocused: HTMLElement | null = null; // for focus restore
+
+    // ---- Filter --------------------------------------------------------
+    function applyFilter(cat: string) {
+      tiles.forEach((tile, i) => {
+        const match = cat === 'all' || tile.dataset.category === cat;
+        tile.style.display = match ? '' : 'none';
+      });
+      // Rebuild the visible-indices list for lightbox navigation
+      visibleIndices = tiles
+        .map((t, i) => ({ t, i }))
+        .filter(({ t }) => t.style.display !== 'none')
+        .map(({ i }) => i);
+    }
+
+    filterBtns.forEach(btn => {
+      btn.addEventListener('click', () => {
+        filterBtns.forEach(b => {
+          b.classList.remove('filter-btn--active');
+          b.setAttribute('aria-pressed', 'false');
+        });
+        btn.classList.add('filter-btn--active');
+        btn.setAttribute('aria-pressed', 'true');
+        applyFilter(btn.dataset.filter || 'all');
+      });
+    });
+
+    // ---- Lightbox ------------------------------------------------------
+    function openLightbox(tileIndex: number) {
+      // Resolve tileIndex (absolute) to its position in visibleIndices
+      const pos = visibleIndices.indexOf(tileIndex);
+      if (pos === -1) return;
+      currentPos = pos;
+
+      lastFocused = document.activeElement as HTMLElement;
+      lightbox.classList.add('lightbox--open');
+      lightbox.setAttribute('aria-hidden', 'false');
+      document.body.style.overflow = 'hidden';
+      updateImage();
+      btnClose?.focus();
+    }
+
+    let btnClose = document.querySelector('.lightbox__btn--close') as HTMLButtonElement;
+
+    function updateImage() {
+      const absIdx = visibleIndices[currentPos];
+      const tile = tiles[absIdx];
+      if (!tile) return;
+      const full = tile.dataset.full || '';
+      const img = tile.querySelector('img');
+      const alt = img?.getAttribute('alt') || '';
+      lbImg.src = full;
+      lbImg.alt = alt;
+      lbCaption.textContent = alt;
+    }
+
+    function closeLightbox() {
+      lightbox.classList.remove('lightbox--open');
+      lightbox.setAttribute('aria-hidden', 'true');
+      document.body.style.overflow = '';
+      if (lastFocused) (lastFocused as HTMLElement).focus();
+    }
+
+    function nav(dir: 1 | -1) {
+      const n = visibleIndices.length;
+      if (n === 0) return;
+      currentPos = (currentPos + dir + n) % n;
+      updateImage();
+    }
+
+    // Focus trap: keep Tab cycling within the lightbox while open
+    const focusable = () => Array.from(lightbox.querySelectorAll<HTMLElement>(
+      'button, [href], [tabindex]:not([tabindex="-1"])'
+    )).filter(el => !el.hasAttribute('disabled'));
+
+    // ---- Wire up tile clicks ------------------------------------------
+    tiles.forEach((tile, i) => {
+      tile.addEventListener('click', () => openLightbox(i));
+    });
+
+    // ---- Close + nav buttons ------------------------------------------
+    closeEls.forEach(el => el.addEventListener('click', closeLightbox));
+    btnPrev.addEventListener('click', () => nav(-1));
+    btnNext.addEventListener('click', () => nav(1));
+
+    // ---- Keyboard ------------------------------------------------------
+    document.addEventListener('keydown', (e: KeyboardEvent) => {
+      if (!lightbox.classList.contains('lightbox--open')) return;
+      switch (e.key) {
+        case 'Escape':
+          closeLightbox();
+          break;
+        case 'ArrowLeft':
+          e.preventDefault();
+          nav(-1);
+          break;
+        case 'ArrowRight':
+          e.preventDefault();
+          nav(1);
+          break;
+        case 'Tab':
+          // Trap focus within lightbox
+          {
+            const f = focusable();
+            if (f.length === 0) return;
+            const first = f[0];
+            const last = f[f.length - 1];
+            if (e.shiftKey && document.activeElement === first) {
+              e.preventDefault();
+              last.focus();
+            } else if (!e.shiftKey && document.activeElement === last) {
+              e.preventDefault();
+              first.focus();
+            }
+          }
+          break;
+      }
+    });
+  })();
+</script>
+
 <style>
-  /* CSS columns masonry — items flow top-to-bottom then next column.
-     Break-inside avoid keeps tiles intact across the column flow. */
+  /* ---- Filter bar ---------------------------------------------------- */
+  .filter-bar {
+    display: flex;
+    flex-wrap: wrap;
+    gap: var(--space-2);
+    margin-bottom: var(--space-5);
+    padding-bottom: var(--space-4);
+    border-bottom: 1px solid var(--color-border);
+  }
+  .filter-btn {
+    font: inherit;
+    font-size: var(--text-sm);
+    padding: var(--space-1) var(--space-3);
+    background: transparent;
+    color: var(--color-ink-muted);
+    border: 1px solid var(--color-border);
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    transition: all var(--transition-fast);
+  }
+  .filter-btn:hover {
+    color: var(--birch-white);
+    border-color: var(--color-border-strong);
+  }
+  .filter-btn--active {
+    background: var(--clay-deep);  // AA-safe with birch-white text
+    color: var(--birch-white);
+    border-color: var(--clay-terracotta);
+  }
+  .filter-btn:focus-visible {
+    outline: 2px solid var(--hot-coal-bright);
+    outline-offset: 2px;
+  }
+
+  /* ---- Masonry grid -------------------------------------------------- */
+  /* CSS columns masonry: tiles flow top→bottom, then next column.
+     break-inside: avoid keeps tiles intact across the column flow. */
   .masonry {
     column-count: 3;
     column-gap: var(--space-3);
   }
-  @media (max-width: 880px) { .masonry { column-count: 2; } }
-  @media (max-width: 540px) { .masonry { column-count: 1; } }
+  @media (max-width: 900px) { .masonry { column-count: 2; } }
+  @media (max-width: 560px) { .masonry { column-count: 1; } }
 
   .tile {
+    display: block;
     break-inside: avoid;
+    width: 100%;
     margin: 0 0 var(--space-3);
+    padding: 0;
+    border: 1px solid var(--color-border);
     border-radius: var(--radius-lg);
     overflow: hidden;
     background: var(--wood-burnt);
-    border: 1px solid var(--color-border);
-    transition: transform var(--transition-base), border-color var(--transition-base);
+    cursor: pointer;
+    position: relative;
+    transition: transform var(--transition-base), border-color var(--transition-base),
+      box-shadow var(--transition-base);
   }
   .tile:hover {
     transform: translateY(-3px);
-    border-color: var(--color-border-strong);
+    border-color: var(--clay-light);
+    box-shadow: var(--shadow-md);
   }
-  .tile__media {
+  .tile:focus-visible {
+    outline: 2px solid var(--hot-coal-bright);
+    outline-offset: 3px;
+  }
+  .tile img {
     width: 100%;
-    background-size: cover;
-    background-position: center;
+    height: auto;
+    display: block;
+    /* Subtle zoom on hover for tactile feel */
+    transition: transform var(--transition-slow);
   }
-  /* Vary the aspect ratio to create masonry rhythm. */
-  .tile--short .tile__media { aspect-ratio: 4 / 3; }
-  .tile--std   .tile__media { aspect-ratio: 1 / 1; }
-  .tile--tall  .tile__media { aspect-ratio: 3 / 4; }
-  /* Placeholder gradients by tone — replace with real image backgrounds later. */
-  .tile--warm  .tile__media { background: linear-gradient(135deg, var(--wood-smolder), var(--clay-light)); }
-  .tile--cool  .tile__media { background: linear-gradient(135deg, #2a3438, var(--forest-light)); }
-  .tile--oak   .tile__media { background: linear-gradient(135deg, var(--wood-charred), var(--clay-terracotta)); }
-  .tile--ember .tile__media { background: linear-gradient(135deg, #3a1f12, var(--hot-coal)); }
-  .tile--sage  .tile__media { background: linear-gradient(135deg, var(--forest-deep), var(--forest-light)); }
-  figcaption {
-    padding: var(--space-2) var(--space-3);
-    font-size: var(--text-sm);
-    color: var(--color-ink-muted);
+  .tile:hover img {
+    transform: scale(1.03);
   }
 
+  /* Hidden state for filtered-out tiles */
+  .tile[style*='display: none'] { /* placeholder selector */ }
+
+  .gallery-note {
+    margin-top: var(--space-5);
+    text-align: center;
+    font-size: var(--text-sm);
+    color: var(--color-ink-subtle);
+    font-style: italic;
+  }
+
+  /* ---- CTA band ------------------------------------------------------ */
   .cta-band {
     display: flex;
     align-items: center;
@@ -116,5 +458,129 @@ const shots = [
   }
   @media (max-width: 640px) {
     .cta-band { flex-direction: column; align-items: flex-start; }
+  }
+
+  /* =====================================================================
+     LIGHTBOX — fade + scale transition on open/close
+  ===================================================================== */
+  .lightbox {
+    position: fixed;
+    inset: 0;
+    z-index: var(--z-modal);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: var(--space-4);
+    /* Hidden state: invisible + non-interactive, but still rendered so the
+       opacity/transform transition can play on open. */
+    opacity: 0;
+    visibility: hidden;
+    pointer-events: none;
+    transition:
+      opacity var(--duration-medium) var(--ease-out),
+      visibility 0s linear var(--duration-medium);
+  }
+  .lightbox--open {
+    opacity: 1;
+    visibility: visible;
+    pointer-events: auto;
+    transition:
+      opacity var(--duration-medium) var(--ease-out),
+      visibility 0s linear 0s;
+  }
+
+  .lightbox__backdrop {
+    position: absolute;
+    inset: 0;
+    background: rgba(13, 11, 9, 0.94);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+  }
+
+  .lightbox__figure {
+    position: relative;
+    z-index: 1;
+    margin: 0;
+    max-width: 90vw;
+    max-height: 85vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: var(--space-3);
+    /* Scale in from 0.96 on open — subtle, not a popup bounce. */
+    transform: scale(0.96);
+    opacity: 0;
+    transition:
+      transform var(--duration-medium) var(--ease-out),
+      opacity var(--duration-medium) var(--ease-out);
+  }
+  .lightbox--open .lightbox__figure {
+    transform: scale(1);
+    opacity: 1;
+  }
+  .lightbox__img {
+    max-width: 90vw;
+    max-height: 75vh;
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-xl);
+    object-fit: contain;
+  }
+  .lightbox__caption {
+    font-size: var(--text-sm);
+    color: var(--color-ink-muted);
+    text-align: center;
+    max-width: 60ch;
+    line-height: var(--leading-normal);
+  }
+
+  /* Nav / close buttons */
+  .lightbox__btn {
+    position: absolute;
+    z-index: 2;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    background: rgba(43, 29, 20, 0.7);
+    border: 1px solid var(--color-border);
+    color: var(--birch-white);
+    border-radius: var(--radius-pill);
+    cursor: pointer;
+    transition: background var(--duration-fast) var(--ease-soft),
+      color var(--duration-fast) var(--ease-soft),
+      transform var(--duration-fast) var(--ease-soft);
+    backdrop-filter: blur(4px);
+  }
+  .lightbox__btn:hover {
+    background: var(--clay-deep);
+    color: var(--birch-white);
+  }
+  .lightbox__btn:focus-visible {
+    outline: 2px solid var(--hot-coal-bright);
+    outline-offset: 2px;
+  }
+
+  .lightbox__btn--prev { left: var(--space-3); top: 50%; transform: translateY(-50%); }
+  .lightbox__btn--next { right: var(--space-3); top: 50%; transform: translateY(-50%); }
+  .lightbox__btn--close { right: var(--space-3); top: var(--space-3); }
+
+  .lightbox__btn--prev:hover { transform: translateY(-50%) scale(1.08); }
+  .lightbox__btn--next:hover { transform: translateY(-50%) scale(1.08); }
+
+  @media (max-width: 600px) {
+    .lightbox__btn--prev,
+    .lightbox__btn--next {
+      width: 40px;
+      height: 40px;
+    }
+    .lightbox__btn--prev { left: var(--space-1); }
+    .lightbox__btn--next { right: var(--space-1); }
+  }
+
+  /* Respect reduced motion */
+  @media (prefers-reduced-motion: reduce) {
+    .tile img { transition: none; }
+    .tile:hover img { transform: none; }
   }
 </style>

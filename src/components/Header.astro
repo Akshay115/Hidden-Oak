@@ -41,12 +41,18 @@ const isActive = (href: string) =>
       </span>
     </a>
 
-    <input type="checkbox" id="nav-toggle" class="nav-toggle" hidden />
-    <label for="nav-toggle" class="nav-burger" aria-label="Toggle menu">
+    <button
+      type="button"
+      class="nav-burger"
+      id="nav-toggle"
+      aria-label="Toggle menu"
+      aria-expanded="false"
+      aria-controls="primary-nav"
+    >
       <span></span><span></span><span></span>
-    </label>
+    </button>
 
-    <nav class="site-nav" aria-label="Primary">
+    <nav class="site-nav" id="primary-nav" aria-label="Primary">
       <ul class="site-nav__list">
         {
           nav.map((item) => (
@@ -137,9 +143,13 @@ const isActive = (href: string) =>
     text-decoration: none;
     padding-block: var(--space-1);
     border-bottom: 2px solid transparent;
-    transition: color var(--transition-fast), border-color var(--transition-fast);
+    transition: color var(--duration-fast) var(--ease-soft),
+      border-color var(--duration-fast) var(--ease-soft);
   }
-  .site-nav__link:hover { color: var(--birch-white); }
+  .site-nav__link:hover {
+    color: var(--birch-white);
+    border-bottom-color: var(--color-border-strong);
+  }
   .site-nav__link.active {
     color: var(--hot-coal-bright);
     border-bottom-color: var(--hot-coal);
@@ -156,18 +166,29 @@ const isActive = (href: string) =>
     .nav-burger {
       display: flex;
       flex-direction: column;
-      justify-content: space-between;
-      width: 28px;
-      height: 22px;
+      justify-content: center;
+      align-items: center;
+      width: 44px;
+      height: 44px;
+      background: transparent;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-sm);
       cursor: pointer;
+      gap: 5px;
     }
     .nav-burger span {
       display: block;
       height: 2px;
-      width: 100%;
+      width: 22px;
       background: var(--birch-white);
       border-radius: 2px;
-      transition: transform var(--transition-fast), opacity var(--transition-fast);
+      transition: transform var(--duration-fast) var(--ease-soft),
+        opacity var(--duration-fast) var(--ease-soft);
+    }
+    .nav-burger:hover { border-color: var(--color-border-strong); }
+    .nav-burger:focus-visible {
+      outline: 2px solid var(--hot-coal-bright);
+      outline-offset: 2px;
     }
 
     .site-nav {
@@ -181,33 +202,68 @@ const isActive = (href: string) =>
       overflow: hidden;
       opacity: 0;
       pointer-events: none;
-      transition: max-height var(--transition-base), opacity var(--transition-base);
+      transition: max-height var(--duration-medium) var(--ease-out),
+        opacity var(--duration-medium) var(--ease-out);
     }
-    .site-nav__list {
-      flex-direction: column;
-      align-items: stretch;
-      gap: var(--space-2);
-      padding: var(--space-4) var(--space-3);
-    }
-    .site-nav__link {
-      display: block;
-      padding: var(--space-1) var(--space-1);
-      font-size: var(--text-base);
-    }
-    .site-nav__cta-li { margin: var(--space-1) 0; }
-    :global(.site-nav__cta) { width: 100%; }
-
-    .nav-toggle:checked ~ .site-nav {
+    .site-nav--open {
       max-height: 80vh;
       opacity: 1;
       pointer-events: auto;
     }
-    .nav-toggle:checked ~ .nav-burger span:nth-child(1) {
-      transform: translateY(10px) rotate(45deg);
+    .site-nav__list {
+      flex-direction: column;
+      align-items: stretch;
+      gap: var(--space-1);
+      padding: var(--space-3) var(--space-3) var(--space-4);
     }
-    .nav-toggle:checked ~ .nav-burger span:nth-child(2) { opacity: 0; }
-    .nav-toggle:checked ~ .nav-burger span:nth-child(3) {
-      transform: translateY(-10px) rotate(-45deg);
+    .site-nav__link {
+      display: flex;
+      align-items: center;
+      padding: var(--space-3) var(--space-2);
+      font-size: var(--text-base);
+      border-radius: var(--radius-sm);
+      min-height: 44px;
+    }
+    .site-nav__cta-li { margin: var(--space-1) 0; }
+    :global(.site-nav__cta) { width: 100%; min-height: 44px; }
+
+    /* Burger animates to X when open */
+    .nav-burger[aria-expanded='true'] span:nth-child(1) {
+      transform: translateY(7px) rotate(45deg);
+    }
+    .nav-burger[aria-expanded='true'] span:nth-child(2) { opacity: 0; }
+    .nav-burger[aria-expanded='true'] span:nth-child(3) {
+      transform: translateY(-7px) rotate(-45deg);
     }
   }
 </style>
+
+<script>
+  // Mobile nav toggle: keyboard-accessible open/close via a real <button>.
+  (() => {
+    const btn = document.getElementById('nav-toggle');
+    const nav = document.getElementById('primary-nav');
+    if (!btn || !nav) return;
+
+    const toggle = (force?: boolean) => {
+      const open = force !== undefined ? force : btn.getAttribute('aria-expanded') !== 'true';
+      btn.setAttribute('aria-expanded', String(open));
+      nav.classList.toggle('site-nav--open', open);
+    };
+
+    btn.addEventListener('click', () => toggle());
+
+    // Close when a nav link is clicked (mobile UX — user navigates away)
+    nav.querySelectorAll('a').forEach(link => {
+      link.addEventListener('click', () => toggle(false));
+    });
+
+    // Close on Escape
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape' && btn.getAttribute('aria-expanded') === 'true') {
+        toggle(false);
+        btn.focus();
+      }
+    });
+  })();
+</script>
