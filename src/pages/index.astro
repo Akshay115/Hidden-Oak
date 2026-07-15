@@ -109,12 +109,8 @@ const reasons = [
           <CTAButton href="/gallery" variant="ghost" size="md">See the space</CTAButton>
         </div>
       </div>
-      <aside class="imgslot" aria-label="Image placeholder">
-        <span class="imgslot__glow" aria-hidden="true"></span>
-        <span class="deco-icon deco-icon--xl deco-icon--flame imgslot__icon" aria-hidden="true"></span>
-        <span>
-          [IMAGE: Warm interior — wooden bench, steam rising, clay walls catching firelight. Landscape.]
-        </span>
+      <aside class="imgslot imgslot--filled" aria-label="Inside the sauna, wood stove and warm light">
+        <img src="/images/gallery/sauna-stove.svg" alt="The wood stove inside Hidden Oak's sauna, warm firelight on clay walls" loading="lazy" decoding="async" />
       </aside>
     </div>
   </section>
@@ -161,7 +157,7 @@ const reasons = [
   <SectionDivider />
 
   {/* Why */}
-  <section class="section" data-reveal>
+  <section class="section section--jungle" data-reveal>
     <div class="container why">
       <div class="why__head">
         <p class="eyebrow">Why Hidden Oak</p>
@@ -182,11 +178,8 @@ const reasons = [
           ))
         }
       </div>
-      <aside class="imgslot imgslot--wide" aria-label="Image placeholder">
-        <span class="imgslot__glow" aria-hidden="true"></span>
-        <span>
-          [IMAGE: Exterior at dusk — mud walls, palms, warm light from the doorway. Wide landscape.]
-        </span>
+      <aside class="imgslot imgslot--wide imgslot--filled" aria-label="Exterior at dusk">
+        <img src="/images/gallery/exterior-dusk.svg" alt="Hidden Oak's mud-and-wood banya at dusk, palms silhouetted against a warm sky" loading="lazy" decoding="async" />
       </aside>
     </div>
   </section>
@@ -242,11 +235,8 @@ const reasons = [
           <CTAButton href="/location" variant="ghost" size="lg">Find us in Arambol</CTAButton>
         </div>
       </div>
-      <aside class="imgslot imgslot--closing" aria-label="Image placeholder">
-        <span class="deco-icon deco-icon--xl deco-icon--branch imgslot__icon" aria-hidden="true"></span>
-        <span>
-          [IMAGE: Guest mid-session — calm, steam-softened frame. Portrait or square.]
-        </span>
+      <aside class="imgslot imgslot--closing imgslot--filled" aria-label="Steam rising in the sauna">
+        <img src="/images/gallery/sauna-steam.svg" alt="Steam curling through warm light inside the Hidden Oak sauna" loading="lazy" decoding="async" />
       </aside>
     </div>
   </section>
@@ -550,6 +540,21 @@ const reasons = [
   }
   .imgslot--wide { aspect-ratio: 21 / 9; }
   .imgslot--closing { aspect-ratio: 1; min-height: 220px; }
+  .imgslot--filled {
+    border: 1px solid var(--color-border);
+    padding: 0;
+    background: var(--wood-charred);
+  }
+  .imgslot--filled img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+    transition: transform var(--duration-slow) var(--ease-out);
+  }
+  .imgslot--filled:hover img {
+    transform: scale(1.035);
+  }
   .imgslot__glow {
     position: absolute;
     width: 60%;
